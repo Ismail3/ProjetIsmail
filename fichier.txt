@@ -1,2 +1,0 @@
-Le contenu d'un fichier.
-Une autre ligne dans le fichier.
