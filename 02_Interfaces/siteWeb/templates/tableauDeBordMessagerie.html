@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062) -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style type="text/css">.gm-style .gm-style-mtc label, .gm-style .gm-style-mtc div {
+        font-weight: 400
+    }
+    </style>
+    <link type="text/css" rel="stylesheet" href="../ressources/styles/css">
+    <style type="text/css">.gm-style .gm-style-cc span, .gm-style .gm-style-cc a, .gm-style .gm-style-mtc div {
+        font-size: 10px
+    }
+    </style>
+    <style type="text/css">@media print {
+        .gm-style .gmnoprint, .gmnoprint {
+            display: none
+        }
+    }
+
+    @media screen {
+        .gm-style .gmnoscreen, .gmnoscreen {
+            display: none
+        }
+    }</style>
+    <style type="text/css">.gm-style-pbc {
+
+        transition: opacity ease-in-out;
+        background-color: rgba(0, 0, 0, 0.45);
+        text-align: center
+    }
+
+    .gm-style-pbt {
+        font-size: 22px;
+        color: white;
+        font-family: Roboto, Arial, sans-serif;
+        position: relative;
+        margin: 0;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%)
+    }
+    </style>
+    <title>W3.CSS Template</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="../ressources/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="../ressources/styles/apprendre@comprendre.css">
+    <style>
+        body, h1, h2, h3, h4, h5, h6 {
+            font-family: "Raleway", sans-serif
+        }
+
+        body, html {
+            height: 100%;
+            line-height: 1.8;
+        }
+
+        /* Full height image header */
+        .bgimg-1 {
+            background-position: center;
+            background-size: cover;
+            background-image: url("../ressources/images/laptop-2557574_1920.jpg");
+            min-height: 11%;
+        }
+
+        .w3-bar .w3-button {
+            padding: 16px;
+        }
+    </style>
+    <script type="text/javascript" charset="UTF-8" src="../ressources/javascript/common.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../ressources/javascript/map.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../ressources/javascript/util.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../ressources/javascript/marker.js"></script>
+    <style type="text/css">.gm-style {
+        font: 400 11px Roboto, Arial, sans-serif;
+        text-decoration: none;
+    }
+
+    .gm-style img {
+        max-width: none;
+    }</style>
+    <script type="text/javascript" charset="UTF-8" src="../ressources/javascript/onion.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../ressources/javascript/controls.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../ressources/javascript/stats.js"></script>
+</head>
+<body cz-shortcut-listen="true">
+
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+    <div class="w3-bar w3-white w3-card" id="myNavbar">
+        <a href="../index.html#home"
+           class="w3-bar-item w3-button w3-wide">
+            <img id="logo_header" src="../ressources/images/Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+        </a>
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+        <!-- Right-sided navbar links -->
+        <div class="w3-right w3-hide-small">
+
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                <a href="#home" class="w3-bar-item w3-button"><i
+                        class="fa fa-user"></i> Tableau de bord</a>
+            </form>
+        </div>
+        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
+           onclick="w3_open()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+</div>
+
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none"
+     id="mySidebar">
+    <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+    <a href="#team" onclick="w3_close()"
+       class="w3-bar-item w3-button">Tableau de bord</a>
+</nav>
+
+
+<!-- Header with full-height image -->
+<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
+</header>
+
+
+<button onclick="topFunction()" id="topBtn" title="Go to top">Top</button>
+
+<script>
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction()
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            document.getElementById("topBtn").style.display = "block";
+        } else {
+            document.getElementById("topBtn").style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="./tableauDeBord.html"><img class="profil-picture" src="../ressources/images/team1.jpg"></a>
+    <a href="./tableauDeBordProfil.html">Profil</a>
+    <a href="./tableauDeBordMessagerie.html">Messagerie</a>
+    <a href="./tableauDeBordStatistiques.html">Statistiques</a>
+    <a href="./tableauDeBordCours.html">Cours</a>
+    <a href="./tableauDeBordRessources.html">Ressources</a>
+</div>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+</script>
+
+<div class="w3-container w3-row w3-center w3-dark-grey w3-padding-64">
+    <div class="w3-quarter">
+        <span class="w3-xxlarge">125</span>
+        <br>Messages
+    </div>
+    <div class="w3-quarter">
+        <span class="w3-xxlarge">5</span>
+        <br>Messages non lus
+    </div>
+    <div class="w3-quarter">
+        <span class="w3-xxlarge">25</span>
+        <br>Conversations
+    </div>
+    <div class="w3-quarter">
+        <span class="w3-xxlarge">4</span>
+        <br>Favoris
+    </div>
+</div>
+
+<h2>Messageries</h2>
+<p>Vous trouverez ici la liste de conversation avec vos élèves:</p>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>-</th>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Matière</th>
+        <th>Statut</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><img class="profil-picture-min" src="../ressources/images/team2.jpg"/></td>
+        <td>Jone</td>
+        <td>Doe</td>
+        <td>Matière</td>
+        <td>
+            <a href="tableauDeBordMessage.html">
+                <img class="table-icon" alt="mailOpen" src="../ressources/images/mail00.png"/>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td><img class="profil-picture-min" src="../ressources/images/team1.jpg"/></td>
+        <td>Anja</td>
+        <td>Doe</td>
+        <td>Matière</td>
+        <td>
+            <a href="tableauDeBordMessage.html"/>
+            <img class="table-icon" alt="mailOpen" src="../ressources/images/mail00.png"/>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td><img class="profil-picture-min" src="../ressources/images/team3.jpg"/></td>
+        <td>Mike</td>
+        <td>Ross</td>
+        <td>Matière</td>
+        <td>
+            <a href="tableauDeBordMessage.html"/>
+            <img class="table-icon" alt="mailOpen" src="../ressources/images/mail00.png"/>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td><img class="profil-picture-min" src="../ressources/images/team4.jpg"/></td>
+        <td>Dan</td>
+        <td>Star</td>
+        <td>Matière</td>
+        <td>
+            <a href="tableauDeBordMessage.html"/>
+            <img class="table-icon" alt="mailOpen" src="../ressources/images/mail00.png"/>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td><img class="profil-picture-min" src="../ressources/images/team2.jpg"/></td>
+        <td>Jone</td>
+        <td>Doe</td>
+        <td>Matière</td>
+        <td>
+            <a href="tableauDeBordMessage.html"/>
+            <img class="table-icon" alt="mailOpen" src="../ressources/images/mail00.png"/>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td><img class="profil-picture-min" src="../ressources/images/team1.jpg"/></td>
+        <td>Anja</td>
+        <td>Doe</td>
+        <td>Matière</td>
+        <td>
+            <a href="tableauDeBordMessage.html"/>
+            <img class="table-icon" alt="mailOpen" src="../ressources/images/mail00.png"/>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td><img class="profil-picture-min" src="../ressources/images/team3.jpg"/></td>
+        <td>Mike</td>
+        <td>Ross</td>
+        <td>Matière</td>
+        <td>
+            <a href="tableauDeBordMessage.html"/>
+            <img class="table-icon" alt="mailNew" src="../ressources/images/mail01.png"/>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td><img class="profil-picture-min" src="../ressources/images/team4.jpg"/></td>
+        <td>Dan</td>
+        <td>Star</td>
+        <td>Matière</td>
+        <td>
+            <a href="tableauDeBordMessage.html"/>
+            <img class="table-icon" alt="mailOpen" src="../ressources/images/mail00.png"/>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div>
+    <ul class="pagination pagination-lg">
+        <li class="page-item disabled">
+            <a class="page-link" href="#">&laquo;</a>
+        </li>
+        <li class="page-item active">
+            <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">4</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">5</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">&raquo;</a>
+        </li>
+    </ul>
+</div>
+
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-64">
+    <a href="#home" class="w3-button w3-light-grey"><i
+            class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+    <div class="w3-xlarge w3-section">
+        <i class="fa fa-facebook-official w3-hover-opacity"></i>
+        <i class="fa fa-instagram w3-hover-opacity"></i>
+        <i class="fa fa-snapchat w3-hover-opacity"></i>
+        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+        <i class="fa fa-twitter w3-hover-opacity"></i>
+        <i class="fa fa-linkedin w3-hover-opacity"></i>
+    </div>
+    <p>Réaliser par Ismail SOSSE ALAOUI</p>
+</footer>
+
+<!-- Add Google Maps -->
+<script>
+    function myMap() {
+        myCenter = new google.maps.LatLng(41.878114, -87.629798);
+        var mapOptions = {
+            center: myCenter,
+            zoom: 12, scrollwheel: false, draggable: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
+
+        var marker = new google.maps.Marker({
+            position: myCenter,
+        });
+        marker.setMap(map);
+    }
+
+    // Modal Image Gallery
+    function onClick(element) {
+        document.getElementById("img01").src = element.src;
+        document.getElementById("modal01").style.display = "block";
+        var captionText = document.getElementById("caption");
+        captionText.innerHTML = element.alt;
+    }
+
+
+    // Toggle between showing and hiding the sidebar when clicking the menu icon
+    var mySidebar = document.getElementById("mySidebar");
+
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+        } else {
+            mySidebar.style.display = 'block';
+        }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+    }
+</script>
+<script src="../ressources/javascript/js"></script>
+<!--
+To use this code on your website, get a free API key from Google.
+Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
+-->
+
+
+</body>
+</html>
