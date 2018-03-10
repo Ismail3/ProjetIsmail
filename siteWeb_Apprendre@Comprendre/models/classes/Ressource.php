@@ -4,7 +4,7 @@ class Ressource
 {
     /**
      * Ressource constructor.
-     * @param string $id
+     * @param int $id
      * @param string $nom
      * @param string $description
      * @param string $image
