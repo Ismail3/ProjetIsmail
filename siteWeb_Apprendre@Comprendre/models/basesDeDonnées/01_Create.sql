@@ -38,7 +38,7 @@ CREATE TABLE Personne (
   nom              VARCHAR(255),
   prenom           VARCHAR(255),
   date_naissance   DATE,
-  mot_de_passe     INT,
+  mot_de_passe     VARCHAR(255),
   date_inscription DATETIME     DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT PK_Personne PRIMARY KEY (id)
 );

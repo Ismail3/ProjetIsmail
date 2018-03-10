@@ -1,6 +1,6 @@
 <?php
 
-class Mesage
+class Message
 {
     /*
      * Attributes
