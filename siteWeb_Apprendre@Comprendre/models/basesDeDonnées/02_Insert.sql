@@ -92,6 +92,15 @@ LINES TERMINATED BY '\n'
 IGNORE 1 LINES
 (date_inscription,date_realisation,proposition_cours,participant,duree,etat);
 
+LOAD DATA INFILE "enseigner.csv" IGNORE
+INTO TABLE Enseigner
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY ''
+ESCAPED BY ''
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(matiere,niveau_etude,enseignant);
+
 
 
 

@@ -26,10 +26,12 @@ CREATE TABLE Personne (
   id               INT NOT NULL AUTO_INCREMENT,
   nom              VARCHAR(255),
   prenom           VARCHAR(255),
+  email           VARCHAR(255),
   date_naissance   DATE,
   mot_de_passe     VARCHAR(255),
   date_inscription DATETIME     DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT PK_Personne PRIMARY KEY (id)
+  CONSTRAINT PK_Personne PRIMARY KEY (id),
+  CONSTRAINT UC_Person UNIQUE (ID,email)
 );
 
 
