@@ -6,19 +6,11 @@ DROP TABLE IF EXISTS Eleve;
 DROP TABLE IF EXISTS Enseigner;
 DROP TABLE IF EXISTS Personne;
 DROP TABLE IF EXISTS Enseignant;
-DROP TABLE IF EXISTS TypeEnseignant;
 DROP TABLE IF EXISTS Ressource;
 DROP TABLE IF EXISTS TypeRessource;
 DROP TABLE IF EXISTS NiveauEtude;
 DROP TABLE IF EXISTS Matiere;
-DROP TABLE IF EXISTS Filiaire;
 DROP TABLE IF EXISTS Message;
-
-CREATE TABLE Filiaire (
-  id  INT NOT NULL AUTO_INCREMENT,
-  nom VARCHAR(255),
-  CONSTRAINT PK_Filiaire PRIMARY KEY (id)
-);
 
 CREATE TABLE Matiere (
   id  INT NOT NULL AUTO_INCREMENT,
@@ -43,21 +35,14 @@ CREATE TABLE Personne (
   CONSTRAINT PK_Personne PRIMARY KEY (id)
 );
 
-CREATE TABLE TypeEnseignant (
-  id  INT NOT NULL AUTO_INCREMENT,
-  nom VARCHAR(255),
-  CONSTRAINT PK_TypeEnseignant PRIMARY KEY (id)
-);
 
 CREATE TABLE Enseignant (
   id              INT NOT NULL AUTO_INCREMENT,
   idPersonne      INT NOT NULL,
-  type_enseignant INT,
+  description TEXT,
   CONSTRAINT PK_Enseignant PRIMARY KEY (id),
   CONSTRAINT FK_Enseignant_Personne FOREIGN KEY (idPersonne)
-  REFERENCES Personne (id),
-  CONSTRAINT FK_Enseignant_TypeEnseignant FOREIGN KEY (type_enseignant)
-  REFERENCES TypeEnseignant (id)
+  REFERENCES Personne (id)
 );
 
 
@@ -79,12 +64,9 @@ CREATE TABLE Eleve (
   id           INT NOT NULL AUTO_INCREMENT,
   idPersonne   INT NOT NULL,
   niveau_etude INT,
-  filiaire     INT,
   CONSTRAINT PK_Eleve PRIMARY KEY (id),
   CONSTRAINT FK_Eleve_Personne FOREIGN KEY (idPersonne)
   REFERENCES Personne (id),
-  CONSTRAINT FK_Eleve_Filiaire FOREIGN KEY (filiaire)
-  REFERENCES Matiere (id),
   CONSTRAINT FK_Eleve_NiveauEtude FOREIGN KEY (niveau_etude)
   REFERENCES NiveauEtude (id)
 );
@@ -193,10 +175,8 @@ DESC PropositionCours;
 DESC Eleve;
 DESC Enseigner;
 DESC Enseignant;
-DESC TypeEnseignant;
 DESC NiveauEtude;
 DESC Matiere;
-DESC Filiaire;
 DESC Ressource;
 DESC TypeRessource;
 DESC Message;

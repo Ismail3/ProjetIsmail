@@ -8,6 +8,35 @@ IGNORE 1 LINES
 (id, nom, prenom, date_naissance, mot_de_passe, date_inscription);
 
 
+LOAD DATA INFILE "enseignant.csv" IGNORE
+INTO TABLE Personne
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY ''
+ESCAPED BY ''
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(id, nom, prenom, date_naissance, mot_de_passe, date_inscription);
+
+LOAD DATA INFILE "matiere.csv" IGNORE
+INTO TABLE Matiere
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY ''
+ESCAPED BY ''
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(id, nom);
+
+
+LOAD DATA INFILE "niveauEtude.csv" IGNORE
+INTO TABLE niveauEtude
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY ''
+ESCAPED BY ''
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(id, nom);
+
+
 /*
 
 https://dev.mysql.com/doc/refman/5.7/en/load-data.html
