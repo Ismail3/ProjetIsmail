@@ -114,7 +114,7 @@ https://dev.mysql.com/doc/refman/5.7/en/load-data.html
 13.2.6 LOAD DATA INFILE Syntax
 LOAD DATA [LOW_PRIORITY | CONCURRENT] [LOCAL] INFILE 'file_name'
     [REPLACE | IGNORE]
-    INTO TABLE tbl_name/home/lowx/Documents/coursParticuliers/ismail/Projet/tp_git/ProjetIsmail/siteWeb_Apprendre@Comprendre/models/basesDeDonnées
+    INTO TABLE
     [PARTITION (partition_name [, partition_name] ...)]
     [CHARACTER SET charset_name]
     [{FIELDS | COLUMNS}
