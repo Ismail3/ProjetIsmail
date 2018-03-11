@@ -1,16 +1,14 @@
-DROP TABLE IF EXISTS SeanceDemandeCours;
-DROP TABLE IF EXISTS SeancePropositionCours;
-DROP TABLE IF EXISTS DemandeCours;
-DROP TABLE IF EXISTS PropositionCours;
+DROP TABLE IF EXISTS Message;
+DROP TABLE IF EXISTS SeanceCours;
+DROP TABLE IF EXISTS Cours;
 DROP TABLE IF EXISTS Eleve;
 DROP TABLE IF EXISTS Enseigner;
-DROP TABLE IF EXISTS Personne;
 DROP TABLE IF EXISTS Enseignant;
+DROP TABLE IF EXISTS Personne;
 DROP TABLE IF EXISTS Ressource;
 DROP TABLE IF EXISTS TypeRessource;
 DROP TABLE IF EXISTS NiveauEtude;
 DROP TABLE IF EXISTS Matiere;
-DROP TABLE IF EXISTS Message;
 
 CREATE TABLE Matiere (
   id  INT NOT NULL AUTO_INCREMENT,
@@ -21,7 +19,6 @@ CREATE TABLE Matiere (
 CREATE TABLE NiveauEtude (
   id    INT NOT NULL AUTO_INCREMENT,
   nom   VARCHAR(255),
-  value INT NOT NULL,
   CONSTRAINT PK_NiveauEtude PRIMARY KEY (id)
 );
 
@@ -37,11 +34,11 @@ CREATE TABLE Personne (
 
 
 CREATE TABLE Enseignant (
-  id              INT NOT NULL AUTO_INCREMENT,
-  idPersonne      INT NOT NULL,
+  id          INT NOT NULL AUTO_INCREMENT,
+  id_personne  INT NOT NULL,
   description TEXT,
   CONSTRAINT PK_Enseignant PRIMARY KEY (id),
-  CONSTRAINT FK_Enseignant_Personne FOREIGN KEY (idPersonne)
+  CONSTRAINT FK_Enseignant_Personne FOREIGN KEY (id_personne)
   REFERENCES Personne (id)
 );
 
@@ -56,22 +53,22 @@ CREATE TABLE Enseigner (
   CONSTRAINT FK_Enseigner_Niveau FOREIGN KEY (niveau_etude)
   REFERENCES NiveauEtude (id),
   CONSTRAINT FK_Enseigner_Engseignant FOREIGN KEY (enseignant)
-  REFERENCES Enseignant (id)
+  REFERENCES Personne (id)
 );
 
 
 CREATE TABLE Eleve (
   id           INT NOT NULL AUTO_INCREMENT,
-  idPersonne   INT NOT NULL,
+  id_personne   INT NOT NULL,
   niveau_etude INT,
   CONSTRAINT PK_Eleve PRIMARY KEY (id),
-  CONSTRAINT FK_Eleve_Personne FOREIGN KEY (idPersonne)
+  CONSTRAINT FK_Eleve_Personne FOREIGN KEY (id_personne)
   REFERENCES Personne (id),
   CONSTRAINT FK_Eleve_NiveauEtude FOREIGN KEY (niveau_etude)
   REFERENCES NiveauEtude (id)
 );
 
-CREATE TABLE PropositionCours (
+CREATE TABLE Cours (
   id               INT NOT NULL AUTO_INCREMENT,
   nom              VARCHAR(255),
   description      TEXT,
@@ -79,60 +76,31 @@ CREATE TABLE PropositionCours (
   date_proposition DATETIME     DEFAULT CURRENT_TIMESTAMP,
   id_auteur        INT,
   matiere          INT,
-  niveau_etude     INT,
-  CONSTRAINT PK_PropositionCours PRIMARY KEY (id),
-  CONSTRAINT FK_PropositionCours_Auteur FOREIGN KEY (id_auteur)
-  REFERENCES Enseignant (id),
-  CONSTRAINT FK_PropositionCours_Matiere FOREIGN KEY (matiere)
+  niveau_etude_min INT,
+  niveau_etude_max INT,
+  CONSTRAINT PK_Cours PRIMARY KEY (id),
+  CONSTRAINT FK_Cours_Auteur FOREIGN KEY (id_auteur)
+  REFERENCES Personne (id),
+  CONSTRAINT FK_Cours_Matiere FOREIGN KEY (matiere)
   REFERENCES Matiere (id),
-  CONSTRAINT FK_PropositionCours_NiveauEtude FOREIGN KEY (niveau_etude)
+  CONSTRAINT FK_Cours_NiveauEtudeMin FOREIGN KEY (niveau_etude_min)
+  REFERENCES NiveauEtude (id),
+  CONSTRAINT FK_Cours_NiveauEtudeMax FOREIGN KEY (niveau_etude_max)
   REFERENCES NiveauEtude (id)
 );
 
-CREATE TABLE SeancePropositionCours (
+CREATE TABLE SeanceCours (
   date_inscription  DATETIME DEFAULT CURRENT_TIMESTAMP,
   date_realisation  DATETIME,
   proposition_cours INT,
-  eleve             INT,
+  participant       INT,
   duree             INT,
   etat              INT,
-  CONSTRAINT PK_SeancePropositionCours PRIMARY KEY (proposition_cours, eleve, date_realisation),
-  CONSTRAINT FK_SeancePropositionCours_Cours FOREIGN KEY (proposition_cours)
-  REFERENCES PropositionCours (id),
-  CONSTRAINT FK_SeancePropositionCours_Eleve FOREIGN KEY (eleve)
-  REFERENCES Eleve (id)
-);
-
-CREATE TABLE DemandeCours (
-  id           INT NOT NULL AUTO_INCREMENT,
-  nom          VARCHAR(255),
-  description  TEXT,
-  tarif        FLOAT,
-  date_demande DATETIME     DEFAULT CURRENT_TIMESTAMP,
-  id_auteur    INT,
-  matiere      INT,
-  niveau_etude INT,
-  CONSTRAINT PK_DemandeCours PRIMARY KEY (id),
-  CONSTRAINT FK_DemandeCours_Auteur FOREIGN KEY (id_auteur)
-  REFERENCES Eleve (id),
-  CONSTRAINT FK_DemandeCours_Matiere FOREIGN KEY (matiere)
-  REFERENCES Matiere (id),
-  CONSTRAINT FK_DemandeCours_NiveauEtude FOREIGN KEY (niveau_etude)
-  REFERENCES NiveauEtude (id)
-);
-
-CREATE TABLE SeanceDemandeCours (
-  date_inscription  DATETIME DEFAULT CURRENT_TIMESTAMP,
-  date_realisation  DATETIME,
-  proposition_cours INT,
-  enseignant        INT,
-  duree             INT,
-  etat              INT,
-  CONSTRAINT PK_SeanceDemandeCours PRIMARY KEY (proposition_cours, enseignant, date_realisation),
-  CONSTRAINT FK_SeanceDemandeCours_Cours FOREIGN KEY (proposition_cours)
-  REFERENCES DemandeCours (id),
-  CONSTRAINT FK_SeanceDemandeCours_Enseignant FOREIGN KEY (enseignant)
-  REFERENCES Enseignant (id)
+  CONSTRAINT PK_SeanceCours PRIMARY KEY (proposition_cours, participant, date_realisation),
+  CONSTRAINT FK_SeanceCours_Cours FOREIGN KEY (proposition_cours)
+  REFERENCES Cours (id),
+  CONSTRAINT FK_SeanceCours_Personne FOREIGN KEY (participant)
+  REFERENCES Personne (id)
 );
 
 CREATE TABLE TypeRessource (
@@ -168,10 +136,8 @@ CREATE TABLE Message (
 
 SHOW TABLES;
 
-DESC SeanceDemandeCours;
-DESC SeancePropositionCours;
-DESC DemandeCours;
-DESC PropositionCours;
+DESC SeanceCours;
+DESC Cours;
 DESC Eleve;
 DESC Enseigner;
 DESC Enseignant;
