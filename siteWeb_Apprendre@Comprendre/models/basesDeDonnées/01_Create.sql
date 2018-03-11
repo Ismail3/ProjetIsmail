@@ -17,8 +17,8 @@ CREATE TABLE Matiere (
 );
 
 CREATE TABLE NiveauEtude (
-  id    INT NOT NULL AUTO_INCREMENT,
-  nom   VARCHAR(255),
+  id  INT NOT NULL AUTO_INCREMENT,
+  nom VARCHAR(255),
   CONSTRAINT PK_NiveauEtude PRIMARY KEY (id)
 );
 
@@ -35,7 +35,7 @@ CREATE TABLE Personne (
 
 CREATE TABLE Enseignant (
   id          INT NOT NULL AUTO_INCREMENT,
-  id_personne  INT NOT NULL,
+  id_personne INT NOT NULL,
   description TEXT,
   CONSTRAINT PK_Enseignant PRIMARY KEY (id),
   CONSTRAINT FK_Enseignant_Personne FOREIGN KEY (id_personne)
@@ -59,7 +59,7 @@ CREATE TABLE Enseigner (
 
 CREATE TABLE Eleve (
   id           INT NOT NULL AUTO_INCREMENT,
-  id_personne   INT NOT NULL,
+  id_personne  INT NOT NULL,
   niveau_etude INT,
   CONSTRAINT PK_Eleve PRIMARY KEY (id),
   CONSTRAINT FK_Eleve_Personne FOREIGN KEY (id_personne)
@@ -73,7 +73,7 @@ CREATE TABLE Cours (
   nom              VARCHAR(255),
   description      TEXT,
   tarif            FLOAT,
-  date_proposition DATETIME     DEFAULT CURRENT_TIMESTAMP,
+  date_creation    DATETIME     DEFAULT CURRENT_TIMESTAMP,
   id_auteur        INT,
   matiere          INT,
   niveau_etude_min INT,

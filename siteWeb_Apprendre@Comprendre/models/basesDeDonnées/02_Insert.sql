@@ -24,7 +24,7 @@ OPTIONALLY ENCLOSED BY ''
 ESCAPED BY ''
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(id_personne,description);
+(id_personne,niveau_etude);
 
 
 LOAD DATA INFILE "personne_enseignant.csv" IGNORE
@@ -48,11 +48,52 @@ IGNORE 1 LINES
 LOAD DATA INFILE "matiere.csv" IGNORE
 INTO TABLE Matiere
 COLUMNS TERMINATED BY ','
-OPTIONALLY ENCLOSED BY ''
+OPTIONALLY ENCLOSED BY '"'
 ESCAPED BY ''
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
 (id, nom);
+
+LOAD DATA INFILE "cours_enseignant.csv" IGNORE
+INTO TABLE Cours
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+ESCAPED BY ''
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(id,nom,description,tarif,date_creation,id_auteur,matiere,niveau_etude_min,niveau_etude_max);
+
+LOAD DATA INFILE "seance_cours_enseignant.csv" IGNORE
+INTO TABLE SeanceCours
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+ESCAPED BY ''
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(date_inscription,date_realisation,proposition_cours,participant,duree,etat);
+
+
+LOAD DATA INFILE "cours_eleve.csv" IGNORE
+INTO TABLE Cours
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+ESCAPED BY ''
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(id,nom,description,tarif,date_creation,id_auteur,matiere,niveau_etude_min,niveau_etude_max);
+
+
+LOAD DATA INFILE "seance_cours_eleve.csv" IGNORE
+INTO TABLE SeanceCours
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY ''
+ESCAPED BY ''
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(date_inscription,date_realisation,proposition_cours,participant,duree,etat);
+
+
+
 
 
 
