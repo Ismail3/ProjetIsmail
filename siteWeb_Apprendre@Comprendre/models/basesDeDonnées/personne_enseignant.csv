@@ -1,4 +1,4 @@
-id,nom,prénom,email,dateNaissance,motDePasse,dateInscription
+id,nom,prenom,email,date_naissance,mot_de_passe,date_inscription
 1000,PELLETIER,Lorelle,lorelle.pelletier@exmpmail.com,1970-03-16,password,2015-02-06
 1001,MENARD,Ibraheem,ibraheem.menard@exmpmail.com,1974-03-26,password,2015-09-26
 1002,CHAUVIN,Sango,sango.chauvin@exmpmail.com,1986-12-02,password,2016-05-15

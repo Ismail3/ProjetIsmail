@@ -1,4 +1,4 @@
-id,nom,pr�nom,email,dateNaissance,motDePasse,dateInscription
+id,nom,prenom,email,date_naissance,mot_de_passe,date_inscription
 1,LAURENT,Itziar,itziar.laurent@exmpmail.com,1992-04-06,password,2015-02-07
 2,MORIN,Natasha,natasha.morin@exmpmail.com,1985-12-16,password,2015-06-22
 3,DUFOUR,Grigory,grigory.dufour@exmpmail.com,1992-10-28,password,2015-07-15

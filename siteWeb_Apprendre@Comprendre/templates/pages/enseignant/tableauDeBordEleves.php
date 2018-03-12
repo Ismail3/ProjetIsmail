@@ -29,11 +29,11 @@
 
 <body cz-shortcut-listen="true">
 <?php
-require(dirname(__FILE__) . '/../../../controlleurs/pages/enseignant/TableauDeBordControlleur.php');
+require_once(dirname(__FILE__) . '/../../../controlleurs/pages/enseignant/TableauDeBordControlleur.php');
 
-require(dirname(__FILE__) . '/../../widgets/enseignant/navbar.php');
-require(dirname(__FILE__) . '/../../widgets/enseignant/header.php');
-require(dirname(__FILE__) . '/../../widgets/topButton.php');
+require_once(dirname(__FILE__) . '/../../widgets/enseignant/navbar.php');
+require_once(dirname(__FILE__) . '/../../widgets/enseignant/header.php');
+require_once(dirname(__FILE__) . '/../../widgets/topButton.php');
 ?>
 
 
@@ -62,7 +62,7 @@ require(dirname(__FILE__) . '/../../widgets/topButton.php');
 
 <!-- Footer -->
 <?php
-require(dirname(__FILE__) . '/../../widgets/footer.php');
+require_once(dirname(__FILE__) . '/../../widgets/footer.php');
 ?>
 
 
