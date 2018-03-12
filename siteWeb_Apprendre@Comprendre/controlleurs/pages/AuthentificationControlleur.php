@@ -2,7 +2,7 @@
 
 class AuthentificationControlleur
 {
-    public static function getHeader()
+    public static function displayHeader()
     {
         echo '<!-- Header with full-height image -->
 <header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
@@ -31,18 +31,19 @@ class AuthentificationControlleur
 </header>';
     }
 
-    public static function getTopButton()
+    public static function displayTopButton()
     {
         echo '<button onclick="topFunction()" id="topBtn" title="Go to top">Top</button>';
     }
 
-    public static function getContenu()
+
+    public static function displayConnexion()
     {
         echo '<!-- Promo Section - "We know design" -->
 <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
     <div class="w3-row-padding">
         <div class="w3-col m6">
-            <form>
+            <form action="" method="post">
                 <fieldset>
                     <legend>Connexion</legend>
                     <div class="form-group">
@@ -65,7 +66,26 @@ class AuthentificationControlleur
         </div>
     </div>
 </div>
+';
+    }
 
+    public static function uConnexion()
+    {
+        $errors = array();
+        if (!empty($_POST)) {
+
+
+            if (!empty($_POST['exampleInputEmail1'])) {
+                $errors['exampleInputEmail1']="['exampleInputEmail1'] invalide";
+            }
+
+        }
+        var_dump($errors);
+    }
+
+    public static function displayInscription()
+    {
+        echo '
 <!-- Promo Section - "We know design" -->
 <div id="inscription" class="w3-container w3-dark-grey" style="padding:128px 16px">
     <div class="w3-row-padding">
@@ -126,6 +146,12 @@ class AuthentificationControlleur
         </div>
     </div>
 </div>';
+    }
+
+    public static function getContenu()
+    {
+        self::displayConnexion();
+        self::displayInscription();
     }
 
     public static function getFooter()

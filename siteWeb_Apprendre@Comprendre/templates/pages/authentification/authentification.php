@@ -34,8 +34,9 @@
 require_once(dirname(__FILE__) . '/../../../controlleurs/widgets/NavBarControlleur.php');
 require_once(dirname(__FILE__) . '/../../../controlleurs/pages/AuthentificationControlleur.php');
 NavBarControlleur::getAuthentificationNavBar();
-AuthentificationControlleur::getHeader();
-AuthentificationControlleur::getTopButton();
+AuthentificationControlleur::displayHeader();
+AuthentificationControlleur::displayTopButton();
+AuthentificationControlleur::uConnexion();
 AuthentificationControlleur::getContenu();
 AuthentificationControlleur::getFooter();
 
