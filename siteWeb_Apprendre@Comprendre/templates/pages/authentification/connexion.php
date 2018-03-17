@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="../../../ressources/styles/font-awesome.min.css">
     <link rel="stylesheet" href="../../../ressources/styles/bootstrap.min.css">
     <link rel="stylesheet" href="../../../ressources/styles/apprendre@comprendre.css">
-    <link rel="stylesheet" href="../../../ressources/styles/template-tableau-de-bord-enseignant.css">
+    <link rel="stylesheet" href="../../../ressources/styles/template.css">
+    <link rel="stylesheet" href="../../../ressources/styles/template-authentification.css">
 
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/common.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/map.js"></script>
@@ -26,45 +27,22 @@
     <script src="../../../ressources/javascript/js"></script>
     <script src="../../../ressources/javascript/apprendre@comprendre.js"></script>
 </head>
-
 <body cz-shortcut-listen="true">
+
+
 <?php
-require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControlleur.php');
+require_once(dirname(__FILE__) . '/../../../controlleurs/pages/AuthentificationControlleur.php');
 
-require_once(dirname(__FILE__) . '/../../widgets/enseignant/navbar.php');
-require_once(dirname(__FILE__) . '/../../widgets/enseignant/header.php');
-require_once(dirname(__FILE__) . '/../../widgets/topButton.php');
+$authCtrl = new AuthentificationControlleur();
+
+$authCtrl->displayNavBar();
+$authCtrl->displayTopButton();
+$authCtrl->uConnexion();
+$authCtrl->debugSession();
+$authCtrl->displayConnexion();
+$authCtrl->displayFooter();
+
 ?>
-
-
-<!-- Team Section -->
-<div class="w3-container" style="padding:128px 16px" id="team">
-    <h3 class="w3-center">Vos élèves</h3>
-    <p class="w3-center w3-large">Dans ces rubriques vous pouvez contacter vos élèves ou visualer les cours ques vous
-        avez ou devez réaliser avec eux</p>
-    <div class="w3-row-padding w3-grayscale" style="margin-top:64px">
-        <?php
-
-        $controlleur = new TableauDeBordControlleur();
-
-        $controlleur->displayEleves();
-
-        ?>
-    </div>
-
-    <?php
-    $controlleur->displayPage();
-
-    ?>
-
-</div>
-
-
-<!-- Footer -->
-<?php
-require_once(dirname(__FILE__) . '/../../widgets/footer.php');
-?>
-
 
 </body>
 </html>

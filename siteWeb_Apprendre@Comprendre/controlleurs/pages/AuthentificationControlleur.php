@@ -1,8 +1,79 @@
 <?php
+require_once(dirname(__FILE__) . '/../AbstractControlleur.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Personne.php');
 
-class AuthentificationControlleur
+class AuthentificationControlleur extends AbstractControlleur
 {
-    public static function displayHeader()
+
+    public function displayNavBar()
+    {
+        if (array_key_exists('utilisateur', $_SESSION) && !empty($_SESSION['utilisateur'])) {
+            echo '<!-- Navbar (sit on top) -->
+                <div class="w3-top">
+                    <div class="w3-bar w3-white w3-card" id="myNavbar">
+                        <a href="../../../index.php#home"
+                           class="w3-bar-item w3-button w3-wide">
+                            <img id="logo_header" src="../../../ressources/images/Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+                        </a>
+                        <!-- Right-sided navbar links -->
+                        <div class="w3-right w3-hide-small">
+                
+                            <a href="../enseignant/tableauDeBord.php" class="w3-bar-item w3-button"><i
+                                    class="fa fa-user"></i> Tableau de bord</a>
+                        </div>
+                        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+                
+                        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
+                           onclick="w3_open()">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Sidebar on small screens when clicking the menu icon -->
+                <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none"
+                     id="mySidebar">
+                    <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+                    <a href="#team" onclick="w3_close()"
+                       class="w3-bar-item w3-button">Tableau de bord</a>
+                </nav>
+                ';
+        } else {
+            echo '<!-- Navbar (sit on top) -->
+                <div class="w3-top">
+                    <div class="w3-bar w3-white w3-card" id="myNavbar">
+                        <a href="../../../index.php#home"
+                           class="w3-bar-item w3-button w3-wide">
+                            <img id="logo_header" src="../../../ressources/images/Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+                        </a>
+                        <!-- Right-sided navbar links -->
+                        <div class="w3-right w3-hide-small">
+                
+                            <a href="authentification.php" class="w3-bar-item w3-button"><i
+                                        class="fa fa-user"></i> Authentification</a>
+                        </div>
+                        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+                
+                        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
+                           onclick="w3_open()">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Sidebar on small screens when clicking the menu icon -->
+                <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none"
+                     id="mySidebar">
+                    <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+                    <a href="#team" onclick="w3_close()"
+                       class="w3-bar-item w3-button">Authentification</a>
+                </nav>
+                                
+                ';
+        }
+    }
+
+    public function displayHeader()
     {
         echo '<!-- Header with full-height image -->
 <header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
@@ -12,9 +83,9 @@ class AuthentificationControlleur
             <h1><strong> Aprendre@Comprendre</strong></h1>
             <span class="w3-xxlarge w3-hide-large w3-hide-medium">Start something that matters</span><br>
             <span class="w3-large">Stop wasting valuable time with projects that just isn\'t you.</span>
-            <p><a href="#connexion"
+            <p><a href="connexion.php"
                   class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Connexion</a>
-                <a href="#inscription"
+                <a href="inscription.php"
                    class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Inscription</a>
             </p>
         </div>
@@ -31,32 +102,24 @@ class AuthentificationControlleur
 </header>';
     }
 
-    public static function displayTopButton()
-    {
-        echo '<button onclick="topFunction()" id="topBtn" title="Go to top">Top</button>';
-    }
-
-
-    public static function displayConnexion()
+    public function displayConnexion()
     {
         echo '<!-- Promo Section - "We know design" -->
 <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
     <div class="w3-row-padding">
         <div class="w3-col m6">
-            <form action="" method="post">
+            <form action="authentification.php" method="post">
                 <fieldset>
                     <legend>Connexion</legend>
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                        <label for="inputEmailConnexion">Email address</label>
+                        <input name="inputEmailConnexion" type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email">
                         <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"></div>
-                    <a href="../enseignant/tableauDeBord.php" >
+                        <label for="inputPasswordConnexion">Password</label>
+                        <input name="inputPasswordConnexion" type="password" class="form-control" id="inputPasswordConnexion" placeholder="Password"></div>
                         <button type="submit" class="btn btn-primary">Submit</button>
-                    </a>
                 </fieldset>
             </form>
         </div>
@@ -69,21 +132,89 @@ class AuthentificationControlleur
 ';
     }
 
-    public static function uConnexion()
+    public function uConnexion()
     {
-        $errors = array();
-        if (!empty($_POST)) {
+        $bdd = $this->getDb()->openConn();
 
+        $email = $_POST['inputEmailConnexion'];
+        $password = $_POST['inputPasswordConnexion'];
 
-            if (!empty($_POST['exampleInputEmail1'])) {
-                $errors['exampleInputEmail1']="['exampleInputEmail1'] invalide";
+        //  Récupération de l'utilisateur et de son pass hashé
+        /*
+
+         */
+
+        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
+                FROM Eleve E, NiveauEtude NE, Personne P
+                WHERE E.id_personne = P.id
+                      and E.niveau_etude = NE.id
+                      and P.email='$email'
+                      and P.mot_de_passe='$password'
+                ;";
+        $result = $bdd->query($sql);
+        if ($result->num_rows > 0) {
+            session_start();
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+
+                $personne = new Personne();
+                $personne->setId($row["id"]);
+                $personne->setNom($row["nom"]);
+                $personne->setPrenom($row["prenom"]);
+                $personne->setEmail($row["email"]);
+                $personne->setDateNaissance($row["date_naissance"]);
+                $_SESSION["utilisateur"] = $personne;
+                var_dump("utilisateur: <br>");
+                var_dump($_SESSION["utilisateur"]);
+                var_dump("<br>");
+                var_dump("<br>");
+//                $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"]);
             }
-
+        } else {
+            echo "Vous êtes actuellement déconnecté";
         }
-        var_dump($errors);
+        var_dump("utilisateur: <br>");
+        var_dump($_SESSION["utilisateur"]);
+        var_dump("<br>");
+        var_dump("<br>");
+
+        $this->getDb()->closeConn();
     }
 
-    public static function displayInscription()
+    function displayEleve($id, $nom, $prenom, $email, $date_naissance, $niveau_etude)
+    {
+        $eleve = '<div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-card">
+                <img src="../../ressources/images/team2.jpg" alt="John" style="width:100%">
+                <div class="w3-container">
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                                <h3>' . $nom . ' ' . $prenom . '</h3>
+                            </td>
+                            <td style="text-align: right">
+                                ' . $id . ' 
+                                                    <p class="w3-opacity">' . $niveau_etude . ' </p>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p style="text-align: center">' . $date_naissance . '</p>
+                    <p>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> ' . $email . ' </button>
+                    </p>
+                    <p>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-book"></i> Cours</button>
+                    </p>
+                </div>
+            </div>
+        </div>';
+
+        echo $eleve;
+    }
+
+    public function displayInscription()
     {
         echo '
 <!-- Promo Section - "We know design" -->
@@ -108,8 +239,8 @@ class AuthentificationControlleur
                         <input type="date" class="form-control" id="inputDateNaissance">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                        <label for="inputEmailConnexion">Email address</label>
+                        <input type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email">
                         <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
                     </div>
                     <div class="form-group">
@@ -148,13 +279,7 @@ class AuthentificationControlleur
 </div>';
     }
 
-    public static function getContenu()
-    {
-        self::displayConnexion();
-        self::displayInscription();
-    }
-
-    public static function getFooter()
+    public function displayFooter()
     {
         echo '<!-- Footer -->
 <footer class="w3-center w3-black w3-padding-64">

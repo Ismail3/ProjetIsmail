@@ -30,13 +30,20 @@
 <body cz-shortcut-listen="true">
 
 <?php
-require_once(dirname(__FILE__) . '/controlleurs/widgets/NavBarControlleur.php');
 require_once(dirname(__FILE__) . '/controlleurs/pages/AccueilControlleur.php');
-NavBarControlleur::getNavBar();
-AccueilControlleur::getHeader();
-AccueilControlleur::getTopButton();
-AccueilControlleur::getContenu();
-AccueilControlleur::getFooter();
+
+$accueilCtrl = new AccueilControlleur();
+
+$accueilCtrl->displayNavBar();
+$accueilCtrl->displayHeader();
+$accueilCtrl->displayTopButton();
+$accueilCtrl->debugSession();
+$accueilCtrl->destroyConnexion();
+$accueilCtrl->displayContenu();
+$accueilCtrl->displayFooter();
+
+//session_destroy();
+
 ?>
 
 </body>

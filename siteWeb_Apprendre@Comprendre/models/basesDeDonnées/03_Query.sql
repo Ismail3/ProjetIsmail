@@ -55,6 +55,22 @@ mysql> desc NiveauEtude;
 2 rows in set (0,00 sec)
  */
 
+
+/*
+  Connexion utilisateur
+*/
+SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
+FROM Eleve E, NiveauEtude NE, Personne P
+WHERE E.id_personne = P.id
+      and E.niveau_etude = NE.id
+      and P.email='garsha.guillaume@exmpmail.com'
+      and P.mot_de_passe='password'
+;
+
+
+/*
+  Liste des élèves
+*/
 SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
 FROM Eleve E, NiveauEtude NE, Personne P
 WHERE E.id_personne = P.id and E.niveau_etude = NE.id

@@ -2,7 +2,7 @@
 
 class NavBarControlleur
 {
-    public static function getNavBar()
+    public function getNavBar()
     {
         echo '<!-- Navbar (sit on top) -->
 <div class="w3-top">
@@ -36,16 +36,17 @@ class NavBarControlleur
 ';
     }
 
-    public static function getEnseignantNavBar()
+    public function getEnseignantNavBar()
     {
     }
 
-    public static function getEleveNavBar()
+    public function getEleveNavBar()
     {
     }
 
-    public static function getAuthentificationNavBar()
+    public function displayAuthentificationNavBar()
     {
+        var_dump($_SESSION["utilisateur"]);
         echo '<!-- Navbar (sit on top) -->
                 <div class="w3-top">
                     <div class="w3-bar w3-white w3-card" id="myNavbar">
@@ -78,11 +79,11 @@ class NavBarControlleur
                 ';
     }
 
-    public static function getTableauDeBordEnseignantNavBar()
+    public function getTableauDeBordEnseignantNavBar()
     {
     }
 
-    public static function getTableauDeBordEleveNavBar()
+    public function getTableauDeBordEleveNavBar()
     {
     }
 

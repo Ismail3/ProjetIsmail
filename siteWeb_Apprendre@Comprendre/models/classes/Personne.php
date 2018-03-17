@@ -8,10 +8,7 @@ class Personne
     protected $id;
     protected $nom;
     protected $prenom;
-    protected $dateNaissance;
-    protected $motDePAsse;
-    protected $image;
-    protected $dateInscription;
+    protected $email;
 
     /**
      * Personne constructor.
@@ -135,6 +132,27 @@ class Personne
     {
         $this->dateInscription = $dateInscription;
     }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+    protected $dateNaissance;
+    protected $motDePAsse;
+    protected $image;
+    protected $dateInscription;
+
 
 
 }

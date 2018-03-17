@@ -31,14 +31,15 @@
 
 
 <?php
-require_once(dirname(__FILE__) . '/../../../controlleurs/widgets/NavBarControlleur.php');
 require_once(dirname(__FILE__) . '/../../../controlleurs/pages/AuthentificationControlleur.php');
-NavBarControlleur::getAuthentificationNavBar();
-AuthentificationControlleur::displayHeader();
-AuthentificationControlleur::displayTopButton();
-AuthentificationControlleur::uConnexion();
-AuthentificationControlleur::getContenu();
-AuthentificationControlleur::getFooter();
+
+$authCtrl = new AuthentificationControlleur();
+
+$authCtrl->displayNavBar();
+$authCtrl->displayHeader();
+$authCtrl->displayTopButton();
+$authCtrl->uConnexion();
+$authCtrl->displayFooter();
 
 ?>
 

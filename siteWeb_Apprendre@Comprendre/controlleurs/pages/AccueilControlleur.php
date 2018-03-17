@@ -1,9 +1,45 @@
 <?php
+require_once(dirname(__FILE__) . '/../AbstractControlleur.php');
 
-class AccueilControlleur
+
+class AccueilControlleur extends AbstractControlleur
 {
 
-    public static function getHeader()
+    public function displayNavBar()
+    {
+        echo '<!-- Navbar (sit on top) -->
+<div class="w3-top">
+    <div class="w3-bar w3-white w3-card" id="myNavbar">
+        <a href="#home"
+           class="w3-bar-item w3-button w3-wide">
+            <img id="logo_header"src="ressources/images/Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+        </a>
+        <!-- Right-sided navbar links -->
+        <div class="w3-right w3-hide-small">
+
+            <a href="templates/pages/authentification/authentification.php" class="w3-bar-item w3-button"><i
+                        class="fa fa-user"></i> Authentification</a>
+        </div>
+        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
+           onclick="w3_open()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+</div>
+
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none"
+     id="mySidebar">
+    <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+    <a href="#team" onclick="w3_close()"
+       class="w3-bar-item w3-button">Authentification</a>
+</nav>
+                ';
+    }
+
+    public function displayHeader()
     {
         echo '<!-- Header with full-height image -->
 <header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
@@ -29,65 +65,14 @@ class AccueilControlleur
 </header>';
     }
 
-    public static function getAccueilEnseignantHeader()
-    {
-        echo '<!-- Header with full-height image -->
-<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
-    <div class="w3-display-left w3-text-white full-width-div" style="padding:48px">
-        <span class="w3-jumbo w3-hide-small"></span><br>
-        <div align="center">
-            <h1><strong> Aprendre@Comprendre</strong></h1>
-            <span class="w3-xxlarge w3-hide-large w3-hide-medium">Start something that matters</span><br>
-            <span class="w3-large">Stop wasting valuable time with projects that just isn\'t you.</span>
-            <p><a href="#about"
-                  class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Learn
-                    more and start today</a></p>
-        </div>
-    </div>
-    <div class="w3-display-bottomleft w3-text-grey w3-large" style="padding:24px 48px">
-        <i class="fa fa-facebook-official w3-hover-opacity"></i>
-        <i class="fa fa-instagram w3-hover-opacity"></i>
-        <i class="fa fa-snapchat w3-hover-opacity"></i>
-        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-        <i class="fa fa-twitter w3-hover-opacity"></i>
-        <i class="fa fa-linkedin w3-hover-opacity"></i>
-    </div>
-</header>';
-    }
 
-    public static function getAccueilEleveHeader()
-    {
-        echo '<!-- Header with full-height image -->
-<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
-    <div class="w3-display-left w3-text-white full-width-div" style="padding:48px">
-        <span class="w3-jumbo w3-hide-small"></span><br>
-        <div align="center">
-            <h1><strong> Aprendre@Comprendre</strong></h1>
-            <span class="w3-xxlarge w3-hide-large w3-hide-medium">Start something that matters</span><br>
-            <span class="w3-large">Stop wasting valuable time with projects that just isn\'t you.</span>
-            <p><a href="#about"
-                  class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Learn
-                    more and start today</a></p>
-        </div>
-    </div>
-    <div class="w3-display-bottomleft w3-text-grey w3-large" style="padding:24px 48px">
-        <i class="fa fa-facebook-official w3-hover-opacity"></i>
-        <i class="fa fa-instagram w3-hover-opacity"></i>
-        <i class="fa fa-snapchat w3-hover-opacity"></i>
-        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-        <i class="fa fa-twitter w3-hover-opacity"></i>
-        <i class="fa fa-linkedin w3-hover-opacity"></i>
-    </div>
-</header>';
-    }
-
-    public static function getTopButton()
+    public function displayTopButton()
     {
 
         echo '<button onclick="topFunction()" id="topBtn" title="Go to top">Top</button>';
     }
 
-    public static function getContenu()
+    public function displayContenu()
     {
         echo '
 
@@ -151,7 +136,7 @@ class AccueilControlleur
                 <div class="w3-container">
                     <h3>John Doe</h3>
                     <p class="w3-opacity">CEO &amp; Founder</p>
-                    <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
+                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
                         elementum.</p>
                     <p>
                         <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
@@ -165,7 +150,7 @@ class AccueilControlleur
                 <div class="w3-container">
                     <h3>Anja Doe</h3>
                     <p class="w3-opacity">Art Director</p>
-                    <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
+                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
                         elementum.</p>
                     <p>
                         <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
@@ -179,7 +164,7 @@ class AccueilControlleur
                 <div class="w3-container">
                     <h3>Mike Ross</h3>
                     <p class="w3-opacity">Web Designer</p>
-                    <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
+                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
                         elementum.</p>
                     <p>
                         <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
@@ -193,7 +178,7 @@ class AccueilControlleur
                 <div class="w3-container">
                     <h3>Dan Star</h3>
                     <p class="w3-opacity">Designer</p>
-                    <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
+                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
                         elementum.</p>
                     <p>
                         <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
@@ -226,7 +211,7 @@ class AccueilControlleur
 ';
     }
 
-    public static function getFooter()
+    public function displayFooter()
     {
         echo '<!-- Footer -->
 <footer class="w3-center w3-black w3-padding-64">
@@ -244,5 +229,10 @@ class AccueilControlleur
     </p>
 </footer>
 ';
+    }
+
+    public function destroyConnexion()
+    {
+        session_destroy();
     }
 }
