@@ -74,4 +74,9 @@ class AbstractControlleur
     {
         var_dump($_SESSION);
     }
+
+    public function userConnected()
+    {
+        return array_key_exists('utilisateur', $_SESSION) && !empty($_SESSION['utilisateur']);
+    }
 }

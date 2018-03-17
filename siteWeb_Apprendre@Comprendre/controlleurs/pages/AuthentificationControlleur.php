@@ -7,7 +7,7 @@ class AuthentificationControlleur extends AbstractControlleur
 
     public function displayNavBar()
     {
-        if (array_key_exists('utilisateur', $_SESSION) && !empty($_SESSION['utilisateur'])) {
+        if ($this->userConnected()) {
             echo '<!-- Navbar (sit on top) -->
                 <div class="w3-top">
                     <div class="w3-bar w3-white w3-card" id="myNavbar">
@@ -108,7 +108,7 @@ class AuthentificationControlleur extends AbstractControlleur
 <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
     <div class="w3-row-padding">
         <div class="w3-col m6">
-            <form action="authentification.php" method="post">
+            <form action="connexion_result.php" method="post">
                 <fieldset>
                     <legend>Connexion</legend>
                     <div class="form-group">
@@ -138,11 +138,6 @@ class AuthentificationControlleur extends AbstractControlleur
 
         $email = $_POST['inputEmailConnexion'];
         $password = $_POST['inputPasswordConnexion'];
-
-        //  Récupération de l'utilisateur et de son pass hashé
-        /*
-
-         */
 
         $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
                 FROM Eleve E, NiveauEtude NE, Personne P
@@ -181,6 +176,7 @@ class AuthentificationControlleur extends AbstractControlleur
         $this->getDb()->closeConn();
     }
 
+
     function displayEleve($id, $nom, $prenom, $email, $date_naissance, $niveau_etude)
     {
         $eleve = '<div class="w3-col l3 m6 w3-margin-bottom">
@@ -216,58 +212,78 @@ class AuthentificationControlleur extends AbstractControlleur
 
     public function displayInscription()
     {
-        echo '
+        $email = $_POST['inputEmailInscription'];
+        $mot_de_passe = $_POST['inputPasswordInscription'];
+        $mot_de_passe_confirm = $_POST['inputPasswordConfirmInscription'];
+        $nom = $_POST['inputNomInscription'];
+        $prenom = $_POST['inputPrenomInscription'];
+        $date_de_naissance = $_POST['inputDateDeNaissanceInscription'];
+        $type_compte = $_POST['inputTypeCompteInscription'];
+
+        $widget= '
 <!-- Promo Section - "We know design" -->
 <div id="inscription" class="w3-container w3-dark-grey" style="padding:128px 16px">
     <div class="w3-row-padding">
         <div class="w3-col m6">
-            <form>
+            <form action="./inscription.php" method="post">
                 <fieldset>
                     <legend>Inscription</legend>
                     <div class="form-group">
-                        <label for="inputNom">Nom</label>
-                        <input type="text" class="form-control" id="inputNom" aria-describedby="nomHelp" placeholder="Entrer votre NOM">
+                        <label for="inputNomInscription">Nom</label>
+                        <input type="text" class="form-control" 
+                        name="inputNomInscription"
+                        id="inputNomInscription" aria-describedby="nomHelp" 
+                        placeholder="Entrer votre NOM"
+                        value="' . $nom  . '">
                         <small id="nomHelp" class="form-text text-muted">UPPER CASE</small>
                     </div>
                     <div class="form-group">
-                        <label for="inputPrénom">Prénom</label>
-                        <input type="text" class="form-control" id="inputPrénom" aria-describedby="prénomHelp" placeholder="Entrer votre Prénom">
+                        <label for="inputPrenomInscription">Prénom</label>
+                        <input type="text" class="form-control" 
+                        name="inputPrenomInscription"
+                        id="inputPrenomInscription" aria-describedby="prénomHelp" placeholder="Entrer votre Prénom">
                         <small id="prénomHelp" class="form-text text-muted">Normal case</small>
                     </div>
                     <div class="form-group">
-                        <label for="inputDateNaissance">Date de naissance</label>
-                        <input type="date" class="form-control" id="inputDateNaissance">
+                        <label for="inputNaisssanceInscription">Date de naissance</label>
+                        <input type="date" class="form-control" 
+                        name="inputNaisssanceInscription"
+                        id="inputNaisssanceInscription">
                     </div>
                     <div class="form-group">
-                        <label for="inputEmailConnexion">Email address</label>
-                        <input type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email">
+                        <label for="inputEmailInscription">Email address</label>
+                        <input type="email" class="form-control" 
+                        name="inputEmailInscription"
+                        id="inputEmailInscription" aria-describedby="emailHelp" placeholder="Enter email">
                         <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        <label for="inputPasswordInscription">Password</label>
+                        <input type="password" class="form-control" 
+                        name="inputPasswordInscription"
+                        id="inputPasswordInscription" placeholder="Password">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Confirm password">
+                        <input type="password" class="form-control" 
+                        name="inputPasswordConfirmInscription"
+                        id="inputPasswordConfirmInscription" placeholder="Confirm password">
                     </div>
                     <fieldset class="form-group">
                         <legend>TypeDeCompte</legend>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                                <input type="radio" class="form-check-input" name="inputTypeCompteInscription" id="inputTypeCompteInscription1" value="option1" checked="">
                                 Éleve
                             </label>
                             <br>
                             <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
+                                <input type="radio" class="form-check-input" name="inputTypeCompteInscription" id="inputTypeCompteInscription2" value="option2">
                                 Enseignant
                             </label>
                         </div>
 
                     </fieldset>
-                    <a href="../enseignant/tableauDeBord.php" >
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </a>
+                        <button type="submit" class="btn btn-primary" value = "Envoyer">Submit</button>
                 </fieldset>
             </form>
         </div>
@@ -277,6 +293,55 @@ class AuthentificationControlleur extends AbstractControlleur
         </div>
     </div>
 </div>';
+
+        echo $widget;
+    }
+
+    /**
+     * Fonction permettant de gérer l'inscription des utilisateurs
+     */
+    public function uInscription()
+    {
+        if ($this->formulaireInscriptionComplet()) {
+            $bdd = $this->getDb()->openConn();
+
+            $email = $_POST['inputEmailInscription'];
+            $mot_de_passe = $_POST['inputPasswordInscription'];
+            $mot_de_passe_confirm = $_POST['inputPasswordConfirmInscription'];
+            $nom = $_POST['inputNomInscription'];
+            $prenom = $_POST['inputPrenomInscription'];
+            $date_de_naissance = $_POST['inputDateDeNaissanceInscription'];
+            $type_compte = $_POST['inputTypeCompteInscription'];
+
+            if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
+                $sql = "INSERT INTO Personne (nom, prenom, email, date_naissance, mot_de_passe)
+                VALUES ('$nom','$prenom','$email','$date_de_naissance','$mot_de_passe')
+                ;";
+
+                var_dump($sql);
+                var_dump("<br>");
+
+                if ($bdd->query($sql) === TRUE) {
+                    var_dump("New record created successfully");
+                    var_dump("<br>");
+                    echo "New record created successfully";
+                } else {
+                    var_dump("Error: " . $sql . "<br>" . $bdd->error);
+                    var_dump("<br>");
+                    echo "Error: " . $sql . "<br>" . $bdd->error;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $mot_de_passe
+     * @param $mot_de_passe_confirm
+     * @return bool
+     */
+    public function validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)
+    {
+        return strcmp($mot_de_passe, $mot_de_passe_confirm) == 0;
     }
 
     public function displayFooter()
@@ -297,4 +362,176 @@ class AuthentificationControlleur extends AbstractControlleur
     </p>
 </footer>';
     }
+
+    public function displayConnexionResult()
+    {
+        if ($this->userConnected()) {
+            echo '<!-- Promo Section - "We know design" -->
+            <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
+                <div class="w3-row-padding">
+                    <div class="w3-col m6">
+                                    <a href="../enseignant/tableauDeBord.php">                                   
+                                    <button type="submit" class="btn btn-primary">Tableau de bord</button>
+                                    </a>
+                    </div>
+                    <div class="w3-col m6">
+                        <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
+                             width="700" height="394">
+                    </div>
+                </div>
+            </div>
+            ';
+        } else {
+            echo '<!-- Promo Section - "We know design" -->
+            <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
+                <div class="w3-row-padding">
+                    <div class="w3-col m6">
+                        <form action="connexion_result.php" method="post">
+                            <fieldset>
+                                <legend>Connexion</legend>
+                                <div class="form-group">
+                                    <label for="inputEmailConnexion">Email address</label>
+                                    <input name="inputEmailConnexion" type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email">
+                                    <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPasswordConnexion">Password</label>
+                                    <input name="inputPasswordConnexion" type="password" class="form-control" id="inputPasswordConnexion" placeholder="Password"></div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                    Echec de la connexion
+                    <div class="w3-col m6">
+                        <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
+                             width="700" height="394">
+                    </div>
+                </div>
+            </div>
+            ';
+        }
+    }
+
+    public function displayInscriptionResult()
+    {
+        echo '
+<!-- Promo Section - "We know design" -->
+<div id="inscription" class="w3-container w3-dark-grey" style="padding:128px 16px">
+    <div class="w3-row-padding">
+        <div class="w3-col m6">
+            <form action="inscription_result.php" method="post">
+                <fieldset>
+                    <legend>Inscription</legend>
+                    <div class="form-group">
+                        <label for="inputNomInscription">Nom</label>
+                        <input type="text" class="form-control" id="inputNomInscription" aria-describedby="nomHelp" placeholder="Entrer votre NOM">
+                        <small id="nomHelp" class="form-text text-muted">UPPER CASE</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPrenomInscription">Prénom</label>
+                        <input type="text" class="form-control" id="inputPrenomInscription" aria-describedby="prénomHelp" placeholder="Entrer votre Prénom">
+                        <small id="prénomHelp" class="form-text text-muted">Normal case</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputNaisssanceInscription">Date de naissance</label>
+                        <input type="date" class="form-control" id="inputNaisssanceInscription">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmailInscription">Email address</label>
+                        <input type="email" class="form-control" id="inputEmailInscription" aria-describedby="emailHelp" placeholder="Enter email">
+                        <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPasswordInscription">Password</label>
+                        <input type="password" class="form-control" id="inputPasswordInscription" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="inputPasswordConfirmInscription" placeholder="Confirm password">
+                    </div>
+                    <fieldset class="form-group">
+                        <legend>TypeDeCompte</legend>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="inputTypeCompteInscription" id="inputTypeCompteInscription1" value="option1" checked="">
+                                Éleve
+                            </label>
+                            <br>
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="inputTypeCompteInscription" id="inputTypeCompteInscription2" value="option2">
+                                Enseignant
+                            </label>
+                        </div>
+
+                    </fieldset>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                </fieldset>
+            </form>
+        </div>
+        <div class="w3-col m6">
+            <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
+                 width="700" height="394">
+        </div>
+    </div>
+</div>';
+    }
+
+    private function formulaireInscriptionComplet()
+    {
+        $formulaire_complet = true;
+
+        $email = $_POST['inputEmailInscription'];
+        $mot_de_passe = $_POST['inputPasswordInscription'];
+        $mot_de_passe_confirm = $_POST['inputPasswordConfirmInscription'];
+        $nom = $_POST['inputNomInscription'];
+        $prenom = $_POST['inputPrenomInscription'];
+        $date_de_naissance = $_POST['inputDateDeNaissanceInscription'];
+        $type_compte = $_POST['inputTypeCompteInscription'];
+
+        echo($email);
+        echo("<br>");
+        echo($mot_de_passe);
+        echo("<br>");
+        echo($mot_de_passe_confirm);
+        echo("<br>");
+        echo($nom);
+        echo("<br>");
+        echo($prenom);
+        echo("<br>");
+        echo($date_de_naissance);
+        echo("<br>");
+        echo($type_compte);
+        echo("<br>");
+
+        if (empty($email)) {
+            echo("email manquant");
+            $formulaire_complet = false;
+        }
+        if (empty($mot_de_passe)) {
+            echo("mot_de_passe manquant");
+            $formulaire_complet = false;
+        }
+        if (empty($mot_de_passe_confirm)) {
+            echo("mot_de_passe_confirm manquant");
+            $formulaire_complet = false;
+        }
+        if (empty($nom)) {
+            echo("nom manquant");
+            $formulaire_complet = false;
+        }
+        if (empty($prenom)) {
+            echo("prenom manquant");
+            $formulaire_complet = false;
+        }
+        if (empty($date_de_naissance)) {
+            echo("date_de_naissance manquant");
+            $formulaire_complet = false;
+        }
+        if (empty($type_compte)) {
+            echo("type_compte manquant");
+            $formulaire_complet = false;
+        }
+
+        return $formulaire_complet;
+    }
+
 }

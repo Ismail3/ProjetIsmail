@@ -31,7 +31,7 @@ CREATE TABLE Personne (
   mot_de_passe     VARCHAR(255),
   date_inscription DATETIME     DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT PK_Personne PRIMARY KEY (id),
-  CONSTRAINT UC_Person UNIQUE (ID,email)
+  CONSTRAINT UC_Person UNIQUE (email)
 );
 
 

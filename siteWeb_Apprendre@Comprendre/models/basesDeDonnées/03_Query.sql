@@ -69,6 +69,13 @@ WHERE E.id_personne = P.id
 
 
 /*
+  Inscription utilisateur
+*/
+INSERT INTO Personne (nom, prenom, email, date_naissance, mot_de_passe)
+VALUES ('SOSSE ALAOUI','Ismail','ismail34alaoui@gmail.com','1989-04-22','password')
+;
+
+/*
   Liste des élèves
 */
 SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
