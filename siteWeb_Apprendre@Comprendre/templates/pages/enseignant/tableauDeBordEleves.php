@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../../../ressources/styles/font-awesome.min.css">
     <link rel="stylesheet" href="../../../ressources/styles/bootstrap.min.css">
     <link rel="stylesheet" href="../../../ressources/styles/apprendre@comprendre.css">
-    <link rel="stylesheet" href="../../../ressources/styles/template-tableau-de-bord-enseignant.css">
+    <link rel="stylesheet" href="../../../ressources/styles/template-tableau-de-bord.css">
 
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/common.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/map.js"></script>

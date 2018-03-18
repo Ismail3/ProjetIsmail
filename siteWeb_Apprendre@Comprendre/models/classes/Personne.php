@@ -13,6 +13,7 @@ class Personne
     protected $motDePasse;
     protected $image;
     protected $dateInscription;
+    protected $type_personne;
 
     /**
      * Personne constructor.
@@ -152,6 +153,24 @@ class Personne
     {
         $this->email = $email;
     }
+
+    /**
+     * @return string
+     */
+    public function getTypePersonne()
+    {
+        return $this->type_personne;
+    }
+
+    /**
+     * @param string $type_personne
+     */
+    public function setTypePersonne($type_personne)
+    {
+        $this->type_personne = $type_personne;
+    }
+
+
 
     /**
      * @return string

@@ -11,7 +11,7 @@
                 <input class="form-control mr-sm-2" type="text" placeholder="Search">
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                 <a onclick="openNav2()" href="#home" class="w3-bar-item w3-button"><i
-                        class="fa fa-home"></i> Menu</a>
+                            class="fa fa-home"></i> Menu</a>
             </form>
         </div>
         <!-- Hide right-floated links on small screens and replace them with a menu icon -->

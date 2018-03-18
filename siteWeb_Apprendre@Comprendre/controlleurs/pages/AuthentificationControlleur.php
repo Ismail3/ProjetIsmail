@@ -9,7 +9,7 @@ class AuthentificationControlleur extends AbstractControlleur
 
     public function displayNavBar()
     {
-        if ($this->userConnected()) {
+        if ($this->isUserConnected()) {
             echo '<!-- Navbar (sit on top) -->
                 <div class="w3-top">
                     <div class="w3-bar w3-white w3-card" id="myNavbar">
@@ -106,7 +106,7 @@ class AuthentificationControlleur extends AbstractControlleur
 
     public function displayConnexion()
     {
-        if ($this->userConnected()) {
+        if ($this->isUserConnected()) {
             $this->displayConnexionConnected();
         } else {
             $this->displayConnexionUnConnected();
@@ -184,7 +184,7 @@ class AuthentificationControlleur extends AbstractControlleur
 
     public function displayInscription()
     {
-        if ($this->userConnected()) {
+        if ($this->isUserConnected()) {
             $this->displayInscriptionConnected();
         } else {
             $this->displayInscriptionUnConnected();
@@ -479,6 +479,7 @@ class AuthentificationControlleur extends AbstractControlleur
             $personne->setPrenom($prenom);
             $personne->setEmail($email);
             $personne->setDateNaissance($date_naissance);
+            $personne->setTypePersonne($type_compte);
             $_SESSION["utilisateur"] = $personne;
             echo "<br>";
             echo "New record Personne created successfully. Last inserted ID is: " . $_SESSION["utilisateur"];
@@ -513,10 +514,12 @@ class AuthentificationControlleur extends AbstractControlleur
 
     private function displayConnexionConnected()
     {
-        echo '<!-- Promo Section - "We know design" -->
+        $widget = '<!-- Promo Section - "We know design" -->
             <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
                 <div class="w3-row-padding">
-                    <div class="w3-col m6">
+                    <div class="w3-col m6">';
+        $widget = $widget.$this->getUserConnected();
+        $widget = $widget.'
                                     <a href="../enseignant/tableauDeBord.php">                                   
                                     <button type="submit" class="btn btn-primary">Tableau de bord</button>
                                     </a>
@@ -528,6 +531,7 @@ class AuthentificationControlleur extends AbstractControlleur
                 </div>
             </div>
             ';
+        echo $widget;
     }
 
     private function displayConnexionUnConnected()
@@ -604,7 +608,7 @@ class AuthentificationControlleur extends AbstractControlleur
         //Recherche des informations de l'utilisateur
         if (strcmp($typePersonne, Eleve::$TABLE_NAME) == 0) {
             //Connexion d'un élève
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne,NE.nom as niveau_etude
                 FROM Eleve E, NiveauEtude NE, Personne P
                 WHERE E.id_personne = P.id
                       and E.niveau_etude = NE.id
@@ -621,11 +625,11 @@ class AuthentificationControlleur extends AbstractControlleur
                     $personne->setPrenom($row["prenom"]);
                     $personne->setEmail($row["email"]);
                     $personne->setDateNaissance($row["date_naissance"]);
+                    $personne->setTypePersonne($row["type_personne"]);
+                    $personne->setDateInscription($row["date_inscription"]);
                     $_SESSION["utilisateur"] = $personne;
-                    $_SESSION["type_utilisateur"] = $personne::$TABLE_NAME;
                     var_dump("utilisateur: <br>");
                     var_dump($_SESSION["utilisateur"]);
-                    var_dump($_SESSION["type_utilisateur"]);
                     var_dump("<br>");
                     var_dump("<br>");
 //                $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"]);
@@ -634,7 +638,7 @@ class AuthentificationControlleur extends AbstractControlleur
             }
         } else {
             //Connexion d'un enseignant
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne
                 FROM Enseignant E, Personne P
                 WHERE E.id_personne = P.id
                       and P.id='$id'
@@ -650,8 +654,9 @@ class AuthentificationControlleur extends AbstractControlleur
                     $personne->setPrenom($row["prenom"]);
                     $personne->setEmail($row["email"]);
                     $personne->setDateNaissance($row["date_naissance"]);
+                    $personne->setDateInscription($row["date_inscription"]);
+                    $personne->setTypePersonne($row["type_personne"]);
                     $_SESSION["utilisateur"] = $personne;
-                    $_SESSION["type_utilisateur"] = $personne::$TABLE_NAME;
                     var_dump("utilisateur: <br>");
                     var_dump($_SESSION["utilisateur"]);
                     var_dump($_SESSION["type_utilisateur"]);
