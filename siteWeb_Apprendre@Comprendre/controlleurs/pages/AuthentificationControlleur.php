@@ -352,7 +352,7 @@ class AuthentificationControlleur extends AbstractControlleur
 
             if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
 
-                $this->createPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte);
+                $this->insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte);
             }
         }
     }
@@ -450,7 +450,7 @@ class AuthentificationControlleur extends AbstractControlleur
         return $formulaire_complet;
     }
 
-    private function createPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte)
+    private function insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte)
     {
         $bdd = $this->getDb()->openConn();
 
@@ -608,7 +608,7 @@ class AuthentificationControlleur extends AbstractControlleur
         //Recherche des informations de l'utilisateur
         if (strcmp($typePersonne, Eleve::$TABLE_NAME) == 0) {
             //Connexion d'un élève
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne,NE.nom as niveau_etude
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne,NE.nom as niveau_etude, telephone, adresse
                 FROM Eleve E, NiveauEtude NE, Personne P
                 WHERE E.id_personne = P.id
                       and E.niveau_etude = NE.id
@@ -624,6 +624,8 @@ class AuthentificationControlleur extends AbstractControlleur
                     $personne->setNom($row["nom"]);
                     $personne->setPrenom($row["prenom"]);
                     $personne->setEmail($row["email"]);
+                    $personne->setTelephone($row["telephone"]);
+                    $personne->setAdresse($row["adresse"]);
                     $personne->setDateNaissance($row["date_naissance"]);
                     $personne->setTypePersonne($row["type_personne"]);
                     $personne->setDateInscription($row["date_inscription"]);
@@ -638,7 +640,7 @@ class AuthentificationControlleur extends AbstractControlleur
             }
         } else {
             //Connexion d'un enseignant
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse
                 FROM Enseignant E, Personne P
                 WHERE E.id_personne = P.id
                       and P.id='$id'
@@ -653,9 +655,11 @@ class AuthentificationControlleur extends AbstractControlleur
                     $personne->setNom($row["nom"]);
                     $personne->setPrenom($row["prenom"]);
                     $personne->setEmail($row["email"]);
+                    $personne->setTelephone($row["telephone"]);
                     $personne->setDateNaissance($row["date_naissance"]);
                     $personne->setDateInscription($row["date_inscription"]);
                     $personne->setTypePersonne($row["type_personne"]);
+                    $personne->setAdresse($row["adresse"]);
                     $_SESSION["utilisateur"] = $personne;
                     var_dump("utilisateur: <br>");
                     var_dump($_SESSION["utilisateur"]);

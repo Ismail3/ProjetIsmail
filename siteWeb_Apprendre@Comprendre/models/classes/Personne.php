@@ -9,6 +9,8 @@ class Personne
     protected $nom;
     protected $prenom;
     protected $email;
+    protected $telephone;
+    protected $adresse;
     protected $dateNaissance;
     protected $motDePasse;
     protected $image;
@@ -157,6 +159,40 @@ class Personne
     /**
      * @return string
      */
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+
+    /**
+     * @param string $telephone
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+
+    /**
+     * @param string $adresse
+     */
+    public function setAdresse($adresse)
+    {
+        $this->adresse = $adresse;
+    }
+
+
+
+    /**
+     * @return string
+     */
     public function getTypePersonne()
     {
         return $this->type_personne;
@@ -186,6 +222,10 @@ class Personne
         $toString = $toString . "<br>";
         $toString = $toString . "email : " . $this->email;
         $toString = $toString . "<br>";
+        $toString = $toString . "telephone : " . $this->telephone;
+        $toString = $toString . "<br>";
+        $toString = $toString . "adresse : " . $this->adresse;
+        $toString = $toString . "<br>";
         $toString = $toString . "dateNaissance : " . $this->dateNaissance;
         $toString = $toString . "<br>";
         $toString = $toString . "motDePasse : " . $this->motDePasse;
@@ -193,6 +233,8 @@ class Personne
         $toString = $toString . "image : " . $this->image;
         $toString = $toString . "<br>";
         $toString = $toString . "dateInscription : " . $this->dateInscription;
+        $toString = $toString . "<br>";
+        $toString = $toString . "type_personne : " . $this->type_personne;
         $toString = $toString . "<br>";
         return $toString;
     }

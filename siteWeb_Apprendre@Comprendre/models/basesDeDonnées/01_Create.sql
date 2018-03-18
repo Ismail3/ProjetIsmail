@@ -27,12 +27,15 @@ CREATE TABLE Personne (
   nom              VARCHAR(255),
   prenom           VARCHAR(255),
   email            VARCHAR(255),
+  telephone        VARCHAR(255),
+  adresse          VARCHAR(255),
   date_naissance   DATE,
   mot_de_passe     VARCHAR(255),
   date_inscription DATETIME     DEFAULT CURRENT_TIMESTAMP,
   type_personne    VARCHAR(255),
   CONSTRAINT PK_Personne PRIMARY KEY (id),
-  CONSTRAINT UC_Person UNIQUE (email)
+  CONSTRAINT UC_Personne_Mail UNIQUE (email),
+  CONSTRAINT UC_Personne_Telephone UNIQUE (telephone)
 );
 
 
@@ -50,7 +53,7 @@ CREATE TABLE Enseigner (
   matiere      INT,
   niveau_etude INT,
   enseignant   INT,
-  CONSTRAINT PK_Matiere PRIMARY KEY (matiere, niveau_etude, enseignant),
+  CONSTRAINT PK_Matiere PRIMARY KEY (matiere, enseignant),
   CONSTRAINT FK_Enseigner_Matiere FOREIGN KEY (matiere)
   REFERENCES Matiere (id),
   CONSTRAINT FK_Enseigner_Niveau FOREIGN KEY (niveau_etude)

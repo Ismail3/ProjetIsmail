@@ -100,6 +100,27 @@ VALUES (1100)
 INSERT INTO Enseignant (id_personne)
 VALUES (1100)
 ;
+
+/*
+  Tableau de bord Enseignant;
+ */
+
+
+-- Matière enseigner
+SELECT E.enseignant, M.nom as matiere, NE.nom as niveau_etude, max(NE.id) as id_niveau_etude
+FROM Enseigner E, Matiere M, NiveauEtude NE
+WHERE E.enseignant = 1099 and E.matiere = M.id and E.niveau_etude = NE.id
+ORDER BY matiere
+;
+
+-- Liste des cours
+SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom
+FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
+WHERE C.id_auteur = 1001 and M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
+ORDER BY date_creation DESC
+LIMIT 10;
+
+-- Liste des seances
 /*
   Liste des élèves
 */

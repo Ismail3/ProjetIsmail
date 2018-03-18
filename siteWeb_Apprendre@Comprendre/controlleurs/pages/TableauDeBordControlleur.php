@@ -155,11 +155,10 @@ class TableauDeBordControlleur extends AbstractControlleur
 
     public function displayUilisateurProfil()
     {
-        $widgets ='';
+        $widgets = '';
         if ($this->isEleve()) {
             $widgets = $widgets . $this->displayEleveProfil();
-        } else
-        {
+        } else {
             $widgets = $widgets . $this->displayEnseignantProfil();
         }
 
@@ -202,16 +201,13 @@ class TableauDeBordControlleur extends AbstractControlleur
 
     function displayEleves()
     {
-
-        //
-
         $bd = new BdConnexion();
 
         // Create connection
-        $conn = $bd->openConn();
+        $bdd = $bd->openConn();
         // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
         }
 
         $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
@@ -219,7 +215,7 @@ class TableauDeBordControlleur extends AbstractControlleur
                 WHERE E.id_personne = P.id and E.niveau_etude = NE.id
                 LIMIT 8
                 ;";
-        $result = $conn->query($sql);
+        $result = $bdd->query($sql);
 
         if ($result->num_rows > 0) {
             // output data of each row
@@ -230,7 +226,7 @@ class TableauDeBordControlleur extends AbstractControlleur
             echo "0 results";
         }
 
-        $conn->close();
+        $bdd->close();
     }
 
     public
@@ -373,105 +369,27 @@ class TableauDeBordControlleur extends AbstractControlleur
     private function displayEleveProfil()
     {
         $eleve = $this->getUserConnected();
-        $widgets =  '<!-- Header with full-height image -->
-<div class="w3-content w3-margin-top" style="max-width:1400px;">
+        $widgets = '<!-- Header with full-height image -->
+            <div class="w3-content w3-margin-top" style="max-width:1400px;">
+            
+                <!-- The Grid -->
+                <div class="w3-row-padding">';
+        $widgets = $widgets . '
 
-    <!-- The Grid -->
-    <div class="w3-row-padding">
+            <!-- Left Column -->
+            <div class="w3-third">
 
-        <!-- Left Column -->
-        <div class="w3-third">
-
-            <div class="w3-white w3-text-grey w3-card-4">
-                <div class="w3-display-container">
-                    <img src="../../../ressources/images/team1.jpg" style="width:100%" alt="Avatar">
-                    <div class="w3-display-bottomleft w3-container w3-text-black">
-                        <h2>'.$eleve->getPrenom().' '.$eleve->getNom().'</h2>
-                    </div>
+            <div class="w3-white w3-text-grey w3-card-4">';
+        $widgets = $widgets . $this->getProfilMainInfos($eleve);
+        $widgets = $widgets . '
                 </div>
-                <div class="w3-container">
-                    <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>Designer</p>
-                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>London, UK</p>
-                    <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>ex@mail.com</p>
-                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>1224435534</p>
-                    <hr>
-
-                    <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Skills</b>
-                    </p>
-                    <p>Adobe Photoshop</p>
-                    <div class="w3-light-grey w3-round-xlarge w3-small">
-                        <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:90%">90%</div>
-                    </div>
-                    <p>Photography</p>
-                    <div class="w3-light-grey w3-round-xlarge w3-small">
-                        <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:80%">
-                            <div class="w3-center w3-text-white">80%</div>
-                        </div>
-                    </div>
-                    <p>Illustrator</p>
-                    <div class="w3-light-grey w3-round-xlarge w3-small">
-                        <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:75%">75%</div>
-                    </div>
-                    <p>Media</p>
-                    <div class="w3-light-grey w3-round-xlarge w3-small">
-                        <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:50%">50%</div>
-                    </div>
-                    <br>
-
-                    <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Languages</b>
-                    </p>
-                    <p>English</p>
-                    <div class="w3-light-grey w3-round-xlarge">
-                        <div class="w3-round-xlarge w3-teal" style="height:24px;width:100%"></div>
-                    </div>
-                    <p>Spanish</p>
-                    <div class="w3-light-grey w3-round-xlarge">
-                        <div class="w3-round-xlarge w3-teal" style="height:24px;width:55%"></div>
-                    </div>
-                    <p>German</p>
-                    <div class="w3-light-grey w3-round-xlarge">
-                        <div class="w3-round-xlarge w3-teal" style="height:24px;width:25%"></div>
-                    </div>
-                    <br>
-                </div>
-            </div>
-            <br>
-
-            <!-- End Left Column -->
-        </div>
-
+                <br>
+    
+                <!-- End Left Column -->
+            </div>';
+        $widgets = $widgets . '
         <!-- Right Column -->
         <div class="w3-twothird">
-
-            <div class="w3-container w3-card w3-white w3-margin-bottom">
-                <h2 class="w3-text-grey w3-padding-16"><i
-                            class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Work Experience
-                </h2>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>Front End Developer / w3schools.com</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Jan 2015 - <span
-                                class="w3-tag w3-teal w3-round">Current</span></h6>
-                    <p>Lorem ipsum dolor sit amet. Praesentium magnam consectetur vel in deserunt aspernatur est
-                        reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure,
-                        iste.</p>
-                    <hr>
-                </div>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>Web Developer / something.com</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Mar 2012 - Dec 2014
-                    </h6>
-                    <p>Consectetur adipisicing elit. Praesentium magnam consectetur vel in deserunt aspernatur est
-                        reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure,
-                        iste.</p>
-                    <hr>
-                </div>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>Graphic Designer / designsomething.com</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Jun 2010 - Mar 2012
-                    </h6>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p><br>
-                </div>
-            </div>
 
             <div class="w3-container w3-card w3-white">
                 <h2 class="w3-text-grey w3-padding-16"><i
@@ -497,7 +415,8 @@ class TableauDeBordControlleur extends AbstractControlleur
 
             <!-- End Right Column -->
         </div>
-
+        ';
+        $widgets = $widgets . '
         <!-- End Grid -->
     </div>
 
@@ -508,139 +427,233 @@ class TableauDeBordControlleur extends AbstractControlleur
 
     private function displayEnseignantProfil()
     {
-        $widgets =  '<!-- Header with full-height image -->
+        $enseignant = $this->getUserConnected();
+        $widgets = '<!-- Header with full-height image -->
+            <div class="w3-content w3-margin-top" style="max-width:1400px;">
+            
+                <!-- The Grid -->
+                <div class="w3-row-padding">';
+        $widgets = $widgets . '
 
+            <!-- Left Column -->
+            <div class="w3-third">
 
-<div class="w3-content w3-margin-top" style="max-width:1400px;">
+            <div class="w3-white w3-text-grey w3-card-4">';
+        $widgets = $widgets . $this->getProfilMainInfos($enseignant);
+        $widgets = $widgets . $this->getMatiereEnseigner($enseignant);
+        $widgets = $widgets . '
+                </div>
+                <br>
+    
+                <!-- End Left Column -->
+            </div>';
+        $widgets = $widgets . '
+        
+                <!-- Right Column -->
+                <div class="w3-twothird">
+        
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <h2 class="w3-text-grey w3-padding-16"><i
+                                    class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Cours </h2>';
+        $widgets = $widgets . $this->getListeDesCours($enseignant);;
+        $widgets = $widgets . '
+                    </div>';
+        $widgets = $widgets . '
+        
+                    <div class="w3-container w3-card w3-white">';
+        $widgets = $widgets . '
+                        <h2 class="w3-text-grey w3-padding-16"><i
+                                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Séances programmés</h2>
+                        <div class="w3-container">';
+        $widgets = $widgets . '
+                            <h5 class="w3-opacity"><b>W3Schools.com</b></h5>
+                            <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Forever</h6>
+                            <p>Web Development! All I need to know in one place</p>
+                            <hr>
+                        </div>
+                        <div class="w3-container">
+                            <h5 class="w3-opacity"><b>London Business School</b></h5>
+                            <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 - 2015</h6>
+                            <p>Master Degree</p>
+                            <hr>
+                        </div>
+                        <div class="w3-container">
+                            <h5 class="w3-opacity"><b>School of Coding</b></h5>
+                            <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2010 - 2013</h6>
+                            <p>Bachelor Degree</p><br>
+                        </div>';
+        $widgets = $widgets . '
+                    </div>
+        
+                    <!-- End Right Column -->
+                </div>';
+        $widgets = $widgets . '
+        
+                <!-- End Grid -->
+            </div>
+        
+            <!-- End Page Container -->
+        </div>';
+        return $widgets;
+    }
 
-    <!-- The Grid -->
-    <div class="w3-row-padding">
-
+    private function getProfilMainInfos($personne)
+    {
+        $widget = '
         <!-- Left Column -->
-        <div class="w3-third">
 
-            <div class="w3-white w3-text-grey w3-card-4">
                 <div class="w3-display-container">
                     <img src="../../../ressources/images/team1.jpg" style="width:100%" alt="Avatar">
                     <div class="w3-display-bottomleft w3-container w3-text-black">
-                        <h2>'.$eleve->getPrenom().' '.$eleve->getNom().'</h2>
+                        <h2>' . $personne->getPrenom() . ' ' . $personne->getNom() . '</h2>
                     </div>
                 </div>
                 <div class="w3-container">
-                    <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>Designer</p>
-                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>London, UK</p>
-                    <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>ex@mail.com</p>
-                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>1224435534</p>
+                    <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getTypePersonne() . '</p>
+                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getAdresse() . '</p>
+                    <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getEmail() . '</p>
+                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getTelephone() . '</p>
                     <hr>
 
-                    <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Skills</b>
-                    </p>
-                    <p>Adobe Photoshop</p>
+                </div>';
+        return $widget;
+    }
+
+    /**
+     * @param $enseignant
+     * @return Enseignant
+     */
+    private function getMatiereEnseigner($enseignant)
+    {
+        $widget = '<div class="w3-container">';
+        $widget = $widget . '<p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Compétences</b>
+                    </p>';
+
+        $bd = new BdConnexion();
+        $idEnseignant = $enseignant->getIdPersonne();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "SELECT E.enseignant, M.nom as matiere, NE.nom as niveau_etude, NE.id as id_niveau_etude
+                FROM Enseigner E, Matiere M, NiveauEtude NE
+                WHERE E.enseignant = $idEnseignant and E.matiere = M.id and E.niveau_etude = NE.id
+                ORDER BY matiere
+                ;";
+        $result = $bdd->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $widget = $widget . $this->displayMatiereEnseigner($row);
+            }
+        } else {
+            echo "0 results";
+        }
+
+        $bdd->close();
+        $widget = $widget . '<br></div>';
+
+        return $widget;
+    }
+
+    private function displayMatiereEnseigner($row)
+    {
+        $matiere = $row['matiere'];
+        $niveau_etude = $row['niveau_etude'];
+        $id_niveau_etude = 100 * ($row['id_niveau_etude'] / 18);
+        $widget = '                    <p><b>' . $matiere . '</b></p>
                     <div class="w3-light-grey w3-round-xlarge w3-small">
-                        <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:90%">90%</div>
-                    </div>
-                    <p>Photography</p>
-                    <div class="w3-light-grey w3-round-xlarge w3-small">
-                        <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:80%">
-                            <div class="w3-center w3-text-white">80%</div>
-                        </div>
-                    </div>
-                    <p>Illustrator</p>
-                    <div class="w3-light-grey w3-round-xlarge w3-small">
-                        <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:75%">75%</div>
-                    </div>
-                    <p>Media</p>
-                    <div class="w3-light-grey w3-round-xlarge w3-small">
-                        <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:50%">50%</div>
-                    </div>
-                    <br>
+                        <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:' . $id_niveau_etude . '%">' . $niveau_etude . '</div>
+                    </div>';
 
-                    <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Languages</b>
-                    </p>
-                    <p>English</p>
-                    <div class="w3-light-grey w3-round-xlarge">
-                        <div class="w3-round-xlarge w3-teal" style="height:24px;width:100%"></div>
-                    </div>
-                    <p>Spanish</p>
-                    <div class="w3-light-grey w3-round-xlarge">
-                        <div class="w3-round-xlarge w3-teal" style="height:24px;width:55%"></div>
-                    </div>
-                    <p>German</p>
-                    <div class="w3-light-grey w3-round-xlarge">
-                        <div class="w3-round-xlarge w3-teal" style="height:24px;width:25%"></div>
-                    </div>
-                    <br>
-                </div>
-            </div>
-            <br>
+        return $widget;
+    }
 
-            <!-- End Left Column -->
-        </div>
+    private function getListeDesCours($enseignant)
+    {
+        $widget = '';
 
-        <!-- Right Column -->
-        <div class="w3-twothird">
+        $bd = new BdConnexion();
+        $idEnseignant = $enseignant->getIdPersonne();
 
-            <div class="w3-container w3-card w3-white w3-margin-bottom">
-                <h2 class="w3-text-grey w3-padding-16"><i
-                            class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Work Experience
-                </h2>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>Front End Developer / w3schools.com</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Jan 2015 - <span
-                                class="w3-tag w3-teal w3-round">Current</span></h6>
-                    <p>Lorem ipsum dolor sit amet. Praesentium magnam consectetur vel in deserunt aspernatur est
-                        reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure,
-                        iste.</p>
-                    <hr>
-                </div>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>Web Developer / something.com</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Mar 2012 - Dec 2014
-                    </h6>
-                    <p>Consectetur adipisicing elit. Praesentium magnam consectetur vel in deserunt aspernatur est
-                        reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure,
-                        iste.</p>
-                    <hr>
-                </div>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>Graphic Designer / designsomething.com</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Jun 2010 - Mar 2012
-                    </h6>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p><br>
-                </div>
-            </div>
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
 
-            <div class="w3-container w3-card w3-white">
-                <h2 class="w3-text-grey w3-padding-16"><i
-                            class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Education</h2>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>W3Schools.com</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Forever</h6>
-                    <p>Web Development! All I need to know in one place</p>
-                    <hr>
-                </div>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>London Business School</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 - 2015</h6>
-                    <p>Master Degree</p>
-                    <hr>
-                </div>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>School of Coding</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2010 - 2013</h6>
-                    <p>Bachelor Degree</p><br>
-                </div>
-            </div>
+        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom
+                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
+                WHERE C.id_auteur = $idEnseignant and M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
+                ORDER BY date_creation DESC
+                LIMIT 10;";
+        $result = $bdd->query($sql);
 
-            <!-- End Right Column -->
-        </div>
 
-        <!-- End Grid -->
-    </div>
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $widget = $widget . $this->displayCours($row);
+            }
+        } else {
+            echo "0 results";
+        }
 
-    <!-- End Page Container -->
-</div>';
-        return $widgets;
+        $bdd->close();
+//        $widget = $widget . '<br></div>';
+
+        return $widget;
+    }
+
+    private function displayCours($row)
+    {
+        $id = $row['id'];
+        $nom = $row['nom'];
+        $description = $row['description'];
+        $tarif = $row['tarif'];
+        $date_creation = $row['date_creation'];
+        $id_auteur = $row['id_auteur'];
+        $matiere_nom = $row['matiere_nom'];
+        $niveau_min_nom = $row['niveau_min_nom'];
+        $niveau_max_nom = $row['niveau_max_nom'];
+        $widget = '<div class="w3-container">
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                            <h5 class="w3-opacity"><b>' . $nom . '</b></h5>                            </td>
+                            <td style="text-align: right">
+<span
+                                        class="w3-tag w3-teal w3-round">' . $matiere_nom . '</span>
+
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                                                        <h6 class="w3-text-teal"><i class="fa fa-asterisk fa-fw w3-margin-right"></i>
+                            ' . $niveau_min_nom . ' - <span
+                                        class="w3-tag w3-teal w3-round">' . $niveau_max_nom . '</span></h6>                           </td>
+                            <td style="text-align: right">
+<h1
+                                        class="w3-tag w3-blue-grey w3-round">' . $tarif . '€</h1>
+
+                            </td>
+                        </tr>
+                    </table>
+                            <p>' . substr($description,0,196) . ' ...</p>
+                            <p style="text-align: right">' . $date_creation . '</p>
+                            <hr>
+                        </div>';
+
+        return $widget;
     }
 
 
