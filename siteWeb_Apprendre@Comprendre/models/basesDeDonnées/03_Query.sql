@@ -59,13 +59,26 @@ mysql> desc NiveauEtude;
 /*
   Connexion utilisateur
 */
+SELECT id , type_personne
+FROM Personne P
+WHERE P.email='garsha.guillaume@exmpmail.com'
+      and P.mot_de_passe='password'
+;
+
 SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
 FROM Eleve E, NiveauEtude NE, Personne P
 WHERE E.id_personne = P.id
       and E.niveau_etude = NE.id
+      and P.id = 999
+;
+
+SELECT P.id as id,P.nom as nom,prenom,email,date_naissance
+FROM Enseignat E, Personne P
+WHERE E.id_personne = P.id
       and P.email='garsha.guillaume@exmpmail.com'
       and P.mot_de_passe='password'
 ;
+
 
 
 /*

@@ -8,6 +8,7 @@ class Eleve extends Personne
     private $id;
     private $niveauEtude;
     private $filiaire;
+    public static $TABLE_NAME="Eleve";
 
     /**
      * Eleve constructor.
@@ -64,7 +65,6 @@ class Eleve extends Personne
     {
         $this->filiaire = $filiaire;
     }
-
 
 
 }

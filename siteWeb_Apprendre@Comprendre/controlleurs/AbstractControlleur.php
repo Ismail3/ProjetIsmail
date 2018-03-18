@@ -72,8 +72,6 @@ class AbstractControlleur
 
     public function debugSession()
     {
-        echo $_SESSION;
-        echo $_SESSION['utilisateur'];
         var_dump($_SESSION);
     }
 

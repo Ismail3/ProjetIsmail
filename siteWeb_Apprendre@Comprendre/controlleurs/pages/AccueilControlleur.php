@@ -68,14 +68,12 @@ class AccueilControlleur extends AbstractControlleur
 
     public function displayTopButton()
     {
-
         echo '<button onclick="topFunction()" id="topBtn" title="Go to top">Top</button>';
     }
 
     public function displayContenu()
     {
         echo '
-
 <!-- About Section -->
 <div class="w3-container" style="padding:128px 16px" id="about">
     <h3 class="w3-center">À propos de <strong> Aprendre@Comprendre</strong></h3>

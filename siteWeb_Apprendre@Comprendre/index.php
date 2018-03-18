@@ -42,8 +42,6 @@ $accueilCtrl->destroyConnexion();
 $accueilCtrl->displayContenu();
 $accueilCtrl->displayFooter();
 
-//session_destroy();
-
 ?>
 
 </body>

@@ -3,7 +3,7 @@
     <div class="w3-bar w3-white w3-card" id="myNavbar">
         <a href="#home"
            class="w3-bar-item w3-button w3-wide">
-            <img id="logo_header"src="ressources/images/Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+            <img id="logo_header" src="ressources/images/Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
         </a>
         <!-- Right-sided navbar links -->
         <div class="w3-right w3-hide-small">

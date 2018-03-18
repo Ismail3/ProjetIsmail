@@ -78,104 +78,74 @@ class AuthentificationControlleur extends AbstractControlleur
     public function displayHeader()
     {
         echo '<!-- Header with full-height image -->
-<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
-    <div class="w3-display-left w3-text-white full-width-div" style="padding:48px">
-        <span class="w3-jumbo w3-hide-small"></span><br>
-        <div align="center">
-            <h1><strong> Aprendre@Comprendre</strong></h1>
-            <span class="w3-xxlarge w3-hide-large w3-hide-medium">Start something that matters</span><br>
-            <span class="w3-large">Stop wasting valuable time with projects that just isn\'t you.</span>
-            <p><a href="connexion.php"
-                  class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Connexion</a>
-                <a href="inscription.php"
-                   class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Inscription</a>
-            </p>
-        </div>
-    </div>
-    <div class="w3-display-bottomleft w3-text-grey w3-large" style="padding:24px 48px">
-        <i class="fa fa-facebook-official w3-hover-opacity"></i>
-        <i class="fa fa-instagram w3-hover-opacity"></i>
-        <i class="fa fa-snapchat w3-hover-opacity"></i>
-        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-        <i class="fa fa-twitter w3-hover-opacity"></i>
-        <i class="fa fa-linkedin w3-hover-opacity"></i>
-    </div>
-
-</header>';
+        <header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
+            <div class="w3-display-left w3-text-white full-width-div" style="padding:48px">
+                <span class="w3-jumbo w3-hide-small"></span><br>
+                <div align="center">
+                    <h1><strong> Aprendre@Comprendre</strong></h1>
+                    <span class="w3-xxlarge w3-hide-large w3-hide-medium">Start something that matters</span><br>
+                    <span class="w3-large">Stop wasting valuable time with projects that just isn\'t you.</span>
+                    <p><a href="connexion.php"
+                          class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Connexion</a>
+                        <a href="inscription.php"
+                           class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Inscription</a>
+                    </p>
+                </div>
+            </div>
+            <div class="w3-display-bottomleft w3-text-grey w3-large" style="padding:24px 48px">
+                <i class="fa fa-facebook-official w3-hover-opacity"></i>
+                <i class="fa fa-instagram w3-hover-opacity"></i>
+                <i class="fa fa-snapchat w3-hover-opacity"></i>
+                <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+                <i class="fa fa-twitter w3-hover-opacity"></i>
+                <i class="fa fa-linkedin w3-hover-opacity"></i>
+            </div>
+        
+        </header>';
     }
 
     public function displayConnexion()
     {
-        echo '<!-- Promo Section - "We know design" -->
-<div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
-    <div class="w3-row-padding">
-        <div class="w3-col m6">
-            <form action="connexion_result.php" method="post">
-                <fieldset>
-                    <legend>Connexion</legend>
-                    <div class="form-group">
-                        <label for="inputEmailConnexion">Email address</label>
-                        <input name="inputEmailConnexion" type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPasswordConnexion">Password</label>
-                        <input name="inputPasswordConnexion" type="password" class="form-control" id="inputPasswordConnexion" placeholder="Password"></div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                </fieldset>
-            </form>
-        </div>
-        <div class="w3-col m6">
-            <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
-                 width="700" height="394">
-        </div>
-    </div>
-</div>
-';
+        if ($this->userConnected()) {
+            $this->displayConnexionConnected();
+        } else {
+            $this->displayConnexionUnConnected();
+        }
     }
 
     public function uConnexion()
     {
-        $bdd = $this->getDb()->openConn();
+        if ($this->formulaireConnexionComplet()) {
 
-        $email = $_POST['inputEmailConnexion'];
-        $password = $_POST['inputPasswordConnexion'];
+            $bdd = $this->getDb()->openConn();
 
-        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
-                FROM Eleve E, NiveauEtude NE, Personne P
-                WHERE E.id_personne = P.id
-                      and E.niveau_etude = NE.id
-                      and P.email='$email'
+            $email = $_POST['inputEmailConnexion'];
+            $password = $_POST['inputPasswordConnexion'];
+
+            $sql = "SELECT id , type_personne
+                    FROM Personne P
+                    WHERE P.email='$email'
                       and P.mot_de_passe='$password'
                 ;";
-        $result = $bdd->query($sql);
-        if ($result->num_rows > 0) {
-            session_start();
-            // output data of each row
-            while ($row = $result->fetch_assoc()) {
+            $result = $bdd->query($sql);
+            if ($result->num_rows > 0) {
+                session_start();
+                // output data of each row
+                while ($row = $result->fetch_assoc()) {
 
-                $personne = new Personne();
-                $personne->setIdPersonne($row["id"]);
-                $personne->setNom($row["nom"]);
-                $personne->setPrenom($row["prenom"]);
-                $personne->setEmail($row["email"]);
-                $personne->setDateNaissance($row["date_naissance"]);
-                $_SESSION["utilisateur"] = $personne;
-                var_dump("utilisateur: <br>");
-                var_dump($_SESSION["utilisateur"]);
-                var_dump("<br>");
-                var_dump("<br>");
-//                $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"]);
+                    $this->connexionUtilisateur($bdd, $row);
+
+                }
+            } else {
+                echo "Vous êtes actuellement déconnecté";
             }
-        } else {
-            echo "Vous êtes actuellement déconnecté";
-        }
-        var_dump("utilisateur: <br>");
-        var_dump($_SESSION["utilisateur"]);
-        var_dump("<br>");
-        var_dump("<br>");
+            var_dump("utilisateur: <br>");
+            var_dump($_SESSION["utilisateur"]);
+            var_dump("<br>");
+            var_dump("<br>");
 
-        $this->getDb()->closeConn();
+            $this->getDb()->closeConn();
+        }
     }
 
 
@@ -416,53 +386,23 @@ class AuthentificationControlleur extends AbstractControlleur
 </footer>';
     }
 
-    public function displayConnexionResult()
+    private function formulaireConnexionComplet()
     {
-        if ($this->userConnected()) {
-            echo '<!-- Promo Section - "We know design" -->
-            <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
-                <div class="w3-row-padding">
-                    <div class="w3-col m6">
-                                    <a href="../enseignant/tableauDeBord.php">                                   
-                                    <button type="submit" class="btn btn-primary">Tableau de bord</button>
-                                    </a>
-                    </div>
-                    <div class="w3-col m6">
-                        <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
-                             width="700" height="394">
-                    </div>
-                </div>
-            </div>
-            ';
-        } else {
-            echo '<!-- Promo Section - "We know design" -->
-            <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
-                <div class="w3-row-padding">
-                    <div class="w3-col m6">
-                        <form action="connexion_result.php" method="post">
-                            <fieldset>
-                                <legend>Connexion</legend>
-                                <div class="form-group">
-                                    <label for="inputEmailConnexion">Email address</label>
-                                    <input name="inputEmailConnexion" type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email">
-                                    <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPasswordConnexion">Password</label>
-                                    <input name="inputPasswordConnexion" type="password" class="form-control" id="inputPasswordConnexion" placeholder="Password"></div>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                            </fieldset>
-                        </form>
-                    </div>
-                    Echec de la connexion
-                    <div class="w3-col m6">
-                        <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
-                             width="700" height="394">
-                    </div>
-                </div>
-            </div>
-            ';
+        $formulaire_complet = true;
+
+        $email = $_POST['inputEmailConnexion'];
+        $mot_de_passe = $_POST['inputPasswordConnexion'];
+
+        if (empty($email)) {
+            echo("email manquant");
+            $formulaire_complet = false;
         }
+        if (empty($mot_de_passe)) {
+            echo("mot_de_passe manquant");
+            $formulaire_complet = false;
+        }
+
+        return $formulaire_complet;
     }
 
 
@@ -514,8 +454,8 @@ class AuthentificationControlleur extends AbstractControlleur
     {
         $bdd = $this->getDb()->openConn();
 
-        $sql = "INSERT INTO Personne (nom, prenom, email, date_naissance, mot_de_passe)
-                VALUES ('$nom','$prenom','$email','$date_naissance','$mot_de_passe')
+        $sql = "INSERT INTO Personne (nom, prenom, email, date_naissance, mot_de_passe, type_personne)
+                VALUES ('$nom','$prenom','$email','$date_naissance','$mot_de_passe','$type_compte')
                 ;";
 
         if ($bdd->query($sql) === TRUE) {
@@ -569,6 +509,161 @@ class AuthentificationControlleur extends AbstractControlleur
         }
 
         return $idTypeCompte;
+    }
+
+    private function displayConnexionConnected()
+    {
+        echo '<!-- Promo Section - "We know design" -->
+            <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
+                <div class="w3-row-padding">
+                    <div class="w3-col m6">
+                                    <a href="../enseignant/tableauDeBord.php">                                   
+                                    <button type="submit" class="btn btn-primary">Tableau de bord</button>
+                                    </a>
+                    </div>
+                    <div class="w3-col m6">
+                        <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
+                             width="700" height="394">
+                    </div>
+                </div>
+            </div>
+            ';
+    }
+
+    private function displayConnexionUnConnected()
+    {
+        $email = $_POST['inputEmailConnexion'];
+        $mot_de_passe = $_POST['inputPasswordConnexion'];
+        if ($this->formulaireConnexionComplet()) {
+            echo '<!-- Promo Section - "We know design" -->
+                <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
+                    <div class="w3-row-padding">
+                        <div class="w3-col m6">
+                            <form action="connexion.php" method="post">
+                                <fieldset>
+                                    <legend>Connexion</legend>
+                                    <div class="form-group">
+                                        <label for="inputEmailConnexion">Email address</label>
+                                        <input name="inputEmailConnexion" type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email"
+                                        value="' . $email . '">
+                                        <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputPasswordConnexion">Password</label>
+                                        <input name="inputPasswordConnexion" type="password" class="form-control" id="inputPasswordConnexion" placeholder="Password"
+                                        value="' . $mot_de_passe . '"></div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="w3-col m6">
+                            <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
+                                 width="700" height="394">
+                        </div>
+                    </div>
+                </div>
+                ';
+        } else {
+            echo '<!-- Promo Section - "We know design" -->
+            <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
+                <div class="w3-row-padding">
+                    <div class="w3-col m6">
+                        <form action="connexion.php" method="post">
+                            <fieldset>
+                                <legend>Connexion</legend>
+                                <div class="form-group">
+                                    <label for="inputEmailConnexion">Email address</label>
+                                    <input name="inputEmailConnexion" type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email"
+                                    value="' . $email . '">
+                                    <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPasswordConnexion">Password</label>
+                                    <input name="inputPasswordConnexion" type="password" class="form-control" id="inputPasswordConnexion" placeholder="Password"
+                                    value="' . $mot_de_passe . '"></div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                    Echec de la connexion
+                    <div class="w3-col m6">
+                        <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
+                             width="700" height="394">
+                    </div>
+                </div>
+            </div>
+            ';
+        }
+    }
+
+    private function connexionUtilisateur($bdd, $row)
+    {
+        $id = $row["id"];
+        $typePersonne = $row["type_personne"];
+
+        //Recherche des informations de l'utilisateur
+        if (strcmp($typePersonne, Eleve::$TABLE_NAME) == 0) {
+            //Connexion d'un élève
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
+                FROM Eleve E, NiveauEtude NE, Personne P
+                WHERE E.id_personne = P.id
+                      and E.niveau_etude = NE.id
+                      and P.id='$id'
+                ;";
+            $result = $bdd->query($sql);
+            if ($result->num_rows > 0) {
+                session_start();
+                // output data of each row
+                while ($row = $result->fetch_assoc()) {
+                    $personne = new Eleve();
+                    $personne->setIdPersonne($row["id"]);
+                    $personne->setNom($row["nom"]);
+                    $personne->setPrenom($row["prenom"]);
+                    $personne->setEmail($row["email"]);
+                    $personne->setDateNaissance($row["date_naissance"]);
+                    $_SESSION["utilisateur"] = $personne;
+                    $_SESSION["type_utilisateur"] = $personne::$TABLE_NAME;
+                    var_dump("utilisateur: <br>");
+                    var_dump($_SESSION["utilisateur"]);
+                    var_dump($_SESSION["type_utilisateur"]);
+                    var_dump("<br>");
+                    var_dump("<br>");
+//                $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"]);
+
+                }
+            }
+        } else {
+            //Connexion d'un enseignant
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance
+                FROM Enseignant E, Personne P
+                WHERE E.id_personne = P.id
+                      and P.id='$id'
+                ;";
+            $result = $bdd->query($sql);
+            if ($result->num_rows > 0) {
+                session_start();
+                // output data of each row
+                while ($row = $result->fetch_assoc()) {
+                    $personne = new Enseignant();
+                    $personne->setIdPersonne($row["id"]);
+                    $personne->setNom($row["nom"]);
+                    $personne->setPrenom($row["prenom"]);
+                    $personne->setEmail($row["email"]);
+                    $personne->setDateNaissance($row["date_naissance"]);
+                    $_SESSION["utilisateur"] = $personne;
+                    $_SESSION["type_utilisateur"] = $personne::$TABLE_NAME;
+                    var_dump("utilisateur: <br>");
+                    var_dump($_SESSION["utilisateur"]);
+                    var_dump($_SESSION["type_utilisateur"]);
+                    var_dump("<br>");
+                    var_dump("<br>");
+//                $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"]);
+
+                }
+            }
+        }
+
+
     }
 
 }

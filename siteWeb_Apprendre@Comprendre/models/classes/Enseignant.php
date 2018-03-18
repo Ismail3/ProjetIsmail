@@ -7,6 +7,8 @@ class Enseignant extends Personne
      */
     private $id;
     private $typeEnseignant;
+    public static $TABLE_NAME="Enseignant";
+
 
     /**
      * Enseignant constructor.
@@ -33,21 +35,20 @@ class Enseignant extends Personne
     }
 
     /**
-     * @return string     */
+     * @return string
+     */
     public function getTypeEnseignant()
     {
         return $this->typeEnseignant;
     }
 
     /**
-     * @param string$typeEnseignant
+     * @param string $typeEnseignant
      */
     public function setTypeEnseignant($typeEnseignant)
     {
         $this->typeEnseignant = $typeEnseignant;
     }
-
-
 
 
 }
