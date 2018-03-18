@@ -29,8 +29,7 @@
 
 <body cz-shortcut-listen="true">
 <?php
-?>
-<?php
+ob_start();
 require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControlleur.php');
 
 $ctrl = new TableauDeBordControlleur();

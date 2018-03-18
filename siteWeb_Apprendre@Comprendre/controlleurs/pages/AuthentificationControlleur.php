@@ -492,6 +492,8 @@ class AuthentificationControlleur extends AbstractControlleur
             echo "_SESSION:utilisateur = " . $_SESSION["utilisateur"];
             echo "<br>";
         }
+
+        $this->getDb()->closeConn();
     }
 
     private function createPersonneType($bdd, $id, $type_compte)

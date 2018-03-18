@@ -59,12 +59,16 @@ mysql> desc NiveauEtude;
 /*
   Connexion utilisateur
 */
+
+-- Connexion personne
 SELECT id , type_personne
 FROM Personne P
 WHERE P.email='garsha.guillaume@exmpmail.com'
       and P.mot_de_passe='password'
 ;
 
+
+-- Profil eleve
 SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
 FROM Eleve E, NiveauEtude NE, Personne P
 WHERE E.id_personne = P.id
@@ -72,11 +76,11 @@ WHERE E.id_personne = P.id
       and P.id = 999
 ;
 
+-- Profil enseignant
 SELECT P.id as id,P.nom as nom,prenom,email,date_naissance
-FROM Enseignat E, Personne P
+FROM Enseignant E, Personne P
 WHERE E.id_personne = P.id
-      and P.email='garsha.guillaume@exmpmail.com'
-      and P.mot_de_passe='password'
+      and P.id = 1001
 ;
 
 
@@ -100,6 +104,29 @@ VALUES (1100)
 INSERT INTO Enseignant (id_personne)
 VALUES (1100)
 ;
+
+
+/*
+  Profil
+ */
+
+
+-- Profil Enseignant
+
+SELECT P.id as id,P.nom as nom,prenom,email,date_naissance
+FROM Enseignant E, Personne P
+WHERE E.id_personne = P.id
+      and P.id = 1001
+;
+
+UPDATE Personne
+SET nom='MENARD', prenom='MENARD',email='ibraheem.menard@exmpmail.com',date_naissance='1974-03-26'
+WHERE id=1001
+;
+
+-- Profil Eleve
+
+SELECT
 
 /*
   Tableau de bord Enseignant;

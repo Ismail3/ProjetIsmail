@@ -10,23 +10,25 @@ class TableauDeBordControlleur extends AbstractControlleur
     /*
      * Attributes
      */
-    private $db;
+    private $profilUpdate=false;
 
     /**
-     * @return BdConnexion
+     * @return bool
      */
-    public function getDb()
+    public function isProfilUpdate()
     {
-        return $this->db;
+        return $this->profilUpdate;
     }
 
     /**
-     * @param BdConnexion $db
+     * @param bool $profilUpdate
      */
-    public function setDb($db)
+    public function setProfilUpdate($profilUpdate)
     {
-        $this->db = $db;
+        $this->profilUpdate = $profilUpdate;
     }
+
+
 
     public function displayNavBar()
     {
@@ -152,6 +154,34 @@ class TableauDeBordControlleur extends AbstractControlleur
         }
     }
 
+    public function editProfilSave()
+    {
+        if (isset($_POST['btnSaveEditProfil'])) {
+            $this->updateProfil();
+        }
+    }
+
+    public function displayUilisateurProfilEdit()
+    {
+        $widgets = '';
+        if (!$_SESSION["profilUpdated"]){
+            if ($this->isEleve()) {
+                $widgets = $widgets . $this->displayEleveProfilEdit();
+            } else {
+                $widgets = $widgets . $this->displayEnseignantProfilEdit();
+            }
+        } else {
+            $_SESSION["profilUpdated"]=false;
+            if ($this->isEleve()) {
+                $widgets = $widgets . $this->displayEleveProfil();
+            } else {
+                $widgets = $widgets . $this->displayEnseignantProfil();
+            }
+        }
+
+        echo $widgets;
+        return $widgets;
+    }
 
     public function displayUilisateurProfil()
     {
@@ -464,7 +494,7 @@ class TableauDeBordControlleur extends AbstractControlleur
         $widgets = $widgets . '
                     <div class="w3-container w3-card w3-white w3-margin-bottom">
                         <h2 class="w3-text-grey w3-padding-16"><i
-                                    class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Séances programmés (Demande)</h2>';
+                                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Séances programmés (Demande)</h2>';
         $widgets = $widgets . $this->getListeDesSeancesCoursDemande($enseignant);
         $widgets = $widgets . '
                     </div>';
@@ -509,6 +539,34 @@ class TableauDeBordControlleur extends AbstractControlleur
                     <hr>
 
                 </div>';
+        return $widget;
+    }
+
+    private function getProfilMainInfosEdit($personne)
+    {
+        $widget = '
+        <!-- Left Column -->
+        <form action="" method="post">
+                <div class="w3-display-container">
+                    <input type="file" class="form-control-file" id="inputImgProfil" aria-describedby="fileHelp">
+                    <img src="../../../ressources/images/team1.jpg" style="width:100%" alt="Avatar">
+                    <div class="w3-display-bottomleft w3-container w3-text-black">
+                        <h2><input type="text" class="form-control" placeholder="Prénom" 
+                        value="' . $personne->getPrenom() . '" name="inputEditProfilPrenom" id="inputEditProfilPrenom">
+                            <input type="text" class="form-control" placeholder="NOM" 
+                            value="' . $personne->getNom() . '" name="inputEditProfilNom" id="inputEditProfilNom"></h2>
+                    </div>
+                </div>
+                <div class="w3-container">
+                    <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getTypePersonne() . '</p>
+                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getAdresse() . '</p>
+                    <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getEmail() . '</p>
+                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getTelephone() . '</p>
+                    <hr>
+
+                </div>
+                <button name="btnSaveEditProfil" id="btnSaveEditProfil" type="submit" class="btn btn-primary" value="btnSaveEditProfil">Submit</button>
+         </form>';
         return $widget;
     }
 
@@ -867,6 +925,108 @@ class TableauDeBordControlleur extends AbstractControlleur
 </div>';
 
         return $widget;
+    }
+
+    private function displayEleveProfilEdit()
+    {
+        $widgets = '';
+
+        return $widgets;
+    }
+
+    private function displayEnseignantProfilEdit()
+    {
+        $enseignant = $this->getUserConnected();
+        $widgets = '<!-- Header with full-height image -->
+            <div class="w3-content w3-margin-top" style="max-width:1400px;">
+            
+                <!-- The Grid -->
+                <div class="w3-row-padding">';
+        $widgets = $widgets . '
+
+            <!-- Left Column -->
+            <div class="w3-third">
+
+            <div class="w3-white w3-text-grey w3-card-4">';
+        $widgets = $widgets . $this->getProfilMainInfosEdit($enseignant);
+        $widgets = $widgets . $this->getMatiereEnseigner($enseignant);
+        $widgets = $widgets . '
+                </div>
+                <br>
+    
+                <!-- End Left Column -->
+            </div>';
+        $widgets = $widgets . '
+        
+                <!-- Right Column -->
+                <div class="w3-twothird">';
+        $widgets = $widgets . '
+                    </div>
+        
+                    <!-- End Right Column -->
+                </div>';
+        $widgets = $widgets . '
+        
+                <!-- End Grid -->
+            </div>
+        
+            <!-- End Page Container -->
+        </div>';
+        return $widgets;
+    }
+
+    private function updateProfil()
+    {
+;
+        $personne = $this->getUserConnected();
+
+        $id = $personne->getIdPersonne();
+        $email = $personne->getEmail();
+        $nom = $_POST['inputEditProfilNom'];
+        $prenom = $_POST['inputEditProfilPrenom'];
+
+        $date_naissance = $personne->getDateNaissance();
+;
+        $bdd = $this->getDb()->openConn();
+
+        $sql = "UPDATE Personne
+                SET nom='$nom', prenom='$prenom',email='$email',date_naissance='$date_naissance'
+                WHERE id=$id
+                ;";
+
+
+        if ($bdd->query($sql) === TRUE) {
+
+            $this->setProfilUpdate(true);
+            $personne->setNom($nom);
+            $personne->setPrenom($prenom);
+            $personne->setEmail($email);
+            $personne->setDateNaissance($date_naissance);
+            $_SESSION["utilisateur"] = $personne;
+            echo '<div class="container">
+<br>
+  <div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Session Personne updated successfully </h1>
+  </div>
+  <div class="alert alert-info alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Info!</strong>
+    '. $_SESSION["utilisateur"].'
+  </div>
+</div>';
+        } else {
+            echo "<div class=\"alert alert-danger alert-dismissible\">
+  <strong>Error!</strong> Error: " . $sql . "<br>" . $bdd->error."
+</div>
+";
+            echo "<br>";
+            echo "_SESSION:utilisateur = " . $_SESSION["utilisateur"];
+            echo "<br>";
+        }
+
+        $this->getDb()->closeConn();
+        $_SESSION["profilUpdated"] = true;
     }
 
 

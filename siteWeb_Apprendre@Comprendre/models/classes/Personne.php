@@ -228,8 +228,6 @@ class Personne
         $toString = $toString . "<br>";
         $toString = $toString . "dateNaissance : " . $this->dateNaissance;
         $toString = $toString . "<br>";
-        $toString = $toString . "motDePasse : " . $this->motDePasse;
-        $toString = $toString . "<br>";
         $toString = $toString . "image : " . $this->image;
         $toString = $toString . "<br>";
         $toString = $toString . "dateInscription : " . $this->dateInscription;
