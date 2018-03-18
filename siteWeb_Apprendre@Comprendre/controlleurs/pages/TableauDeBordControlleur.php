@@ -450,21 +450,31 @@ class TableauDeBordControlleur extends AbstractControlleur
         $widgets = $widgets . '
         
                 <!-- Right Column -->
-                <div class="w3-twothird">
-        
+                <div class="w3-twothird">';
+        //Liste des cours crées
+        $widgets = $widgets . '
                     <div class="w3-container w3-card w3-white w3-margin-bottom">
                         <h2 class="w3-text-grey w3-padding-16"><i
                                     class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Cours </h2>';
         $widgets = $widgets . $this->getListeDesCours($enseignant);
         $widgets = $widgets . '
                     </div>';
+
+        //Liste des séance de cours inscrit
         $widgets = $widgets . '
-        
-                    <div class="w3-container w3-card w3-white">';
-        $widgets = $widgets . '
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
                         <h2 class="w3-text-grey w3-padding-16"><i
-                                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Séances programmés</h2>';
-        $widgets = $widgets . $this->getListeDesSeancesCours($enseignant);
+                                    class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Séances programmés (Demande)</h2>';
+        $widgets = $widgets . $this->getListeDesSeancesCoursDemande($enseignant);
+        $widgets = $widgets . '
+                    </div>';
+
+        //Liste des séance de cours crées
+        $widgets = $widgets . '
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <h2 class="w3-text-grey w3-padding-16"><i
+                                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Séances programmés (Proposition)</h2>';
+        $widgets = $widgets . $this->getListeDesSeancesCoursProposition($enseignant);
         $widgets = $widgets . '
                     </div>
         
@@ -643,7 +653,7 @@ class TableauDeBordControlleur extends AbstractControlleur
      * @param $enseignant
      * @return string
      */
-    private function getListeDesSeancesCours($enseignant)
+    private function getListeDesSeancesCoursProposition($enseignant)
     {
 
         $widgets = '';
@@ -666,7 +676,7 @@ class TableauDeBordControlleur extends AbstractControlleur
                 WHERE C.id_auteur = $idEnseignant and M.id = C.matiere
                 and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
                 and S.proposition_cours = C.id and P.id = S.participant
-                ORDER BY date_creation DESC
+                ORDER BY date_realisation DESC
                 LIMIT 10;";
         $result = $bdd->query($sql);
 
@@ -674,7 +684,7 @@ class TableauDeBordControlleur extends AbstractControlleur
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $widgets = $widgets . $this->displaySeanceCours($row);
+                $widgets = $widgets . $this->displaySeanceCoursProposition($row);
             }
         } else {
             echo "0 results";
@@ -685,7 +695,7 @@ class TableauDeBordControlleur extends AbstractControlleur
         return $widgets;
     }
 
-    private function displaySeanceCours($row)
+    private function displaySeanceCoursProposition($row)
     {
         $id = $row['id'];
         $nom = $row['nom'];
@@ -736,6 +746,114 @@ class TableauDeBordControlleur extends AbstractControlleur
             <td style="text-align: left">
             <h5>
                 Participant : ' . $nom_participant . ' ' . $prenom_participant . '</h5>
+            </td>
+            <td style="text-align: right">
+                <h1 class="w3-tag w3-teal w3-round">' . $duree . 'h</h1>
+            </td>
+        </tr>
+    </table>' .
+            '
+    <p>' . substr($description, 0, 196) . ' ...</p>
+    <p style="text-align: right">' . $date_inscription . '</p>
+    <hr>
+</div>';
+
+        return $widget;
+    }
+
+    private function getListeDesSeancesCoursDemande($enseignant)
+    {
+        $widgets = '';
+
+        $bd = new BdConnexion();
+        $idEnseignant = $enseignant->getIdPersonne();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur,
+                M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom,
+                S.date_inscription, S.date_realisation, S.participant, S.duree, S.etat,
+                P.nom as nom_auteur,P.prenom as prenom_auteur,P.email as email_auteur,P.date_naissance as date_naissance_auteur, P.type_personne as type_personne_auteur
+                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax, SeanceCours S, Personne P
+                WHERE S.participant = $idEnseignant and M.id = C.matiere
+                and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
+                and S.proposition_cours = C.id and P.id = C.id_auteur
+                ORDER BY date_realisation DESC
+                LIMIT 10;
+                ";
+        $result = $bdd->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $widgets = $widgets . $this->displaySeanceCoursDemande($row);
+            }
+        } else {
+            echo "0 results";
+        }
+
+        $bdd->close();
+
+        return $widgets;
+    }
+
+    private function displaySeanceCoursDemande($row)
+    {
+        $id = $row['id'];
+        $nom = $row['nom'];
+        $description = $row['description'];
+        $tarif = $row['tarif'];
+        $date_creation = $row['date_creation'];
+        $id_auteur = $row['id_auteur'];
+        $matiere_nom = $row['matiere_nom'];
+        $niveau_min_nom = $row['niveau_min_nom'];
+        $niveau_max_nom = $row['niveau_max_nom'];
+        $date_inscription = $row['date_inscription'];
+        $date_realisation = $row['date_realisation'];
+        $participant = $row['participant'];
+        $duree = $row['duree'];
+        $etat = $row['etat'];
+        $nom_auteur = $row['nom_auteur'];
+        $prenom_auteur = $row['prenom_auteur'];
+        $email_auteur = $row['email_auteur'];
+        $date_naissance_auteur = $row['date_naissance_auteur'];
+        $type_personne_auteur = $row['type_personne_auteur'];
+        $widget = '<div class="w3-container">
+<table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                            <h4 class="w3-opacity"><b>' . $nom . '</b></h4>                            </td>
+                            <td style="text-align: right">
+<span
+                                        class="w3-tag w3-teal w3-round">' . $matiere_nom . '</span>
+
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                                                        <h5 class="w3-text-teal"><i class="fa fa-asterisk fa-fw w3-margin-right"></i>
+                            ' . $niveau_min_nom . ' - <span
+                                        class="w3-tag w3-teal w3-round">' . $niveau_max_nom . '</span></h5>                           </td>
+                            <td style="text-align: right">
+<h1
+                                        class="w3-tag w3-blue-grey w3-round">' . $tarif . '€</h1>
+
+                            </td>
+                        </tr>
+                    </table>
+    <table style="width: 100%">
+        <tr>
+            <td style="text-align: left">
+            <h5>
+                Organisateur : ' . $nom_auteur . ' ' . $prenom_auteur . ' </h5>
             </td>
             <td style="text-align: right">
                 <h1 class="w3-tag w3-teal w3-round">' . $duree . 'h</h1>

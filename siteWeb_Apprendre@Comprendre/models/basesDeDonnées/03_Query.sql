@@ -120,7 +120,7 @@ WHERE C.id_auteur = 1001 and M.id = C.matiere and Nmin.id = C.niveau_etude_min a
 ORDER BY date_creation DESC
 LIMIT 10;
 
--- Liste des seances
+-- Liste des seances Proposition
 
 SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur,
 M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom,
@@ -130,7 +130,20 @@ FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax, SeanceCours S, Per
 WHERE C.id_auteur = 1001 and M.id = C.matiere
 and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
 and S.proposition_cours = C.id and P.id = S.participant
-ORDER BY date_creation DESC
+ORDER BY date_realisation DESC
+LIMIT 10;
+
+-- Liste des seances Demande
+
+SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur,
+M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom,
+S.date_inscription, S.date_realisation, S.participant, S.duree, S.etat,
+P.nom as nom_auteur,P.prenom as prenom_auteur,P.email as email_auteur,P.date_naissance as date_naissance_auteur, P.type_personne as type_personne_auteur
+FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax, SeanceCours S, Personne P
+WHERE S.participant = 1001 and M.id = C.matiere
+and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
+and S.proposition_cours = C.id and P.id = C.id_auteur
+ORDER BY date_realisation DESC
 LIMIT 10;
 
 /*
