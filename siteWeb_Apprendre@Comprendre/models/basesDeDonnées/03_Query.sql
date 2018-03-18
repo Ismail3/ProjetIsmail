@@ -75,6 +75,18 @@ INSERT INTO Personne (nom, prenom, email, date_naissance, mot_de_passe)
 VALUES ('SOSSE ALAOUI','Ismail','ismail34alaoui@gmail.com','1989-04-22','password')
 ;
 
+SELECT id
+FROM Personne
+WHERE email = 'ismail34alaoui@gmail.com'
+;
+
+INSERT INTO Eleve (id_personne)
+VALUES (1100)
+;
+
+INSERT INTO Enseignant (id_personne)
+VALUES (1100)
+;
 /*
   Liste des élèves
 */

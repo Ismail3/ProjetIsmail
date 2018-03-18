@@ -39,7 +39,7 @@ $authCtrl->displayNavBar();
 $authCtrl->displayTopButton();
 $authCtrl->displayInscription();
 $authCtrl->uInscription();
-//$authCtrl->debugSession();
+$authCtrl->debugSession();
 $authCtrl->displayFooter();
 
 ?>

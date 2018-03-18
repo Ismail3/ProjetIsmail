@@ -5,10 +5,14 @@ class Personne
     /*
      * Attributes
      */
-    protected $id;
+    protected $id_personne;
     protected $nom;
     protected $prenom;
     protected $email;
+    protected $dateNaissance;
+    protected $motDePasse;
+    protected $image;
+    protected $dateInscription;
 
     /**
      * Personne constructor.
@@ -24,17 +28,17 @@ class Personne
     /**
      * @return int
      */
-    public function getId()
+    public function getIdPersonne()
     {
-        return $this->id;
+        return $this->id_personne;
     }
 
     /**
-     * @param int $id
+     * @param int $id_personne
      */
-    public function setId($id)
+    public function setIdPersonne($id_personne)
     {
-        $this->id = $id;
+        $this->id_personne = $id_personne;
     }
 
     /**
@@ -88,17 +92,17 @@ class Personne
     /**
      * @return string
      */
-    public function getMotDePAsse()
+    public function getMotDePasse()
     {
-        return $this->motDePAsse;
+        return $this->motDePasse;
     }
 
     /**
-     * @param string $motDePAsse
+     * @param string $motDePasse
      */
-    public function setMotDePAsse($motDePAsse)
+    public function setMotDePasse($motDePasse)
     {
-        $this->motDePAsse = $motDePAsse;
+        $this->motDePasse = $motDePasse;
     }
 
     /**
@@ -148,11 +152,31 @@ class Personne
     {
         $this->email = $email;
     }
-    protected $dateNaissance;
-    protected $motDePAsse;
-    protected $image;
-    protected $dateInscription;
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $toString = "";
+        $toString = $toString . "id_personne : " . $this->id_personne;
+        $toString = $toString . "<br>";
+        $toString = $toString . "nom : " . $this->nom;
+        $toString = $toString . "<br>";
+        $toString = $toString . "prenom : " . $this->prenom;
+        $toString = $toString . "<br>";
+        $toString = $toString . "email : " . $this->email;
+        $toString = $toString . "<br>";
+        $toString = $toString . "dateNaissance : " . $this->dateNaissance;
+        $toString = $toString . "<br>";
+        $toString = $toString . "motDePasse : " . $this->motDePasse;
+        $toString = $toString . "<br>";
+        $toString = $toString . "image : " . $this->image;
+        $toString = $toString . "<br>";
+        $toString = $toString . "dateInscription : " . $this->dateInscription;
+        $toString = $toString . "<br>";
+        return $toString;
+    }
 
 
 }

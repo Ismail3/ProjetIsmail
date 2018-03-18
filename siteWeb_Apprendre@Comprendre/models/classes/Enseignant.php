@@ -5,6 +5,7 @@ class Enseignant extends Personne
     /*
      * Attributes
      */
+    private $id;
     private $typeEnseignant;
 
     /**
@@ -12,6 +13,23 @@ class Enseignant extends Personne
      */
     public function __construct()
     {
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**

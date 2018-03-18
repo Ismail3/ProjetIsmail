@@ -5,6 +5,7 @@ class Eleve extends Personne
     /*
      * Attributes
      */
+    private $id;
     private $niveauEtude;
     private $filiaire;
 
@@ -14,7 +15,22 @@ class Eleve extends Personne
     public function __construct()
     {
 
+    }
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -48,4 +64,7 @@ class Eleve extends Personne
     {
         $this->filiaire = $filiaire;
     }
+
+
+
 }
