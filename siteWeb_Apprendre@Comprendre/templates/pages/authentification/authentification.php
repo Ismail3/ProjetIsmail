@@ -38,8 +38,6 @@ $authCtrl = new AuthentificationControlleur();
 $authCtrl->displayNavBar();
 $authCtrl->displayHeader();
 $authCtrl->displayTopButton();
-$accueilCtrl->debugSession();
-$authCtrl->uConnexion();
 $authCtrl->displayFooter();
 
 ?>

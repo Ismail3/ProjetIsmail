@@ -37,7 +37,7 @@ $accueilCtrl = new AccueilControlleur();
 $accueilCtrl->displayNavBar();
 $accueilCtrl->displayHeader();
 $accueilCtrl->displayTopButton();
-$accueilCtrl->debugSession();
+//$accueilCtrl->debugSession();
 $accueilCtrl->destroyConnexion();
 $accueilCtrl->displayContenu();
 $accueilCtrl->displayFooter();

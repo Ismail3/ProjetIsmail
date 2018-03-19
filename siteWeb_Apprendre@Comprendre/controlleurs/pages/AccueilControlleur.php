@@ -73,7 +73,47 @@ class AccueilControlleur extends AbstractControlleur
 
     public function displayContenu()
     {
-        echo '
+        $widgets = $this->getInfosSiteWeb();
+
+        echo $widgets;
+    }
+
+    public function displayFooter()
+    {
+        echo '<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-64">
+    <a href="#home" class="w3-button w3-light-grey"><i
+            class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+    <div class="w3-xlarge w3-section">
+        <i class="fa fa-facebook-official w3-hover-opacity"></i>
+        <i class="fa fa-instagram w3-hover-opacity"></i>
+        <i class="fa fa-snapchat w3-hover-opacity"></i>
+        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+        <i class="fa fa-twitter w3-hover-opacity"></i>
+        <i class="fa fa-linkedin w3-hover-opacity"></i>
+    </div>
+    <p>  <p>Réalisé par Ismail SOSSE ALAOUI</p>
+    </p>
+</footer>
+';
+    }
+
+    public function destroyConnexion()
+    {
+        session_destroy();
+    }
+
+    private function getInfosSiteWeb()
+    {
+        $widget = $this->getInfosApropos();
+        $widget = $widget . $this->getStatistiques();
+
+        return $widget;
+    }
+
+    private function getInfosApropos()
+    {
+        $widget = '
 <!-- About Section -->
 <div class="w3-container" style="padding:128px 16px" id="about">
     <h3 class="w3-center">À propos de <strong> Aprendre@Comprendre</strong></h3>
@@ -104,7 +144,8 @@ class AccueilControlleur extends AbstractControlleur
                 dolore.Méthodologie</p>
         </div>
     </div>
-</div>
+</div>';
+        $widget = $widget . '
 
 <!-- Promo Section - "We know design" -->
 <div class="w3-container w3-light-grey" style="padding:128px 16px">
@@ -121,7 +162,8 @@ class AccueilControlleur extends AbstractControlleur
                  width="700" height="394">
         </div>
     </div>
-</div>
+</div>';
+        $widget = $widget . '
 
 <!-- Team Section -->
 <div class="w3-container" style="padding:128px 16px" id="team">
@@ -186,51 +228,151 @@ class AccueilControlleur extends AbstractControlleur
         </div>
     </div>
 </div>
-
-<!-- Promo Section "Statistics" -->
-<div class="w3-container w3-row w3-center w3-dark-grey w3-padding-64">
-    <div class="w3-quarter">
-        <span class="w3-xxlarge">14+</span>
-        <br>Ressources pédagogiques
-    </div>
-    <div class="w3-quarter">
-        <span class="w3-xxlarge">55+</span>
-        <br>Cours réalisés
-    </div>
-    <div class="w3-quarter">
-        <span class="w3-xxlarge">89+</span>
-        <br>Enseignants
-    </div>
-    <div class="w3-quarter">
-        <span class="w3-xxlarge">150+</span>
-        <br>Élèves
-    </div>
-</div>
 ';
+
+        return $widget;
     }
 
-    public function displayFooter()
+    private function getStatistiques()
     {
-        echo '<!-- Footer -->
-<footer class="w3-center w3-black w3-padding-64">
-    <a href="#home" class="w3-button w3-light-grey"><i
-            class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
-    <div class="w3-xlarge w3-section">
-        <i class="fa fa-facebook-official w3-hover-opacity"></i>
-        <i class="fa fa-instagram w3-hover-opacity"></i>
-        <i class="fa fa-snapchat w3-hover-opacity"></i>
-        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-        <i class="fa fa-twitter w3-hover-opacity"></i>
-        <i class="fa fa-linkedin w3-hover-opacity"></i>
-    </div>
-    <p>  <p>Réalisé par Ismail SOSSE ALAOUI</p>
-    </p>
-</footer>
-';
+        $nb_eleves = $this->getNombreEleves();
+        $nb_enseignants = $this->getNombreEnseignants();
+        $nb_cours = $this->getNombreCours();
+        $nb_h_seance = $this->getNombreHeuresRealises();
+        $widget = '
+                <!-- Promo Section "Statistics" -->
+                <div class="w3-container w3-row w3-center w3-dark-grey w3-padding-64">
+                    <div class="w3-quarter">
+                        <span class="w3-xxlarge">+ '.$nb_h_seance.'</span>
+                        <br>Heures réalisés
+                    </div>
+                    <div class="w3-quarter">
+                        <span class="w3-xxlarge">+ ' . $nb_cours . '</span>
+                        <br>Cours proposé
+                    </div>
+                    <div class="w3-quarter">
+                        <span class="w3-xxlarge">+ ' . $nb_enseignants . '</span>
+                        <br>Enseignants
+                    </div>
+                    <div class="w3-quarter">
+                        <span class="w3-xxlarge">+ ' . $nb_eleves . '</span>
+                        <br>Élèves
+                    </div>
+                </div>
+                ';
+
+        return $widget;
     }
 
-    public function destroyConnexion()
+    private function getNombreEleves()
     {
-        session_destroy();
+        $nbEleve = 0;
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select count(*) as nbEleve from Eleve ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $nbEleve = $row['nbEleve'];
+            }
+        }
+
+        $bdd->close();
+
+        return $nbEleve;
+    }
+
+    private function getNombreEnseignants()
+    {
+        $nbEnseignant = 0;
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select count(*) as nbEnseignant from Enseignant ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $nbEnseignant = $row['nbEnseignant'];
+            }
+        }
+
+        $bdd->close();
+
+        return $nbEnseignant;
+    }
+
+    private function getNombreCours()
+    {
+        $nbCours = 0;
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select count(*) as nbCours from Cours ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $nbCours = $row['nbCours'];
+            }
+        }
+
+        $bdd->close();
+
+        return $nbCours;
+    }
+
+    private function getNombreHeuresRealises()
+    {
+        $nbHRealisees = 0;
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select sum(duree) as nbHRealisees from SeanceCours ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $nbHRealisees = $row['nbHRealisees'];
+            }
+        }
+
+        $bdd->close();
+
+        return $nbHRealisees;
     }
 }

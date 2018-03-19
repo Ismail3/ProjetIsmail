@@ -38,7 +38,7 @@ $authCtrl = new AuthentificationControlleur();
 $authCtrl->displayNavBar();
 $authCtrl->displayTopButton();
 $authCtrl->uConnexion();
-$authCtrl->debugSession();
+//$authCtrl->debugSession();
 $authCtrl->displayConnexion();
 $authCtrl->displayFooter();
 

@@ -1,7 +1,10 @@
 <?php
+require_once(dirname(__FILE__) . '/../basesDeDonnées/BdConnexion.php');
+
 
 class Personne
 {
+
     /*
      * Attributes
      */
@@ -224,9 +227,11 @@ class Personne
         $toString = $toString . "<br>";
         $toString = $toString . "telephone : " . $this->telephone;
         $toString = $toString . "<br>";
-        $toString = $toString . "adresse : " . $this->adresse;
+        $toString = $toString . "telephone : " . $this->telephone;
         $toString = $toString . "<br>";
         $toString = $toString . "dateNaissance : " . $this->dateNaissance;
+        $toString = $toString . "<br>";
+        $toString = $toString . "motDePasse : " . $this->motDePasse;
         $toString = $toString . "<br>";
         $toString = $toString . "image : " . $this->image;
         $toString = $toString . "<br>";

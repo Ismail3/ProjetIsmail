@@ -115,36 +115,35 @@ class AuthentificationControlleur extends AbstractControlleur
 
     public function uConnexion()
     {
-        if ($this->formulaireConnexionComplet()) {
+        echo "coucou";
+        if (isset($_POST['btnConnexionUtilisateur'])) {
+            if ($this->formulaireConnexionComplet()) {
 
-            $bdd = $this->getDb()->openConn();
+                $bdd = $this->getDb()->openConn();
 
-            $email = $_POST['inputEmailConnexion'];
-            $password = $_POST['inputPasswordConnexion'];
+                $email = $_POST['inputEmailConnexion'];
+                $password = $_POST['inputPasswordConnexion'];
 
-            $sql = "SELECT id , type_personne
+                $sql = "SELECT id , type_personne
                     FROM Personne P
                     WHERE P.email='$email'
                       and P.mot_de_passe='$password'
                 ;";
-            $result = $bdd->query($sql);
-            if ($result->num_rows > 0) {
-                session_start();
-                // output data of each row
-                while ($row = $result->fetch_assoc()) {
+                $result = $bdd->query($sql);
+                if ($result->num_rows > 0) {
+                    session_start();
+                    // output data of each row
+                    while ($row = $result->fetch_assoc()) {
 
-                    $this->connexionUtilisateur($bdd, $row);
+                        $this->connexionUtilisateur($bdd, $row);
 
+                    }
+                } else {
+                    echo "Vous êtes actuellement déconnecté";
                 }
-            } else {
-                echo "Vous êtes actuellement déconnecté";
-            }
-            var_dump("utilisateur: <br>");
-            var_dump($_SESSION["utilisateur"]);
-            var_dump("<br>");
-            var_dump("<br>");
 
-            $this->getDb()->closeConn();
+                $this->getDb()->closeConn();
+            }
         }
     }
 
@@ -289,7 +288,7 @@ class AuthentificationControlleur extends AbstractControlleur
         }
         $widget = $widget . '        
                             </fieldset>
-                                <button type="submit" class="btn btn-primary" value = "Envoyer">Submit</button>
+                                <button name="btnInscriptionUtilisateur" id="btnInscriptionUtilisateur" value="btnInscriptionUtilisateur" type="submit" class="btn btn-primary" value = "Envoyer">Submit</button>
                         </fieldset>
                     </form>
                 </div>
@@ -339,20 +338,22 @@ class AuthentificationControlleur extends AbstractControlleur
      */
     public function uInscription()
     {
-        if ($this->formulaireInscriptionComplet()) {
+        if (!$this->isUserConnected()) {
 
 
-            $email = $_POST['inputEmailInscription'];
-            $mot_de_passe = $_POST['inputPasswordInscription'];
-            $mot_de_passe_confirm = $_POST['inputPasswordConfirmInscription'];
-            $nom = $_POST['inputNomInscription'];
-            $prenom = $_POST['inputPrenomInscription'];
-            $date_naissance = $_POST['inputDateNaisssanceInscription'];
-            $type_compte = $_POST['inputTypeCompteInscription'];
-
-            if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
-
-                $this->insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte);
+            if (isset($_POST['btnInscriptionUtilisateur'])) {
+                if ($this->formulaireInscriptionComplet()) {
+                    $email = $_POST['inputEmailInscription'];
+                    $mot_de_passe = $_POST['inputPasswordInscription'];
+                    $mot_de_passe_confirm = $_POST['inputPasswordConfirmInscription'];
+                    $nom = $_POST['inputNomInscription'];
+                    $prenom = $_POST['inputPrenomInscription'];
+                    $date_naissance = $_POST['inputDateNaisssanceInscription'];
+                    $type_compte = $_POST['inputTypeCompteInscription'];
+                    if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
+                        $this->insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte);
+                    }
+                }
             }
         }
     }
@@ -466,7 +467,7 @@ class AuthentificationControlleur extends AbstractControlleur
             $id = $this->createPersonneType($bdd, $id_personne, $type_compte);
             $personne = new Personne();
 
-            if (strcmp($type_compte, "Eleve") === 0) {
+            if (strcmp($type_compte, Eleve::$TABLE_NAME) === 0) {
                 $personne = new Eleve();
             } else {
                 $personne = new Enseignant();
@@ -520,8 +521,8 @@ class AuthentificationControlleur extends AbstractControlleur
             <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
                 <div class="w3-row-padding">
                     <div class="w3-col m6">';
-        $widget = $widget.$this->getUserConnected();
-        $widget = $widget.'
+        $widget = $widget . $this->getUserConnected();
+        $widget = $widget . '
                                     <a href="../enseignant/tableauDeBord.php">                                   
                                     <button type="submit" class="btn btn-primary">Tableau de bord</button>
                                     </a>
@@ -540,8 +541,7 @@ class AuthentificationControlleur extends AbstractControlleur
     {
         $email = $_POST['inputEmailConnexion'];
         $mot_de_passe = $_POST['inputPasswordConnexion'];
-        if ($this->formulaireConnexionComplet()) {
-            echo '<!-- Promo Section - "We know design" -->
+        echo '<!-- Promo Section - "We know design" -->
                 <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
                     <div class="w3-row-padding">
                         <div class="w3-col m6">
@@ -558,7 +558,7 @@ class AuthentificationControlleur extends AbstractControlleur
                                         <label for="inputPasswordConnexion">Password</label>
                                         <input name="inputPasswordConnexion" type="password" class="form-control" id="inputPasswordConnexion" placeholder="Password"
                                         value="' . $mot_de_passe . '"></div>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button value="btnConnexionUtilisateur" id="btnConnexionUtilisateur" name="btnConnexionUtilisateur" type="submit" class="btn btn-primary">Submit</button>
                                 </fieldset>
                             </form>
                         </div>
@@ -569,37 +569,6 @@ class AuthentificationControlleur extends AbstractControlleur
                     </div>
                 </div>
                 ';
-        } else {
-            echo '<!-- Promo Section - "We know design" -->
-            <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
-                <div class="w3-row-padding">
-                    <div class="w3-col m6">
-                        <form action="connexion.php" method="post">
-                            <fieldset>
-                                <legend>Connexion</legend>
-                                <div class="form-group">
-                                    <label for="inputEmailConnexion">Email address</label>
-                                    <input name="inputEmailConnexion" type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email"
-                                    value="' . $email . '">
-                                    <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPasswordConnexion">Password</label>
-                                    <input name="inputPasswordConnexion" type="password" class="form-control" id="inputPasswordConnexion" placeholder="Password"
-                                    value="' . $mot_de_passe . '"></div>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                            </fieldset>
-                        </form>
-                    </div>
-                    Echec de la connexion
-                    <div class="w3-col m6">
-                        <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
-                             width="700" height="394">
-                    </div>
-                </div>
-            </div>
-            ';
-        }
     }
 
     private function connexionUtilisateur($bdd, $row)
@@ -621,23 +590,7 @@ class AuthentificationControlleur extends AbstractControlleur
                 session_start();
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
-                    $personne = new Eleve();
-                    $personne->setIdPersonne($row["id"]);
-                    $personne->setNom($row["nom"]);
-                    $personne->setPrenom($row["prenom"]);
-                    $personne->setEmail($row["email"]);
-                    $personne->setTelephone($row["telephone"]);
-                    $personne->setAdresse($row["adresse"]);
-                    $personne->setDateNaissance($row["date_naissance"]);
-                    $personne->setTypePersonne($row["type_personne"]);
-                    $personne->setDateInscription($row["date_inscription"]);
-                    $_SESSION["utilisateur"] = $personne;
-                    var_dump("utilisateur: <br>");
-                    var_dump($_SESSION["utilisateur"]);
-                    var_dump("<br>");
-                    var_dump("<br>");
-//                $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"]);
-
+                    $this->initUserConnected(Eleve::$TABLE_NAME, $row);
                 }
             }
         } else {
@@ -652,24 +605,7 @@ class AuthentificationControlleur extends AbstractControlleur
                 session_start();
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
-                    $personne = new Enseignant();
-                    $personne->setIdPersonne($row["id"]);
-                    $personne->setNom($row["nom"]);
-                    $personne->setPrenom($row["prenom"]);
-                    $personne->setEmail($row["email"]);
-                    $personne->setTelephone($row["telephone"]);
-                    $personne->setDateNaissance($row["date_naissance"]);
-                    $personne->setDateInscription($row["date_inscription"]);
-                    $personne->setTypePersonne($row["type_personne"]);
-                    $personne->setAdresse($row["adresse"]);
-                    $_SESSION["utilisateur"] = $personne;
-                    var_dump("utilisateur: <br>");
-                    var_dump($_SESSION["utilisateur"]);
-                    var_dump($_SESSION["type_utilisateur"]);
-                    var_dump("<br>");
-                    var_dump("<br>");
-//                $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"]);
-
+                    $this->initUserConnected(Enseignant::$TABLE_NAME, $row);
                 }
             }
         }
@@ -677,4 +613,36 @@ class AuthentificationControlleur extends AbstractControlleur
 
     }
 
+    private function initUserConnected($type_personne, $row)
+    {
+        if (strcmp($type_personne, Eleve::$TABLE_NAME) === 0) {
+            $personne = new Eleve();
+            $personne->setIdPersonne($row["id"]);
+            $personne->setNom($row["nom"]);
+            $personne->setPrenom($row["prenom"]);
+            $personne->setEmail($row["email"]);
+            $personne->setTelephone($row["telephone"]);
+            $personne->setAdresse($row["adresse"]);
+            $personne->setDateNaissance($row["date_naissance"]);
+            $personne->setTypePersonne($row["type_personne"]);
+            $personne->setDateInscription($row["date_inscription"]);
+            $_SESSION["utilisateur"] = $personne;
+
+            return $personne;
+        } else {
+            $personne = new Enseignant();
+            $personne->setIdPersonne($row["id"]);
+            $personne->setNom($row["nom"]);
+            $personne->setPrenom($row["prenom"]);
+            $personne->setEmail($row["email"]);
+            $personne->setTelephone($row["telephone"]);
+            $personne->setDateNaissance($row["date_naissance"]);
+            $personne->setDateInscription($row["date_inscription"]);
+            $personne->setTypePersonne($row["type_personne"]);
+            $personne->setAdresse($row["adresse"]);
+            $_SESSION["utilisateur"] = $personne;
+
+            return $personne;
+        }
+    }
 }
