@@ -462,8 +462,8 @@ class AuthentificationControlleur extends AbstractControlleur
         if ($bdd->query($sql) === TRUE) {
             session_start();
             $id_personne = $bdd->insert_id;
-            echo "New record Personne created successfully. Last inserted ID is: " . $id_personne;
-            echo "<br>";
+//            echo "New record Personne created successfully. Last inserted ID is: " . $id_personne;
+//            echo "<br>";
             $id = $this->createPersonneType($bdd, $id_personne, $type_compte);
             $personne = new Personne();
 
@@ -482,9 +482,9 @@ class AuthentificationControlleur extends AbstractControlleur
             $personne->setDateNaissance($date_naissance);
             $personne->setTypePersonne($type_compte);
             $_SESSION["utilisateur"] = $personne;
-            echo "<br>";
-            echo "New record Personne created successfully. Last inserted ID is: " . $_SESSION["utilisateur"];
-            echo "<br>";
+//            echo "<br>";
+//            echo "New record Personne created successfully. Last inserted ID is: " . $_SESSION["utilisateur"];
+//            echo "<br>";
 
 
         } else {

@@ -10,7 +10,7 @@ class TableauDeBordControlleur extends AbstractControlleur
     /*
      * Attributes
      */
-    private $profilUpdate=false;
+    private $profilUpdate = false;
 
     /**
      * @return bool
@@ -27,7 +27,6 @@ class TableauDeBordControlleur extends AbstractControlleur
     {
         $this->profilUpdate = $profilUpdate;
     }
-
 
 
     public function displayNavBar()
@@ -164,14 +163,14 @@ class TableauDeBordControlleur extends AbstractControlleur
     public function displayUilisateurProfilEdit()
     {
         $widgets = '';
-        if (!$_SESSION["profilUpdated"]){
+        if (!$_SESSION["profilUpdated"]) {
             if ($this->isEleve()) {
                 $widgets = $widgets . $this->displayEleveProfilEdit();
             } else {
                 $widgets = $widgets . $this->displayEnseignantProfilEdit();
             }
         } else {
-            $_SESSION["profilUpdated"]=false;
+            $_SESSION["profilUpdated"] = false;
             if ($this->isEleve()) {
                 $widgets = $widgets . $this->displayEleveProfil();
             } else {
@@ -558,10 +557,11 @@ class TableauDeBordControlleur extends AbstractControlleur
                     </div>
                 </div>
                 <div class="w3-container">
+                
                     <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getTypePersonne() . '</p>
-                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getAdresse() . '</p>
-                    <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getEmail() . '</p>
-                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getTelephone() . '</p>
+                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i><input value="' . $personne->getAdresse() . '" type="text" class="form-control" placeholder="Ville, CodePostal" id="inputEditProfilAdresse" name="inputEditProfilAdresse"></p>
+                    <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i><input value="' . $personne->getEmail() . '" type="email" class="form-control" placeholder="example@mail.com" id="inputEditProfilEmail" name="inputEditProfilEmail"></p>
+                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i> <input value="' . $personne->getTelephone() . '" type="tel" class="form-control" placeholder="+33 06 12 34 56 78" id="inputEditProfilTel" name="inputEditProfilTel"></p>
                     <hr>
 
                 </div>
@@ -977,20 +977,21 @@ class TableauDeBordControlleur extends AbstractControlleur
 
     private function updateProfil()
     {
-;
+        ;
         $personne = $this->getUserConnected();
 
         $id = $personne->getIdPersonne();
-        $email = $personne->getEmail();
         $nom = $_POST['inputEditProfilNom'];
         $prenom = $_POST['inputEditProfilPrenom'];
+        $adresse = $_POST['inputEditProfilAdresse'];
+        $email = $_POST['inputEditProfilEmail'];
+        $tel = $_POST['inputEditProfilTel'];
 
-        $date_naissance = $personne->getDateNaissance();
-;
+        $date_naissance = $personne->getDateNaissance();;
         $bdd = $this->getDb()->openConn();
 
         $sql = "UPDATE Personne
-                SET nom='$nom', prenom='$prenom',email='$email',date_naissance='$date_naissance'
+                SET nom='$nom', prenom='$prenom',email='$email',adresse='$adresse',date_naissance='$date_naissance',telephone='$tel'
                 WHERE id=$id
                 ;";
 
@@ -1001,6 +1002,8 @@ class TableauDeBordControlleur extends AbstractControlleur
             $personne->setNom($nom);
             $personne->setPrenom($prenom);
             $personne->setEmail($email);
+            $personne->setAdresse($adresse);
+            $personne->setTelephone($tel);
             $personne->setDateNaissance($date_naissance);
             $_SESSION["utilisateur"] = $personne;
             echo '<div class="container">
@@ -1012,12 +1015,12 @@ class TableauDeBordControlleur extends AbstractControlleur
   <div class="alert alert-info alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Info!</strong>
-    '. $_SESSION["utilisateur"].'
+    ' . $_SESSION["utilisateur"] . '
   </div>
 </div>';
         } else {
             echo "<div class=\"alert alert-danger alert-dismissible\">
-  <strong>Error!</strong> Error: " . $sql . "<br>" . $bdd->error."
+  <strong>Error!</strong> Error: " . $sql . "<br>" . $bdd->error . "
 </div>
 ";
             echo "<br>";
