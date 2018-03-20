@@ -158,9 +158,15 @@ class TableauDeBordControlleur extends AbstractControlleur
         if (isset($_POST['btnSaveEditProfil'])) {
             $mot_de_passe = $_POST['inputEditProfiPassword'];
             $mot_de_passe_confirm = $_POST['inputEditProfilPasswordConfirm'];
-//            if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
-//                $this->updateProfil();
-//            }
+            if (strcmp($mot_de_passe, "") === 0 || strcmp($mot_de_passe_confirm, "") === 0) {
+                echo "not updatePassWord";
+                $this->updateProfil("");
+            } else {
+                if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
+                    echo "updatePassWord";
+                    $this->updateProfil($mot_de_passe);
+                }
+            }
         }
     }
 
@@ -1023,7 +1029,7 @@ class TableauDeBordControlleur extends AbstractControlleur
         return $widgets;
     }
 
-    private function updateProfil()
+    private function updateProfil($mot_de_passe)
     {
         $personne = $this->getUserConnected();
 
@@ -1033,12 +1039,17 @@ class TableauDeBordControlleur extends AbstractControlleur
         $adresse = $_POST['inputEditProfilAdresse'];
         $email = $_POST['inputEditProfilEmail'];
         $tel = $_POST['inputEditProfilTel'];
+        if(strcmp($mot_de_passe,"")===0){
+            $mot_de_passe = $personne->getMotDePasse();
+        }
+
+        echo "mot_de_passe".$mot_de_passe;
 
         $date_naissance = $personne->getDateNaissance();;
         $bdd = $this->getDb()->openConn();
 
         $sql = "UPDATE Personne
-                SET nom='$nom', prenom='$prenom',email='$email',adresse='$adresse',date_naissance='$date_naissance',telephone='$tel'
+                SET nom='$nom', prenom='$prenom',email='$email',adresse='$adresse',date_naissance='$date_naissance',telephone='$tel',mot_de_passe='$mot_de_passe'
                 WHERE id=$id
                 ;";
 
@@ -1052,6 +1063,7 @@ class TableauDeBordControlleur extends AbstractControlleur
             $personne->setAdresse($adresse);
             $personne->setTelephone($tel);
             $personne->setDateNaissance($date_naissance);
+            $personne->setMotDePasse($mot_de_passe);
             $_SESSION["utilisateur"] = $personne;
             echo '<div class="container">
 <br>

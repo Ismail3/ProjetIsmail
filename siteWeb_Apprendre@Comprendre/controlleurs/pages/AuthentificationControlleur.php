@@ -571,7 +571,7 @@ class AuthentificationControlleur extends AbstractControlleur
         //Recherche des informations de l'utilisateur
         if (strcmp($typePersonne, Eleve::$TABLE_NAME) == 0) {
             //Connexion d'un élève
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne,NE.nom as niveau_etude, telephone, adresse
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne,NE.nom as niveau_etude, telephone, adresse, mot_de_passe
                 FROM Eleve E, NiveauEtude NE, Personne P
                 WHERE E.id_personne = P.id
                       and E.niveau_etude = NE.id
@@ -587,7 +587,7 @@ class AuthentificationControlleur extends AbstractControlleur
             }
         } else {
             //Connexion d'un enseignant
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe
                 FROM Enseignant E, Personne P
                 WHERE E.id_personne = P.id
                       and P.id='$id'
@@ -618,6 +618,7 @@ class AuthentificationControlleur extends AbstractControlleur
             $personne->setDateNaissance($row["date_naissance"]);
             $personne->setTypePersonne($row["type_personne"]);
             $personne->setDateInscription($row["date_inscription"]);
+            $personne->setMotDePasse($row["mot_de_passe"]);
             $_SESSION["utilisateur"] = $personne;
 
             return $personne;
@@ -632,6 +633,7 @@ class AuthentificationControlleur extends AbstractControlleur
             $personne->setDateInscription($row["date_inscription"]);
             $personne->setTypePersonne($row["type_personne"]);
             $personne->setAdresse($row["adresse"]);
+            $personne->setMotDePasse($row["mot_de_passe"]);
             $_SESSION["utilisateur"] = $personne;
 
             return $personne;
