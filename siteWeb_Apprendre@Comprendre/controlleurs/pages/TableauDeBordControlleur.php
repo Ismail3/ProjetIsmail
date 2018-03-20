@@ -156,7 +156,11 @@ class TableauDeBordControlleur extends AbstractControlleur
     public function editProfilSave()
     {
         if (isset($_POST['btnSaveEditProfil'])) {
-            $this->updateProfil();
+            $mot_de_passe = $_POST['inputEditProfiPassword'];
+            $mot_de_passe_confirm = $_POST['inputEditProfilPasswordConfirm'];
+//            if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
+//                $this->updateProfil();
+//            }
         }
     }
 
@@ -543,6 +547,8 @@ class TableauDeBordControlleur extends AbstractControlleur
 
     private function getProfilMainInfosEdit($personne)
     {
+        $mot_de_passe = '';
+        $mot_de_passe_confirm = '';
         $widget = '
         <!-- Left Column -->
         <form action="" method="post">
@@ -562,6 +568,15 @@ class TableauDeBordControlleur extends AbstractControlleur
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i><input value="' . $personne->getAdresse() . '" type="text" class="form-control" placeholder="Ville, CodePostal" id="inputEditProfilAdresse" name="inputEditProfilAdresse"></p>
                     <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i><input value="' . $personne->getEmail() . '" type="email" class="form-control" placeholder="example@mail.com" id="inputEditProfilEmail" name="inputEditProfilEmail"></p>
                     <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i> <input value="' . $personne->getTelephone() . '" type="tel" class="form-control" placeholder="+33 06 12 34 56 78" id="inputEditProfilTel" name="inputEditProfilTel"></p>
+                    <p><i class="fa fa-lock fa-fw w3-margin-right w3-large w3-text-teal"></i> 
+                    <input type="password" class="form-control" 
+                                name="inputEditProfiPassword"
+                                id="inputEditProfiPassword" placeholder="Password"
+                                value="' . $mot_de_passe . '">
+                    <input type="password" class="form-control" 
+                                name="inputEditProfilPasswordConfirm"
+                                id="inputEditProfilPasswordConfirm" placeholder="ConfirmPassword"
+                                value="' . $mot_de_passe . '"></p>
                     <hr>
 
                 </div>
@@ -929,8 +944,41 @@ class TableauDeBordControlleur extends AbstractControlleur
 
     private function displayEleveProfilEdit()
     {
-        $widgets = '';
+        $eleve = $this->getUserConnected();
+        $widgets = '<!-- Header with full-height image -->
+            <div class="w3-content w3-margin-top" style="max-width:1400px;">
+            
+                <!-- The Grid -->
+                <div class="w3-row-padding">';
+        $widgets = $widgets . '
 
+            <!-- Left Column -->
+            <div class="w3-third">
+
+            <div class="w3-white w3-text-grey w3-card-4">';
+        $widgets = $widgets . $this->getProfilMainInfosEdit($eleve);
+        $widgets = $widgets . '
+                </div>
+                <br>
+    
+                <!-- End Left Column -->
+            </div>';
+        $widgets = $widgets . '
+        
+                <!-- Right Column -->
+                <div class="w3-twothird">';
+        $widgets = $widgets . '
+                    </div>
+        
+                    <!-- End Right Column -->
+                </div>';
+        $widgets = $widgets . '
+        
+                <!-- End Grid -->
+            </div>
+        
+            <!-- End Page Container -->
+        </div>';
         return $widgets;
     }
 
@@ -977,7 +1025,6 @@ class TableauDeBordControlleur extends AbstractControlleur
 
     private function updateProfil()
     {
-        ;
         $personne = $this->getUserConnected();
 
         $id = $personne->getIdPersonne();

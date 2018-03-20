@@ -80,6 +80,16 @@ class AbstractControlleur
         return array_key_exists('utilisateur', $_SESSION) && !empty($_SESSION['utilisateur']);
     }
 
+    /**
+     * @param $mot_de_passe
+     * @param $mot_de_passe_confirm
+     * @return bool
+     */
+    public function validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)
+    {
+        return strcmp($mot_de_passe, $mot_de_passe_confirm) == 0;
+    }
+
 
     /**
      * @return Personne
