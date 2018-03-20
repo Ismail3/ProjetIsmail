@@ -4,6 +4,7 @@ require_once(dirname(__FILE__) . '/../AbstractControlleur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Personne.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
+require_once(dirname(__FILE__) . '/../../models/classes/NiveauEtude.php');
 
 class TableauDeBordControlleur extends AbstractControlleur
 {
@@ -419,7 +420,7 @@ class TableauDeBordControlleur extends AbstractControlleur
             <div class="w3-third">
 
             <div class="w3-white w3-text-grey w3-card-4">';
-        $widgets = $widgets . $this->getProfilMainInfos($eleve);
+        $widgets = $widgets . $this->getProfilMainInfos($eleve, Eleve::$TABLE_NAME);
         $widgets = $widgets . '
                 </div>
                 <br>
@@ -478,7 +479,7 @@ class TableauDeBordControlleur extends AbstractControlleur
             <div class="w3-third">
 
             <div class="w3-white w3-text-grey w3-card-4">';
-        $widgets = $widgets . $this->getProfilMainInfos($enseignant);
+        $widgets = $widgets . $this->getProfilMainInfos($enseignant, Enseignant::$TABLE_NAME);
         $widgets = $widgets . $this->getMatiereEnseigner($enseignant);
         $widgets = $widgets . '
                 </div>
@@ -529,7 +530,7 @@ class TableauDeBordControlleur extends AbstractControlleur
         return $widgets;
     }
 
-    private function getProfilMainInfos($personne)
+    private function getProfilMainInfos($personne, $type_personne)
     {
         $widget = '
         <!-- Left Column -->
@@ -545,13 +546,18 @@ class TableauDeBordControlleur extends AbstractControlleur
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getAdresse() . '</p>
                     <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getEmail() . '</p>
                     <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getTelephone() . '</p>
-                    <hr>
+                    ';
+        if (strcmp($type_personne, Eleve::$TABLE_NAME) === 0) {
+            $widget = $widget . '<p><i class="fa fa-certificate fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getNiveauEtude() . '</p>
+';
+        }
+        $widget = $widget . '<hr>
 
                 </div>';
         return $widget;
     }
 
-    private function getProfilMainInfosEdit($personne)
+    private function getProfilMainInfosEdit($personne, $type_personne)
     {
         $mot_de_passe = '';
         $mot_de_passe_confirm = '';
@@ -574,7 +580,14 @@ class TableauDeBordControlleur extends AbstractControlleur
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i><input value="' . $personne->getAdresse() . '" type="text" class="form-control" placeholder="Ville, CodePostal" id="inputEditProfilAdresse" name="inputEditProfilAdresse"></p>
                     <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i><input value="' . $personne->getEmail() . '" type="email" class="form-control" placeholder="example@mail.com" id="inputEditProfilEmail" name="inputEditProfilEmail"></p>
                     <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i> <input value="' . $personne->getTelephone() . '" type="tel" class="form-control" placeholder="+33 06 12 34 56 78" id="inputEditProfilTel" name="inputEditProfilTel"></p>
-                    <p><i class="fa fa-lock fa-fw w3-margin-right w3-large w3-text-teal"></i> 
+                    ';
+        if (strcmp($type_personne, Eleve::$TABLE_NAME) === 0) {
+            $widget = $widget . $this->getNiveauEtudeSelect($personne->getNiveauEtude());
+            $widget = $widget . '<p><i class="fa fa-certificate fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getNiveauEtude() . '</p>
+';
+        }
+        $widget = $widget . '
+        <p><i class="fa fa-lock fa-fw w3-margin-right w3-large w3-text-teal"></i>
                     <input type="password" class="form-control" 
                                 name="inputEditProfiPassword"
                                 id="inputEditProfiPassword" placeholder="Password"
@@ -590,6 +603,54 @@ class TableauDeBordControlleur extends AbstractControlleur
          </form>';
         return $widget;
     }
+
+    /**
+     * @param $niveauEtude
+     */
+    private function getNiveauEtudeSelect($niveauEtude)
+    {
+        $widget = '<p><i class="fa fa-certificate fa-fw w3-margin-right w3-large w3-text-teal"></i>';
+        $widget = $widget . '<select style="height:30px;"class="form-control" id="inputEditProfilNiveauEtude" name="inputEditProfilNiveauEtude">';
+        $widget = $widget . $this->getOptitonNiveauEtude();
+
+        $widget = $widget . '                   </select>';
+        $widget = $widget . '</p>
+';
+
+        return $widget;
+    }
+
+    private function getOptitonNiveauEtude()
+    {
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select * from " . NiveauEtude::$TABLE_NAME . ";";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $widget = $widget . '<option ';
+                $widget = $widget . 'value="' . $row['id'];
+                $widget = $widget . '"">';
+                $widget = $widget . $row['nom'];
+                $widget = $widget . '</option>';
+            }
+        }
+
+        $bdd->close();
+
+        return $widget;
+    }
+
 
     /**
      * @param $enseignant
@@ -962,7 +1023,7 @@ class TableauDeBordControlleur extends AbstractControlleur
             <div class="w3-third">
 
             <div class="w3-white w3-text-grey w3-card-4">';
-        $widgets = $widgets . $this->getProfilMainInfosEdit($eleve);
+        $widgets = $widgets . $this->getProfilMainInfosEdit($eleve, Eleve::$TABLE_NAME);
         $widgets = $widgets . '
                 </div>
                 <br>
@@ -1002,7 +1063,7 @@ class TableauDeBordControlleur extends AbstractControlleur
             <div class="w3-third">
 
             <div class="w3-white w3-text-grey w3-card-4">';
-        $widgets = $widgets . $this->getProfilMainInfosEdit($enseignant);
+        $widgets = $widgets . $this->getProfilMainInfosEdit($enseignant, Enseignant::$TABLE_NAME);
         $widgets = $widgets . $this->getMatiereEnseigner($enseignant);
         $widgets = $widgets . '
                 </div>
@@ -1039,11 +1100,11 @@ class TableauDeBordControlleur extends AbstractControlleur
         $adresse = $_POST['inputEditProfilAdresse'];
         $email = $_POST['inputEditProfilEmail'];
         $tel = $_POST['inputEditProfilTel'];
-        if(strcmp($mot_de_passe,"")===0){
+        if (strcmp($mot_de_passe, "") === 0) {
             $mot_de_passe = $personne->getMotDePasse();
         }
 
-        echo "mot_de_passe".$mot_de_passe;
+        echo "mot_de_passe" . $mot_de_passe;
 
         $date_naissance = $personne->getDateNaissance();;
         $bdd = $this->getDb()->openConn();
@@ -1056,7 +1117,6 @@ class TableauDeBordControlleur extends AbstractControlleur
 
         if ($bdd->query($sql) === TRUE) {
 
-            $this->setProfilUpdate(true);
             $personne->setNom($nom);
             $personne->setPrenom($prenom);
             $personne->setEmail($email);
@@ -1065,6 +1125,7 @@ class TableauDeBordControlleur extends AbstractControlleur
             $personne->setDateNaissance($date_naissance);
             $personne->setMotDePasse($mot_de_passe);
             $_SESSION["utilisateur"] = $personne;
+
             echo '<div class="container">
 <br>
   <div class="alert alert-success alert-dismissible">
@@ -1087,8 +1148,64 @@ class TableauDeBordControlleur extends AbstractControlleur
             echo "<br>";
         }
 
+        if (strcmp($personne->getTypePersonne(), Eleve::$TABLE_NAME) === 0) {
+            $niveau_etude = $_POST['inputEditProfilNiveauEtude'];
+
+
+            $sql = "UPDATE Eleve
+                SET niveau_etude='$niveau_etude'
+                WHERE id=$id
+                ;";
+
+
+            if ($bdd->query($sql) === TRUE) {
+
+                $this->setProfilUpdate(true);
+                $niveau_etude_nom = $this->getNiveauEtudeNom($niveau_etude);
+                $personne->setNiveauEtude($niveau_etude_nom);
+                $_SESSION["utilisateur"] = $personne;
+            }
+
+        } else {
+            $this->setProfilUpdate(true);
+        }
+
         $this->getDb()->closeConn();
         $_SESSION["profilUpdated"] = true;
+    }
+
+    private function getNiveauEtudeNom($niveau_etude)
+    {
+        $niveau_etude_nom = '';
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "SELECT nom
+                FROM NiveauEtude
+                WHERE id = $niveau_etude
+                LIMIT 8
+                ;";
+
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $niveau_etude_nom = $row['nom'];
+            }
+        } else {
+            echo "0 results";
+        }
+
+        $bdd->close();
+
+        return $niveau_etude_nom;
     }
 
 

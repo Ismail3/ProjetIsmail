@@ -5,6 +5,7 @@ class NiveauEtude
     /*
      * Attributes
      */
+    public static $TABLE_NAME="NiveauEtude";
     private $id;
     private $nom;
     private $value;
