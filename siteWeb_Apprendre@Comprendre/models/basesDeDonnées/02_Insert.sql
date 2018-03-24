@@ -5,7 +5,7 @@ OPTIONALLY ENCLOSED BY ''
 ESCAPED BY ''
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(id,nom,prenom,email,date_naissance,mot_de_passe,date_inscription,type_personne,telephone,adresse);
+(id,nom,prenom,email,date_naissance,mot_de_passe,date_inscription,type_personne,telephone,adresse,image);
 
 
 LOAD DATA INFILE "niveauEtude.csv" IGNORE
@@ -34,7 +34,7 @@ OPTIONALLY ENCLOSED BY ''
 ESCAPED BY ''
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(id,nom,prenom,email,date_naissance,mot_de_passe,date_inscription,type_personne,telephone,adresse);
+(id,nom,prenom,email,date_naissance,mot_de_passe,date_inscription,type_personne,telephone,adresse,image);
 
 LOAD DATA INFILE "enseignant.csv" IGNORE
 INTO TABLE Enseignant

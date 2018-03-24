@@ -114,4 +114,5 @@ class AbstractControlleur
         echo (strcmp($this->getUserConnected()->getTypePersonne(), Enseignant::$TABLE_NAME) === 0);*/
         return (strcmp($this->getUserConnected()->getTypePersonne(), Enseignant::$TABLE_NAME) === 0);
     }
+
 }

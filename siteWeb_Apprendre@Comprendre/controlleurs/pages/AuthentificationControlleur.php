@@ -350,8 +350,9 @@ class AuthentificationControlleur extends AbstractControlleur
                     $prenom = $_POST['inputPrenomInscription'];
                     $date_naissance = $_POST['inputDateNaisssanceInscription'];
                     $type_compte = $_POST['inputTypeCompteInscription'];
+                    $image = Personne::$DEFAULT_IMAGE;
                     if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
-                        $this->insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte);
+                        $this->insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte,$image);
                     }
                 }
             }
@@ -443,12 +444,12 @@ class AuthentificationControlleur extends AbstractControlleur
         return $formulaire_complet;
     }
 
-    private function insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte)
+    private function insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte, $image)
     {
         $bdd = $this->getDb()->openConn();
 
-        $sql = "INSERT INTO Personne (nom, prenom, email, date_naissance, mot_de_passe, type_personne)
-                VALUES ('$nom','$prenom','$email','$date_naissance','$mot_de_passe','$type_compte')
+        $sql = "INSERT INTO Personne (nom, prenom, email, date_naissance, mot_de_passe, type_personne,image)
+                VALUES ('$nom','$prenom','$email','$date_naissance','$mot_de_passe','$type_compte','$image')
                 ;";
 
         if ($bdd->query($sql) === TRUE) {
@@ -472,6 +473,7 @@ class AuthentificationControlleur extends AbstractControlleur
             $personne->setEmail($email);
             $personne->setDateNaissance($date_naissance);
             $personne->setTypePersonne($type_compte);
+            $personne->setImage($image);
             $_SESSION["utilisateur"] = $personne;
 //            echo "<br>";
 //            echo "New record Personne created successfully. Last inserted ID is: " . $_SESSION["utilisateur"];
@@ -570,7 +572,7 @@ class AuthentificationControlleur extends AbstractControlleur
         //Recherche des informations de l'utilisateur
         if (strcmp($typePersonne, Eleve::$TABLE_NAME) == 0) {
             //Connexion d'un élève
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne,NE.nom as niveau_etude, telephone, adresse, mot_de_passe
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne,NE.nom as niveau_etude, telephone, adresse, mot_de_passe, image
                 FROM Eleve E, NiveauEtude NE, Personne P
                 WHERE E.id_personne = P.id
                       and E.niveau_etude = NE.id
@@ -586,7 +588,7 @@ class AuthentificationControlleur extends AbstractControlleur
             }
         } else {
             //Connexion d'un enseignant
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe, image
                 FROM Enseignant E, Personne P
                 WHERE E.id_personne = P.id
                       and P.id='$id'
@@ -619,6 +621,7 @@ class AuthentificationControlleur extends AbstractControlleur
             $personne->setDateInscription($row["date_inscription"]);
             $personne->setMotDePasse($row["mot_de_passe"]);
             $personne->setNiveauEtude($row["niveau_etude"]);
+            $personne->setImage($row["image"]);
             $_SESSION["utilisateur"] = $personne;
 
             return $personne;
@@ -634,6 +637,7 @@ class AuthentificationControlleur extends AbstractControlleur
             $personne->setTypePersonne($row["type_personne"]);
             $personne->setAdresse($row["adresse"]);
             $personne->setMotDePasse($row["mot_de_passe"]);
+            $personne->setImage($row["image"]);
             $_SESSION["utilisateur"] = $personne;
 
             return $personne;

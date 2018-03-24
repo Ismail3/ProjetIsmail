@@ -42,7 +42,7 @@ class TableauDeBordControlleur extends AbstractControlleur
                     <div class="w3-bar w3-white w3-card" id="myNavbar">
                         <a onclick="openNav()"
                            class="w3-bar-item w3-button w3-wide">
-                            <img id="logo_header" src="../../../ressources/images/Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
                         </a>
                         <!-- Right-sided navbar links -->
                         <div class="w3-right w3-hide-small">
@@ -64,7 +64,7 @@ class TableauDeBordControlleur extends AbstractControlleur
                 
                 <div id="sideNavLeft" class="sidenav-left">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()">&times;</a>
-                    <a href="tableauDeBord.php"><img class="profil-picture" src="../../../ressources/images/team1.jpg"></a>
+                    <a href="tableauDeBord.php"><img class="profil-picture" src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '"></a>
                     <a href="tableauDeBordProfil.php">Profil</a>
                     <a href="tableauDeBordMessagerie.php">Messagerie</a>
                     <a href="tableauDeBordEleves.php">Élèves</a>
@@ -91,7 +91,7 @@ class TableauDeBordControlleur extends AbstractControlleur
                     <div class="w3-bar w3-white w3-card" id="myNavbar">
                         <a onclick="openNav()"
                            class="w3-bar-item w3-button w3-wide">
-                            <img id="logo_header" src="../../../ressources/images/Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
                         </a>
                         <!-- Right-sided navbar links -->
                         <div class="w3-right w3-hide-small">
@@ -113,7 +113,7 @@ class TableauDeBordControlleur extends AbstractControlleur
                 
                 <div id="sideNavLeft" class="sidenav-left">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()">&times;</a>
-                    <a href="tableauDeBord.php"><img class="profil-picture" src="../../../ressources/images/team1.jpg"></a>
+                    <a href="tableauDeBord.php"><img class="profil-picture" src="' . $this->getUserConnected()->getImage() . '></a>
                     <a href="tableauDeBordProfil.php">Profil</a>
                     <a href="tableauDeBordMessagerie.php">Messagerie</a>
                     <a href="tableauDeBordEleves.php">Élèves</a>
@@ -536,7 +536,7 @@ class TableauDeBordControlleur extends AbstractControlleur
         <!-- Left Column -->
 
                 <div class="w3-display-container">
-                    <img src="../../../ressources/images/team1.jpg" style="width:100%" alt="Avatar">
+                    <img src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '" style="width:100%" alt="Avatar">
                     <div class="w3-display-bottomleft w3-container w3-text-black">
                         <h2>' . $personne->getPrenom() . ' ' . $personne->getNom() . '</h2>
                     </div>
@@ -563,10 +563,10 @@ class TableauDeBordControlleur extends AbstractControlleur
         $mot_de_passe_confirm = '';
         $widget = '
         <!-- Left Column -->
-        <form action="" method="post">
+        <form enctype="multipart/form-data" action="" method="post">
                 <div class="w3-display-container">
-                    <input type="file" class="form-control-file" id="inputImgProfil" aria-describedby="fileHelp">
-                    <img src="../../../ressources/images/team1.jpg" style="width:100%" alt="Avatar">
+                    <input type="file" class="form-control-file" name="inputImgProfil" id="inputImgProfil" aria-describedby="fileHelp">
+                    <img src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '" style="width:100%" alt="Avatar">
                     <div class="w3-display-bottomleft w3-container w3-text-black">
                         <h2><input type="text" class="form-control" placeholder="Prénom" 
                         value="' . $personne->getPrenom() . '" name="inputEditProfilPrenom" id="inputEditProfilPrenom">
@@ -1100,6 +1100,8 @@ class TableauDeBordControlleur extends AbstractControlleur
         $adresse = $_POST['inputEditProfilAdresse'];
         $email = $_POST['inputEditProfilEmail'];
         $tel = $_POST['inputEditProfilTel'];
+        $image = $this->getUploadImage();
+
         if (strcmp($mot_de_passe, "") === 0) {
             $mot_de_passe = $personne->getMotDePasse();
         }
@@ -1108,12 +1110,18 @@ class TableauDeBordControlleur extends AbstractControlleur
 
         $date_naissance = $personne->getDateNaissance();;
         $bdd = $this->getDb()->openConn();
-
-        $sql = "UPDATE Personne
+        $sql = "";
+        if (strcmp($image, "") == 0) {
+            $sql = "UPDATE Personne
                 SET nom='$nom', prenom='$prenom',email='$email',adresse='$adresse',date_naissance='$date_naissance',telephone='$tel',mot_de_passe='$mot_de_passe'
                 WHERE id=$id
                 ;";
-
+        } else {
+            $sql = "UPDATE Personne
+                SET nom='$nom', prenom='$prenom',email='$email',adresse='$adresse',date_naissance='$date_naissance',telephone='$tel',mot_de_passe='$mot_de_passe',image='$image'
+                WHERE id=$id
+                ;";
+        }
 
         if ($bdd->query($sql) === TRUE) {
 
@@ -1124,6 +1132,9 @@ class TableauDeBordControlleur extends AbstractControlleur
             $personne->setTelephone($tel);
             $personne->setDateNaissance($date_naissance);
             $personne->setMotDePasse($mot_de_passe);
+            if (strcmp($image, "") != 0) {
+                $personne->setImage($image);
+            }
             $_SESSION["utilisateur"] = $personne;
 
             echo '<div class="container">
@@ -1206,6 +1217,67 @@ class TableauDeBordControlleur extends AbstractControlleur
         $bdd->close();
 
         return $niveau_etude_nom;
+    }
+
+    private function getImagePath()
+    {
+        $path = "../../../ressources/images/";
+        return $path;
+    }
+
+    private function getUploadImage()
+    {
+        $files = $_FILES;
+        $target_dir = $this->getImagePath();
+        $target_file = $target_dir . basename($_FILES["inputImgProfil"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $newFileName = "fileUpload";
+        // Check if image file is a actual image or fake image
+        if (isset($_POST["btnSaveEditProfil"])) {
+            $check = getimagesize($_FILES["inputImgProfil"]["tmp_name"]);
+            if ($check !== false) {
+                echo "File is an image - " . basename($_FILES["inputImgProfil"]["name"]) . " " . $check["mime"] . ".  <br>";
+                $uploadOk = 1;
+            } else {
+                echo "File is not an image.";
+                $uploadOk = 0;
+            }
+        }
+        // Check if file already exists
+        if (file_exists($target_file)) {
+            echo "Sorry, file already exists.";
+            $uploadOk = 0;
+        }
+        // Check file size
+        if ($_FILES["inputImgProfil"]["size"] > 500000) {
+            echo "Sorry, your file is too large.";
+            $uploadOk = 0;
+        }
+        // Allow certain file formats
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+            && $imageFileType != "gif") {
+            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $uploadOk = 0;
+        }
+        // Check if $uploadOk is set to 0 by an error
+        if ($uploadOk == 0) {
+            echo "Sorry, your file was not uploaded.";
+            return "";
+            // if everything is ok, try to upload file
+        } else {
+            echo "<br> Dest : " . $target_file . "<br>";
+            echo "<br> Filaname : " . $_FILES["inputImgProfil"]["tmp_name"] . "<br>";
+            echo "<br> Try Stored in: " . $target_dir . $newFileName . "<br>";
+            if (move_uploaded_file($_FILES["inputImgProfil"]["tmp_name"], $target_file)) {
+                echo "Stored in: " . $target_file . $newFileName . "<br>";
+                echo "The file " . basename($_FILES["inputImgProfil"]["name"]) . " has been uploaded.";
+                return basename($_FILES["inputImgProfil"]["name"]);
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+                return "";
+            }
+        }
     }
 
 

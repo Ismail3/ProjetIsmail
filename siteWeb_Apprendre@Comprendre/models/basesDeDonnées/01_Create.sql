@@ -29,6 +29,7 @@ CREATE TABLE Personne (
   email            VARCHAR(255),
   telephone        VARCHAR(255),
   adresse          VARCHAR(255),
+  image            VARCHAR(255),
   date_naissance   DATE,
   mot_de_passe     VARCHAR(255),
   date_inscription DATETIME     DEFAULT CURRENT_TIMESTAMP,

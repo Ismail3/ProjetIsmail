@@ -8,6 +8,7 @@ class Personne
     /*
      * Attributes
      */
+    public static $DEFAULT_IMAGE ="team0.jpg";
     protected $id_personne;
     protected $nom;
     protected $prenom;
