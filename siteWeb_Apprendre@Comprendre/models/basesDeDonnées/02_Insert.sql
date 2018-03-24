@@ -1,3 +1,21 @@
+LOAD DATA INFILE "personne_administrateur.csv" IGNORE
+INTO TABLE Personne
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY ''
+ESCAPED BY ''
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(id,nom,prenom,email,date_naissance,mot_de_passe,date_inscription,type_personne,telephone,adresse,image);
+
+LOAD DATA INFILE "administrateur.csv" IGNORE
+INTO TABLE Administrateur
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY ''
+ESCAPED BY ''
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(id_personne);
+
 LOAD DATA INFILE "personne_eleve.csv" IGNORE
 INTO TABLE Personne
 COLUMNS TERMINATED BY ','

@@ -94,24 +94,24 @@ class AbstractControlleur
     /**
      * @return Personne
      */
-    public function getUserConnected()
+    protected function getUserConnected()
     {
         return $_SESSION['utilisateur'];
     }
 
+    protected function isAdministrateur()
+    {
+        return (strcmp($this->getUserConnected()->getTypePersonne(), Administrateur::$TABLE_NAME)===0);
+    }
+
+
     public function isEleve()
     {
-/*        echo $this->getUserConnected()->getTypePersonne();
-        echo Eleve::$TABLE_NAME;
-        echo (strcmp($this->getUserConnected()->getTypePersonne(), Eleve::$TABLE_NAME) === 0);*/
         return (strcmp($this->getUserConnected()->getTypePersonne(), Eleve::$TABLE_NAME) === 0);
     }
 
     public function isEnseignant()
     {
-/*        echo $this->getUserConnected()->getTypePersonne();
-        echo Enseignant::$TABLE_NAME;
-        echo (strcmp($this->getUserConnected()->getTypePersonne(), Enseignant::$TABLE_NAME) === 0);*/
         return (strcmp($this->getUserConnected()->getTypePersonne(), Enseignant::$TABLE_NAME) === 0);
     }
 

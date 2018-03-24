@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS Message;
 DROP TABLE IF EXISTS SeanceCours;
 DROP TABLE IF EXISTS Cours;
+DROP TABLE IF EXISTS Administrateur;
 DROP TABLE IF EXISTS Eleve;
 DROP TABLE IF EXISTS Enseigner;
 DROP TABLE IF EXISTS Enseignant;
@@ -75,6 +76,14 @@ CREATE TABLE Eleve (
   REFERENCES NiveauEtude (id)
 );
 
+CREATE TABLE Administrateur (
+  id           INT NOT NULL AUTO_INCREMENT,
+  id_personne  INT NOT NULL,
+  CONSTRAINT PK_Administrateur PRIMARY KEY (id),
+  CONSTRAINT FK_Administrateur_Personne FOREIGN KEY (id_personne)
+  REFERENCES Personne (id)
+);
+
 CREATE TABLE Cours (
   id               INT NOT NULL AUTO_INCREMENT,
   nom              VARCHAR(255),
@@ -145,6 +154,7 @@ SHOW TABLES;
 
 DESC SeanceCours;
 DESC Cours;
+DESC Administrateur;
 DESC Eleve;
 DESC Enseigner;
 DESC Enseignant;

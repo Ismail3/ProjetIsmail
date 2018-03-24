@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/../AbstractControlleur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Personne.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Administrateur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 
@@ -586,7 +587,7 @@ class AuthentificationControlleur extends AbstractControlleur
                     $this->initUserConnected(Eleve::$TABLE_NAME, $row);
                 }
             }
-        } else {
+        } else if (strcmp($typePersonne, Enseignant::$TABLE_NAME) == 0){
             //Connexion d'un enseignant
             $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe, image
                 FROM Enseignant E, Personne P
@@ -599,6 +600,20 @@ class AuthentificationControlleur extends AbstractControlleur
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
                     $this->initUserConnected(Enseignant::$TABLE_NAME, $row);
+                }
+            }
+        } else if (strcmp($typePersonne, Administrateur::$TABLE_NAME) == 0){
+            //Connexion d'un enseignant
+            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe, image
+                FROM Personne P
+                WHERE P.id='$id'
+                ;";
+            $result = $bdd->query($sql);
+            if ($result->num_rows > 0) {
+                session_start();
+                // output data of each row
+                while ($row = $result->fetch_assoc()) {
+                    $this->initUserConnected(Administrateur::$TABLE_NAME, $row);
                 }
             }
         }
@@ -625,8 +640,24 @@ class AuthentificationControlleur extends AbstractControlleur
             $_SESSION["utilisateur"] = $personne;
 
             return $personne;
-        } else {
+        } else if (strcmp($type_personne, Enseignant::$TABLE_NAME) === 0)  {
             $personne = new Enseignant();
+            $personne->setIdPersonne($row["id"]);
+            $personne->setNom($row["nom"]);
+            $personne->setPrenom($row["prenom"]);
+            $personne->setEmail($row["email"]);
+            $personne->setTelephone($row["telephone"]);
+            $personne->setDateNaissance($row["date_naissance"]);
+            $personne->setDateInscription($row["date_inscription"]);
+            $personne->setTypePersonne($row["type_personne"]);
+            $personne->setAdresse($row["adresse"]);
+            $personne->setMotDePasse($row["mot_de_passe"]);
+            $personne->setImage($row["image"]);
+            $_SESSION["utilisateur"] = $personne;
+
+            return $personne;
+        } else if (strcmp($type_personne, Administrateur::$TABLE_NAME) === 0)  {
+            $personne = new Administrateur();
             $personne->setIdPersonne($row["id"]);
             $personne->setNom($row["nom"]);
             $personne->setPrenom($row["prenom"]);

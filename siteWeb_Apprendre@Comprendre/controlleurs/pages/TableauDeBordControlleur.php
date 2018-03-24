@@ -4,6 +4,7 @@ require_once(dirname(__FILE__) . '/../AbstractControlleur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Personne.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Administrateur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/NiveauEtude.php');
 
 class TableauDeBordControlleur extends AbstractControlleur
@@ -36,7 +37,7 @@ class TableauDeBordControlleur extends AbstractControlleur
 
         if ($this->isUserConnected()) {
 
-            if (strcmp($this->getUserConnected()->getTypePersonne(), Eleve::$TABLE_NAME)) {
+            if ($this->isEleve()) {
                 echo '<!-- Navbar (sit on top) -->
                 <div class="w3-top">
                     <div class="w3-bar w3-white w3-card" id="myNavbar">
@@ -85,7 +86,7 @@ class TableauDeBordControlleur extends AbstractControlleur
                        class="w3-bar-item w3-button">Tableau de bord</a>
                 </nav>
                 ';
-            } else {
+            } else if ($this->isEnseignant()) {
                 echo '<!-- Navbar (sit on top) -->
                 <div class="w3-top">
                     <div class="w3-bar w3-white w3-card" id="myNavbar">
@@ -113,10 +114,61 @@ class TableauDeBordControlleur extends AbstractControlleur
                 
                 <div id="sideNavLeft" class="sidenav-left">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()">&times;</a>
-                    <a href="tableauDeBord.php"><img class="profil-picture" src="' . $this->getUserConnected()->getImage() . '></a>
+                    <a href="tableauDeBord.php"><img class="profil-picture" src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '"></a>
                     <a href="tableauDeBordProfil.php">Profil</a>
                     <a href="tableauDeBordMessagerie.php">Messagerie</a>
                     <a href="tableauDeBordEleves.php">Élèves</a>
+                    <a href="tableauDeBordRessources.php">Ressources</a>
+                </div>
+                
+                <div id="sideNavRight" class="sidenav-right">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNavRight()">&times;</a>
+                    <a href="../../../index.php#home">Paramètres</a>
+                    <a href="../../../index.php#home">Deconnexion</a>
+                </div>
+                
+                <!-- Sidebar on small screens when clicking the menu icon -->
+                <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none"
+                     id="mySidebar">
+                    <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+                    <a href="#team" onclick="w3_close()"
+                       class="w3-bar-item w3-button">Tableau de bord</a>
+                </nav>
+                ';
+            } else if ($this->isAdministrateur()) {
+                echo '<!-- Navbar (sit on top) -->
+                <div class="w3-top">
+                    <div class="w3-bar w3-white w3-card" id="myNavbar">
+                        <a onclick="openNav()"
+                           class="w3-bar-item w3-button w3-wide">
+                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+                        </a>
+                        <!-- Right-sided navbar links -->
+                        <div class="w3-right w3-hide-small">
+                            <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                                <a onclick="openNav2()" href="#home" class="w3-bar-item w3-button"><i
+                                        class="fa fa-home"></i> Menu' . $this->getUserConnected()->getTypePersonne() . '</a>
+                            </form>
+                        </div>
+                        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+                
+                        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
+                           onclick="w3_open()">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div id="sideNavLeft" class="sidenav-left">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()">&times;</a>
+                    <a href="tableauDeBord.php"><img class="profil-picture" src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '"></a>
+                    <a href="tableauDeBordProfil.php">Profil</a>
+                    <a href="tableauDeBordEleves.php">Élèves</a>
+                    <a href="tableauDeBordEleves.php">Enseignants</a>
+                    <a href="tableauDeBordEleves.php">Cours</a>
+                    <a href="tableauDeBordEleves.php">SeanceCours</a>
                     <a href="tableauDeBordRessources.php">Ressources</a>
                 </div>
                 
@@ -146,7 +198,9 @@ class TableauDeBordControlleur extends AbstractControlleur
 
             if ($this->isEleve()) {
                 echo '<header class="bgimg-2 w3-display-container w3-grayscale-min" id="top"> </header>';
-            } else {
+            } else if ($this->isEnseignant()) {
+                echo '<header class="bgimg-1 w3-display-container w3-grayscale-min" id="top"> </header>';
+            } else if ($this->isAdministrateur()) {
                 echo '<header class="bgimg-1 w3-display-container w3-grayscale-min" id="top"> </header>';
             }
         } else {
@@ -198,8 +252,10 @@ class TableauDeBordControlleur extends AbstractControlleur
         $widgets = '';
         if ($this->isEleve()) {
             $widgets = $widgets . $this->displayEleveProfil();
-        } else {
+        } else if ($this->isEnseignant()) {
             $widgets = $widgets . $this->displayEnseignantProfil();
+        } else if ($this->isAdministrateur()) {
+            $widgets = $widgets . $this->displayAdministrateurProfil();
         }
 
         echo $widgets;
@@ -269,8 +325,7 @@ class TableauDeBordControlleur extends AbstractControlleur
         $bdd->close();
     }
 
-    public
-    function displayPage()
+    public function displayPage()
     {
 
         $eleve = ' <div class="w3-row-padding w3-grayscale" style="margin-top:64px">
@@ -530,6 +585,70 @@ class TableauDeBordControlleur extends AbstractControlleur
         return $widgets;
     }
 
+    private function displayAdministrateurProfil()
+    {
+        $administrateur = $this->getUserConnected();
+        $widgets = '<!-- Header with full-height image -->
+            <div class="w3-content w3-margin-top" style="max-width:1400px;">
+            
+                <!-- The Grid -->
+                <div class="w3-row-padding">';
+        $widgets = $widgets . '
+
+            <!-- Left Column -->
+            <div class="w3-third">
+
+            <div class="w3-white w3-text-grey w3-card-4">';
+        $widgets = $widgets . $this->getProfilMainInfos($administrateur, Administrateur::$TABLE_NAME);
+        $widgets = $widgets . '
+                </div>
+                <br>
+    
+                <!-- End Left Column -->
+            </div>';
+        $widgets = $widgets . '
+        
+                <!-- Right Column -->
+                <div class="w3-twothird">';
+        //Liste des cours crées
+        $widgets = $widgets . '
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <h2 class="w3-text-grey w3-padding-16"><i
+                                    class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Cours </h2>';
+        $widgets = $widgets . $this->getListeDesCoursAdmin();
+        $widgets = $widgets . '
+                    </div>';
+
+        //Liste des séance de cours inscrit
+        $widgets = $widgets . '
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <h2 class="w3-text-grey w3-padding-16"><i
+                                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Séances programmés (Demande)</h2>';
+        $widgets = $widgets . $this->getListeDesSeancesCoursDemandeAdmin();
+        $widgets = $widgets . '
+                    </div>';
+
+        //Liste des séance de cours crées
+        $widgets = $widgets . '
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <h2 class="w3-text-grey w3-padding-16"><i
+                                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Séances programmés (Proposition)</h2>';
+        $widgets = $widgets . $this->getListeDesSeancesCoursPropositionAdmin();
+        $widgets = $widgets . '
+                    </div>
+        
+                    <!-- End Right Column -->
+                </div>';
+        $widgets = $widgets . '
+        
+                <!-- End Grid -->
+            </div>
+        
+            <!-- End Page Container -->
+        </div>';
+        return $widgets;
+    }
+
     private function getProfilMainInfos($personne, $type_personne)
     {
         $widget = '
@@ -538,10 +657,10 @@ class TableauDeBordControlleur extends AbstractControlleur
                 <div class="w3-display-container">
                     <img src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '" style="width:100%" alt="Avatar">
                     <div class="w3-display-bottomleft w3-container w3-text-black">
-                        <h2>' . $personne->getPrenom() . ' ' . $personne->getNom() . '</h2>
                     </div>
                 </div>
                 <div class="w3-container">
+                    <h2>' . $personne->getPrenom() . ' ' . $personne->getNom() . '</h2>
                     <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getTypePersonne() . '</p>
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getAdresse() . '</p>
                     <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getEmail() . '</p>
@@ -567,14 +686,13 @@ class TableauDeBordControlleur extends AbstractControlleur
                 <div class="w3-display-container">
                     <input type="file" class="form-control-file" name="inputImgProfil" id="inputImgProfil" aria-describedby="fileHelp">
                     <img src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '" style="width:100%" alt="Avatar">
-                    <div class="w3-display-bottomleft w3-container w3-text-black">
-                        <h2><input type="text" class="form-control" placeholder="Prénom" 
+
+                </div>
+                <div class="w3-container">
+   <h2><input type="text" class="form-control" placeholder="Prénom" 
                         value="' . $personne->getPrenom() . '" name="inputEditProfilPrenom" id="inputEditProfilPrenom">
                             <input type="text" class="form-control" placeholder="NOM" 
                             value="' . $personne->getNom() . '" name="inputEditProfilNom" id="inputEditProfilNom"></h2>
-                    </div>
-                </div>
-                <div class="w3-container">
                 
                     <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>' . $personne->getTypePersonne() . '</p>
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i><input value="' . $personne->getAdresse() . '" type="text" class="form-control" placeholder="Ville, CodePostal" id="inputEditProfilAdresse" name="inputEditProfilAdresse"></p>
@@ -611,7 +729,7 @@ class TableauDeBordControlleur extends AbstractControlleur
     {
         $widget = '<p><i class="fa fa-certificate fa-fw w3-margin-right w3-large w3-text-teal"></i>';
         $widget = $widget . '<select style="height:30px;"class="form-control" id="inputEditProfilNiveauEtude" name="inputEditProfilNiveauEtude">';
-        $widget = $widget . $this->getOptitonNiveauEtude();
+        $widget = $widget . $this->getOptitonNiveauEtude($niveauEtude);
 
         $widget = $widget . '                   </select>';
         $widget = $widget . '</p>
@@ -620,7 +738,7 @@ class TableauDeBordControlleur extends AbstractControlleur
         return $widget;
     }
 
-    private function getOptitonNiveauEtude()
+    private function getOptitonNiveauEtude($niveauEtude)
     {
 
         $bd = new BdConnexion();
@@ -634,7 +752,7 @@ class TableauDeBordControlleur extends AbstractControlleur
 
         $sql = "select * from " . NiveauEtude::$TABLE_NAME . ";";
         $result = $bdd->query($sql);
-
+        $widget = '';
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
@@ -726,7 +844,43 @@ class TableauDeBordControlleur extends AbstractControlleur
                 FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
                 WHERE C.id_auteur = $idEnseignant and M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
                 ORDER BY date_creation DESC
-                LIMIT 10;";
+                LIMIT 5;";
+        $result = $bdd->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $widget = $widget . $this->displayCours($row);
+            }
+        } else {
+            echo "0 results";
+        }
+
+        $bdd->close();
+//        $widget = $widget . '<br></div>';
+
+        return $widget;
+    }
+
+    private function getListeDesCoursAdmin()
+    {
+        $widget = '';
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom
+                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
+                WHERE M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
+                ORDER BY date_creation DESC
+                LIMIT 5;";
         $result = $bdd->query($sql);
 
 
@@ -817,7 +971,47 @@ class TableauDeBordControlleur extends AbstractControlleur
                 and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
                 and S.proposition_cours = C.id and P.id = S.participant
                 ORDER BY date_realisation DESC
-                LIMIT 10;";
+                LIMIT 5;";
+        $result = $bdd->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $widgets = $widgets . $this->displaySeanceCoursProposition($row);
+            }
+        } else {
+            echo "0 results";
+        }
+
+        $bdd->close();
+
+        return $widgets;
+    }
+
+    private function getListeDesSeancesCoursPropositionAdmin()
+    {
+        $widgets = '';
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur,
+                M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom,
+                S.date_inscription, S.date_realisation, S.participant, S.duree, S.etat,
+                P.nom as nom_participant,P.prenom as prenom_participant,P.email as email_participant,P.date_naissance as date_naissance_participant, P.type_personne as type_personne_participant
+                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax, SeanceCours S, Personne P
+                WHERE M.id = C.matiere
+                and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
+                and S.proposition_cours = C.id and P.id = S.participant
+                ORDER BY date_realisation DESC
+                LIMIT 5;";
         $result = $bdd->query($sql);
 
 
@@ -924,7 +1118,48 @@ class TableauDeBordControlleur extends AbstractControlleur
                 and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
                 and S.proposition_cours = C.id and P.id = C.id_auteur
                 ORDER BY date_realisation DESC
-                LIMIT 10;
+                LIMIT 5;
+                ";
+        $result = $bdd->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $widgets = $widgets . $this->displaySeanceCoursDemande($row);
+            }
+        } else {
+            echo "0 results";
+        }
+
+        $bdd->close();
+
+        return $widgets;
+    }
+
+    private function getListeDesSeancesCoursDemandeAdmin()
+    {
+        $widgets = '';
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur,
+                M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom,
+                S.date_inscription, S.date_realisation, S.participant, S.duree, S.etat,
+                P.nom as nom_auteur,P.prenom as prenom_auteur,P.email as email_auteur,P.date_naissance as date_naissance_auteur, P.type_personne as type_personne_auteur
+                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax, SeanceCours S, Personne P
+                WHERE M.id = C.matiere
+                and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
+                and S.proposition_cours = C.id and P.id = C.id_auteur
+                ORDER BY date_realisation DESC
+                LIMIT 5;
                 ";
         $result = $bdd->query($sql);
 
@@ -1248,6 +1483,7 @@ class TableauDeBordControlleur extends AbstractControlleur
         if (file_exists($target_file)) {
             echo "Sorry, file already exists.";
             $uploadOk = 0;
+            return basename($_FILES["inputImgProfil"]["name"]);
         }
         // Check file size
         if ($_FILES["inputImgProfil"]["size"] > 500000) {
@@ -1279,6 +1515,8 @@ class TableauDeBordControlleur extends AbstractControlleur
             }
         }
     }
+
+
 
 
 }
