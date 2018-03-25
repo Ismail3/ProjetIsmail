@@ -329,7 +329,6 @@ class AuthentificationControleur extends AbstractControleur
 
     public function displayInscriptionConnected()
     {
-        $personne = $_SESSION["utilisateur"];
 
         $widget = '
         <!-- Promo Section - "We know design" -->
@@ -340,18 +339,19 @@ class AuthentificationControleur extends AbstractControleur
                         <fieldset>';
         $widget = $widget . '
                             <legend>Inscription</legend>';
-        $widget = $widget . $personne;
+        $widget = $widget . $this->getUserConnected()->getMiniature();
         $widget = $widget . '        
                             </fieldset>
-                                    <a href="../enseignant/tableauDeBord.php">                                   
-                                    <button type="submit" class="btn btn-primary">Tableau de bord</button>
-                                    </a>                        </fieldset>
+                      </fieldset>
                     </form>
                 </div>
                 <div class="w3-col m6">
                     <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
                          width="700" height="394">
                 </div>
+                                                    <a href="../enseignant/tableauDeBord.php">                                   
+                                    <button type="submit" class="btn btn-primary">Tableau de bord</button>
+                                    </a>  
             </div>
         </div>';
 
@@ -561,14 +561,12 @@ class AuthentificationControleur extends AbstractControleur
                     <div class="w3-col m6">';
         $widget = $widget . $this->getUserConnected()->getMiniature();
         $widget = $widget . '
-                                    <a href="../enseignant/tableauDeBord.php">                                   
-                                    </a>
-                    </div>
                     <div class="w3-col m6">
                         <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
                              width="700" height="394">
-                         <button type="submit" class="btn btn-primary">Tableau de bord</button>
-                    </div>
+<a href="../enseignant/tableauDeBord.php">                                   
+                                    <button type="submit" class="btn btn-primary">Tableau de bord</button>
+                                    </a>                     </div>
                 </div>
             </div>
             ';

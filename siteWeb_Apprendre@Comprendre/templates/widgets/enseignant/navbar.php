@@ -34,7 +34,6 @@
 
 <div id="sideNavRight" class="sidenav-right">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNavRight()">&times;</a>
-    <a href="../../../index.php#home">Paramètres</a>
     <a href="../../../index.php#home">Deconnexion</a>
 </div>
 
