@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/../models/basesDeDonnées/BdConnexion.php');
 
-class AbstractControlleur
+class AbstractControleur
 {
 
     /*

@@ -1,13 +1,13 @@
 <?php
 require_once(dirname(__FILE__) . '/../../models/basesDeDonnées/BdConnexion.php');
-require_once(dirname(__FILE__) . '/../AbstractControlleur.php');
+require_once(dirname(__FILE__) . '/../AbstractControleur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Personne.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Administrateur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/NiveauEtude.php');
 
-class TableauDeBordControlleur extends AbstractControlleur
+class TableauDeBordControleur extends AbstractControleur
 {
     /*
      * Attributes

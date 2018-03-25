@@ -29,7 +29,7 @@
 
 <body cz-shortcut-listen="true">
 <?php
-require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControlleur.php');
+require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControleur.php');
 
 require_once(dirname(__FILE__) . '/../../widgets/enseignant/navbar.php');
 require_once(dirname(__FILE__) . '/../../widgets/enseignant/header.php');
@@ -45,7 +45,7 @@ require_once(dirname(__FILE__) . '/../../widgets/topButton.php');
     <div class="w3-row-padding w3-grayscale" style="margin-top:64px">
         <?php
 
-        $controlleur = new TableauDeBordControlleur();
+        $controlleur = new TableauDeBordControleur();
 
         $controlleur->displayEleves();
 

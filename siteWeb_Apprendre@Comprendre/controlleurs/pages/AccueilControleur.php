@@ -1,8 +1,8 @@
 <?php
-require_once(dirname(__FILE__) . '/../AbstractControlleur.php');
+require_once(dirname(__FILE__) . '/../AbstractControleur.php');
 
 
-class AccueilControlleur extends AbstractControlleur
+class AccueilControleur extends AbstractControleur
 {
 
     public function displayNavBar()
@@ -12,7 +12,7 @@ class AccueilControlleur extends AbstractControlleur
     <div class="w3-bar w3-white w3-card" id="myNavbar">
         <a href="#home"
            class="w3-bar-item w3-button w3-wide">
-            <img id="logo_header"src="ressources/images/Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+            <img id="logo_header" src="ressources/images/Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
         </a>
         <!-- Right-sided navbar links -->
         <div class="w3-right w3-hide-small">
@@ -47,11 +47,9 @@ class AccueilControlleur extends AbstractControlleur
         <span class="w3-jumbo w3-hide-small"></span><br>
         <div align="center">
             <h1><strong> Aprendre@Comprendre</strong></h1>
-            <span class="w3-xxlarge w3-hide-large w3-hide-medium">Start something that matters</span><br>
-            <span class="w3-large">Stop wasting valuable time with projects that just isn\'t you.</span>
+            <span class="w3-large">Économisons du temps d\'apprentissage en apprennant à mieu comprendre</span>
             <p><a href="#about"
-                  class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Learn
-                    more and start today</a></p>
+                  class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">En savoir plus sur nous</a></p>
         </div>
     </div>
     <div class="w3-display-bottomleft w3-text-grey w3-large" style="padding:24px 48px">

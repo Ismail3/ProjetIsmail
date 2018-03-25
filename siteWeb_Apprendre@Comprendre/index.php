@@ -30,9 +30,9 @@
 <body cz-shortcut-listen="true">
 
 <?php
-require_once(dirname(__FILE__) . '/controlleurs/pages/AccueilControlleur.php');
+require_once(dirname(__FILE__) . '/controlleurs/pages/AccueilControleur.php');
 
-$accueilCtrl = new AccueilControlleur();
+$accueilCtrl = new AccueilControleur();
 
 $accueilCtrl->displayNavBar();
 $accueilCtrl->displayHeader();

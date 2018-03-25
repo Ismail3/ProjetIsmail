@@ -1,0 +1,1 @@
+mysqldump -u root -p db_apprendreAcomprendre > db_apprendreAcomprendre.sql

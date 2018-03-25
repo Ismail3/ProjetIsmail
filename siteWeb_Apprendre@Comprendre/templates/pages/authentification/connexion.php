@@ -31,9 +31,9 @@
 
 
 <?php
-require_once(dirname(__FILE__) . '/../../../controlleurs/pages/AuthentificationControlleur.php');
+require_once(dirname(__FILE__) . '/../../../controlleurs/pages/AuthentificationControleur.php');
 
-$authCtrl = new AuthentificationControlleur();
+$authCtrl = new AuthentificationControleur();
 
 $authCtrl->displayNavBar();
 $authCtrl->displayTopButton();

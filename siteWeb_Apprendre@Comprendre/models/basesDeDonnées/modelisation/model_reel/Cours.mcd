@@ -1,0 +1,23 @@
+MESSAGE: idMessage, valeur , expediteur, receveur , date_envoie
+ECHANGER, 1N MESSAGE, 1N ENSEIGNANT, 1N ÉLEVE
+ADMINISTATEUR: idAdministrateur, nom, prénom, dateNaissance , motDePasse
+
+NIVEAUETUDE: idNiveauEtude, noM
+SUIVRE, 1N NIVEAUETUDE, 11 ÉLEVE : annee
+ÉLEVE: idEleve, nom, prénom, dateNaissance , motDePasse , dateInscription
+ASSITER, 1N COURS, 1N ENSEIGNANT, 1N ÉLEVE : date, heure , duree
+
+ENSEIGNER, 1N NIVEAUETUDE,1N MATIERE, 1N ENSEIGNANT: annee
+ENSEIGNANT: idEnseignant, nom, prénom, dateNaissance , motDePasse, notoriété, dateInscription
+RECHERCHER, 1N ÉLEVE, 1N COURS : date
+COURS: idCours, nom , description
+
+PROPOSER, 1N ENSEIGNANT, 1N COURS : date
+
+
+MATIERE: idMatier, nom
+CONCERNE, 11 MATIERE, 1N COURS
+
+RESSOURCE: idRessource, nom, description, type_ressource , type_ressource
+TYPER, 11 TYPERESSOURCE, 1N RESSOURCE
+TYPERESSOURCE: idTypeRessource, nom, description, type_ressource , type_ressource

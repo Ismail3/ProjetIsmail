@@ -34,9 +34,9 @@
 
 <body cz-shortcut-listen="true">
 <?php
-require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControlleur.php');
+require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControleur.php');
 
-$ctrl = new TableauDeBordControlleur();
+$ctrl = new TableauDeBordControleur();
 
 $ctrl->displayNavBar();
 $ctrl->displayHeader();
