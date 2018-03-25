@@ -247,7 +247,7 @@ class Personne
     {
         $personne = '<div >
             <div >
-                <img src="../../../ressources/images/'.$this->image.'" alt="John" style="width:100%">
+                <img src="../../../ressources/images/'.$this->image.'" alt="' . $this->nom . ' ' . $this->prenom . '" height="394">
                 <div class="w3-container">
                     <table style="width: 100%">
                         <tr>

@@ -8,8 +8,18 @@ require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 class AuthentificationControleur extends AbstractControleur
 {
 
+    //Connexion
     private $inputEmailConnexionErr;
     private $inputPasswordConnexionErr;
+
+    //Inscription
+    private $inputEmailInscriptionErr;
+    private $inputPasswordInscriptionErr;
+    private $inputPasswordConfirmInscriptionErr;
+    private $inputNomInscriptionErr;
+    private $inputPrenomInscriptionErr;
+    private $inputDateNaisssanceInscriptionErr;
+    private $inputTypeCompteInscriptionErr;
 
     public function displayNavBar()
     {
@@ -219,8 +229,10 @@ class AuthentificationControleur extends AbstractControleur
                                 id="inputNomInscription" aria-describedby="nomHelp" 
                                 placeholder="Entrer votre NOM"
                                 value="' . $nom . '">
-                                <small id="nomHelp" class="form-text text-muted">UPPER CASE</small>
-                            </div>';
+                                <small id="nomHelp" class="form-text text-muted">UPPER CASE</small>';
+        $widget = $widget . '<small style="color:red;" id="nomErr" name="nomErr" class="form-text">' . $this->inputNomInscriptionErr . '</small>';
+        $widget = $widget . '
+        </div>';
         $widget = $widget . '
                             <div class="form-group">
                                 <label for="inputPrenomInscription">Prénom</label>
@@ -228,21 +240,27 @@ class AuthentificationControleur extends AbstractControleur
                                 name="inputPrenomInscription"
                                 id="inputPrenomInscription" aria-describedby="prénomHelp" placeholder="Entrer votre Prénom"
                                 value="' . $prenom . '">
-                                <small id="prénomHelp" class="form-text text-muted">Normal case</small>
+                                <small id="prénomHelp" class="form-text text-muted">Normal case</small>';
+        $widget = $widget . '<small style="color:red;" id="emailErr" name="prenomErr" class="form-text">' . $this->inputPrenomInscriptionErr . '</small>';
+        $widget = $widget . '
                             </div>';
         $widget = $widget . '                            <div class="form-group">
                                 <label for="inputDateNaisssanceInscription">Date de naissance</label>
                                 <input type="date" class="form-control" 
                                 name="inputDateNaisssanceInscription"
                                 id="inputDateNaisssanceInscription"
-                                value="' . $date_naissance . '">
+                                value="' . $date_naissance . '">';
+        $widget = $widget . '<small style="color:red;" id="dateNaissanceErr" name="dateNaissanceErr" class="form-text">' . $this->inputDateNaisssanceInscriptionErr . '</small>';
+        $widget = $widget . '
                             </div>';
         $widget = $widget . '                            <div class="form-group">
                                 <label for="inputEmailInscription">Email address</label>
                                 <input type="email" class="form-control" 
                                 name="inputEmailInscription"
                                 id="inputEmailInscription" aria-describedby="emailHelp" placeholder="Enter email"
-                                value="' . $email . '">
+                                value="' . $email . '">';
+        $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputEmailInscriptionErr . '</small>';
+        $widget = $widget . '
                                 <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre email avec quelqu\'un d\'autre.</small>
                             </div>';
         $widget = $widget . '
@@ -251,13 +269,17 @@ class AuthentificationControleur extends AbstractControleur
                                 <input type="password" class="form-control" 
                                 name="inputPasswordInscription"
                                 id="inputPasswordInscription" placeholder="Password"
-                                value="' . $mot_de_passe . '">
+                                value="' . $mot_de_passe . '">';
+        $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">' . $this->inputPasswordInscriptionErr . '</small>';
+        $widget = $widget . '
                             </div>';
         $widget = $widget . '                            <div class="form-group">
                                 <input type="password" class="form-control" 
                                 name="inputPasswordConfirmInscription"
                                 id="inputPasswordConfirmInscription" placeholder="Confirm password"
-                                value="' . $mot_de_passe_confirm . '">
+                                value="' . $mot_de_passe_confirm . '">';
+        $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">' . $this->inputPasswordConfirmInscriptionErr . '</small>';
+        $widget = $widget . '
                             </div>';
 
         if ($type_compte == 'Eleve') {
@@ -356,6 +378,8 @@ class AuthentificationControleur extends AbstractControleur
                     $image = Personne::$DEFAULT_IMAGE;
                     if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
                         $this->insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte, $image);
+                    } else {
+                        $this->inputPasswordInscriptionErr = 'Mots de passe non indentiques';
                     }
                 }
             }
@@ -418,33 +442,48 @@ class AuthentificationControleur extends AbstractControleur
         $date_naissance = $_POST['inputDateNaisssanceInscription'];
         $type_compte = $_POST['inputTypeCompteInscription'];
 
+
         if (empty($email)) {
-            echo("email manquant");
+            $this->inputEmailInscriptionErr = $this->inputEmailInscriptionErr . "email manquant";
             $formulaire_complet = false;
+        } else {
+            $this->inputEmailInscriptionErr = "";
         }
         if (empty($mot_de_passe)) {
-            echo("mot_de_passe manquant");
+            $this->inputPasswordInscriptionErr = $this->inputPasswordInscriptionErr . "mot_de_passe manquant";
             $formulaire_complet = false;
+        } else {
+            $this->inputPasswordInscriptionErr = "";
         }
         if (empty($mot_de_passe_confirm)) {
-            echo("mot_de_passe_confirm manquant");
+            $this->inputPasswordConfirmInscriptionErr = $this->inputPasswordConfirmInscriptionErr . "mot_de_passe_confirm manquant";
             $formulaire_complet = false;
+        } else {
+            $this->inputPasswordConfirmInscriptionErr = "";
         }
         if (empty($nom)) {
-            echo("nom manquant");
+            $this->inputNomInscriptionErr = $this->inputNomInscriptionErr . "nom manquant";
             $formulaire_complet = false;
+        } else {
+            $this->inputNomInscriptionErr = "";
         }
         if (empty($prenom)) {
-            echo("prenom manquant");
+            $this->inputPrenomInscriptionErr = $this->inputPrenomInscriptionErr . "prenom manquant";
             $formulaire_complet = false;
+        } else {
+            $this->inputPrenomInscriptionErr = "";
         }
         if (empty($date_naissance)) {
-            echo("date_naissance manquant");
+            $this->inputDateNaisssanceInscriptionErr = $this->inputDateNaisssanceInscriptionErr . "date_naissance manquant";
             $formulaire_complet = false;
+        } else {
+            $this->inputDateNaisssanceInscriptionErr = "";
         }
         if (empty($type_compte)) {
-            echo("type_compte manquant");
+            $this->inputTypeCompteInscriptionErr = $this->inputTypeCompteInscriptionErr . "type_compte manquant";
             $formulaire_complet = false;
+        } else {
+            $this->inputTypeCompteInscriptionErr = "";
         }
 
         return $formulaire_complet;
@@ -523,12 +562,12 @@ class AuthentificationControleur extends AbstractControleur
         $widget = $widget . $this->getUserConnected()->getMiniature();
         $widget = $widget . '
                                     <a href="../enseignant/tableauDeBord.php">                                   
-                                    <button type="submit" class="btn btn-primary">Tableau de bord</button>
                                     </a>
                     </div>
                     <div class="w3-col m6">
                         <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
                              width="700" height="394">
+                         <button type="submit" class="btn btn-primary">Tableau de bord</button>
                     </div>
                 </div>
             </div>
@@ -552,14 +591,14 @@ class AuthentificationControleur extends AbstractControleur
                                         <input name="inputEmailConnexion" type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email"
                                         value="' . $email . '">
                                         <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre email avec quelqu\'un d\'autre.</small>';
-        $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">'.$this->inputEmailConnexionErr.'</small>';
+        $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputEmailConnexionErr . '</small>';
         $widget = $widget . '
                                     </div>
                                     <div class="form-group">
                                         <label for="inputPasswordConnexion">Password</label>
                                         <input name="inputPasswordConnexion" type="password" class="form-control" id="inputPasswordConnexion" placeholder="Password"
                                         value="' . $mot_de_passe . '"></div>';
-        $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">'.$this->inputPasswordConnexionErr.'</small>';
+        $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">' . $this->inputPasswordConnexionErr . '</small>';
         $widget = $widget . '
         <button value="btnConnexionUtilisateur" id="btnConnexionUtilisateur" name="btnConnexionUtilisateur" type="submit" class="btn btn-primary">Envoyer</button>
                                 </fieldset>
