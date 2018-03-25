@@ -243,5 +243,45 @@ class Personne
         return $toString;
     }
 
+    public function getMiniature()
+    {
+        $personne = '<div >
+            <div >
+                <img src="../../../ressources/images/'.$this->image.'" alt="John" style="width:100%">
+                <div class="w3-container">
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                                <h3>' . $this->nom . ' ' . $this->prenom . '</h3>
+                            </td>
+                            <td style="text-align: right">
+                            <h1 class="w3-tag w3-blue-grey w3-round">
+                                ' . $this->id_personne . ' 
+                            </h1>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="text-align: center">';
+        $personne = $personne . "dateNaissance : " . $this->dateNaissance;
+        $personne = $personne . "<br>";
+        $personne = $personne . "dateInscription : " . $this->dateInscription;
+        $personne = $personne . "<br>";
+        $personne = $personne . "type_personne : " . $this->type_personne;
+        $personne = $personne . "<br>";
+        $personne = $personne. '</p>
+                    <p>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> ' . $this->email . ' </button>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-phone"></i> ' . $this->telephone . ' </button>
+                    </p>
+                </div>
+            </div>
+        </div>';
+
+        $toString = "<div>";
+
+        $toString = $toString . "</div>";
+        return $personne;
+    }
+
 
 }

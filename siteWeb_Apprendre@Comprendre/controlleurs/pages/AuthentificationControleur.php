@@ -8,6 +8,9 @@ require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 class AuthentificationControleur extends AbstractControleur
 {
 
+    private $inputEmailConnexionErr;
+    private $inputPasswordConnexionErr;
+
     public function displayNavBar()
     {
         if ($this->isUserConnected()) {
@@ -116,7 +119,6 @@ class AuthentificationControleur extends AbstractControleur
 
     public function uConnexion()
     {
-        echo "coucou";
         if (isset($_POST['btnConnexionUtilisateur'])) {
             if ($this->formulaireConnexionComplet()) {
 
@@ -241,7 +243,7 @@ class AuthentificationControleur extends AbstractControleur
                                 name="inputEmailInscription"
                                 id="inputEmailInscription" aria-describedby="emailHelp" placeholder="Enter email"
                                 value="' . $email . '">
-                                <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
+                                <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre email avec quelqu\'un d\'autre.</small>
                             </div>';
         $widget = $widget . '
                             <div class="form-group">
@@ -353,13 +355,12 @@ class AuthentificationControleur extends AbstractControleur
                     $type_compte = $_POST['inputTypeCompteInscription'];
                     $image = Personne::$DEFAULT_IMAGE;
                     if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
-                        $this->insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte,$image);
+                        $this->insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte, $image);
                     }
                 }
             }
         }
     }
-
 
 
     public function displayFooter()
@@ -389,12 +390,16 @@ class AuthentificationControleur extends AbstractControleur
         $mot_de_passe = $_POST['inputPasswordConnexion'];
 
         if (empty($email)) {
-            echo("email manquant");
+            $this->inputEmailConnexionErr = "Email manquant ou invalide";
             $formulaire_complet = false;
+        } else {
+            $this->inputEmailConnexionErr = "";
         }
         if (empty($mot_de_passe)) {
-            echo("mot_de_passe manquant");
+            $this->inputPasswordConnexionErr = "Mot de passe manquant";
             $formulaire_complet = false;
+        } else {
+            $this->inputPasswordConnexionErr = "";
         }
 
         return $formulaire_complet;
@@ -515,7 +520,7 @@ class AuthentificationControleur extends AbstractControleur
             <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
                 <div class="w3-row-padding">
                     <div class="w3-col m6">';
-        $widget = $widget . $this->getUserConnected();
+        $widget = $widget . $this->getUserConnected()->getMiniature();
         $widget = $widget . '
                                     <a href="../enseignant/tableauDeBord.php">                                   
                                     <button type="submit" class="btn btn-primary">Tableau de bord</button>
@@ -535,7 +540,7 @@ class AuthentificationControleur extends AbstractControleur
     {
         $email = $_POST['inputEmailConnexion'];
         $mot_de_passe = $_POST['inputPasswordConnexion'];
-        echo '<!-- Promo Section - "We know design" -->
+        $widget = '<!-- Promo Section - "We know design" -->
                 <div id="connexion" class="w3-container w3-light-grey" style="padding:128px 16px">
                     <div class="w3-row-padding">
                         <div class="w3-col m6">
@@ -546,13 +551,17 @@ class AuthentificationControleur extends AbstractControleur
                                         <label for="inputEmailConnexion">Email address</label>
                                         <input name="inputEmailConnexion" type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email"
                                         value="' . $email . '">
-                                        <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
+                                        <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre email avec quelqu\'un d\'autre.</small>';
+        $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">'.$this->inputEmailConnexionErr.'</small>';
+        $widget = $widget . '
                                     </div>
                                     <div class="form-group">
                                         <label for="inputPasswordConnexion">Password</label>
                                         <input name="inputPasswordConnexion" type="password" class="form-control" id="inputPasswordConnexion" placeholder="Password"
-                                        value="' . $mot_de_passe . '"></div>
-                                        <button value="btnConnexionUtilisateur" id="btnConnexionUtilisateur" name="btnConnexionUtilisateur" type="submit" class="btn btn-primary">Submit</button>
+                                        value="' . $mot_de_passe . '"></div>';
+        $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">'.$this->inputPasswordConnexionErr.'</small>';
+        $widget = $widget . '
+        <button value="btnConnexionUtilisateur" id="btnConnexionUtilisateur" name="btnConnexionUtilisateur" type="submit" class="btn btn-primary">Envoyer</button>
                                 </fieldset>
                             </form>
                         </div>
@@ -563,6 +572,8 @@ class AuthentificationControleur extends AbstractControleur
                     </div>
                 </div>
                 ';
+
+        echo $widget;
     }
 
     private function connexionUtilisateur($bdd, $row)
@@ -587,7 +598,7 @@ class AuthentificationControleur extends AbstractControleur
                     $this->initUserConnected(Eleve::$TABLE_NAME, $row);
                 }
             }
-        } else if (strcmp($typePersonne, Enseignant::$TABLE_NAME) == 0){
+        } else if (strcmp($typePersonne, Enseignant::$TABLE_NAME) == 0) {
             //Connexion d'un enseignant
             $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe, image
                 FROM Enseignant E, Personne P
@@ -602,7 +613,7 @@ class AuthentificationControleur extends AbstractControleur
                     $this->initUserConnected(Enseignant::$TABLE_NAME, $row);
                 }
             }
-        } else if (strcmp($typePersonne, Administrateur::$TABLE_NAME) == 0){
+        } else if (strcmp($typePersonne, Administrateur::$TABLE_NAME) == 0) {
             //Connexion d'un enseignant
             $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe, image
                 FROM Personne P
@@ -640,7 +651,7 @@ class AuthentificationControleur extends AbstractControleur
             $_SESSION["utilisateur"] = $personne;
 
             return $personne;
-        } else if (strcmp($type_personne, Enseignant::$TABLE_NAME) === 0)  {
+        } else if (strcmp($type_personne, Enseignant::$TABLE_NAME) === 0) {
             $personne = new Enseignant();
             $personne->setIdPersonne($row["id"]);
             $personne->setNom($row["nom"]);
@@ -656,7 +667,7 @@ class AuthentificationControleur extends AbstractControleur
             $_SESSION["utilisateur"] = $personne;
 
             return $personne;
-        } else if (strcmp($type_personne, Administrateur::$TABLE_NAME) === 0)  {
+        } else if (strcmp($type_personne, Administrateur::$TABLE_NAME) === 0) {
             $personne = new Administrateur();
             $personne->setIdPersonne($row["id"]);
             $personne->setNom($row["nom"]);

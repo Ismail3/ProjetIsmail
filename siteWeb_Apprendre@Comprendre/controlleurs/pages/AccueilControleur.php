@@ -47,7 +47,7 @@ class AccueilControleur extends AbstractControleur
         <span class="w3-jumbo w3-hide-small"></span><br>
         <div align="center">
             <h1><strong> Aprendre@Comprendre</strong></h1>
-            <span class="w3-large">Économisons du temps d\'apprentissage en apprennant à mieu comprendre</span>
+            <span class="w3-large">Économisons du temps d\'apprentissage en apprennant à mieux comprendre</span>
             <p><a href="#about"
                   class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">En savoir plus sur nous</a></p>
         </div>
