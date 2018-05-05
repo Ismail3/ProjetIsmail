@@ -14,7 +14,7 @@ class AbstractControleur
     public function __construct()
     {
         $this->db = new BdConnexion();
-        session_start();
+//        session_start();
     }
 
     /**
@@ -76,7 +76,7 @@ class AbstractControleur
 
     public function isUserConnected()
     {
-        return array_key_exists('utilisateur', $_SESSION) && !empty($_SESSION['utilisateur']);
+        return !empty($_SESSION) && !empty($_SESSION) && array_key_exists('utilisateur', $_SESSION) && !empty($_SESSION['utilisateur']);
     }
 
     /**
@@ -95,6 +95,7 @@ class AbstractControleur
      */
     protected function getUserConnected()
     {
+        var_dump($_SESSION);
         return $_SESSION['utilisateur'];
     }
 

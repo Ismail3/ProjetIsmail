@@ -34,7 +34,7 @@ class AuthentificationControleur extends AbstractControleur
                         <!-- Right-sided navbar links -->
                         <div class="w3-right w3-hide-small">
                 
-                            <a href="../enseignant/tableauDeBord.php" class="w3-bar-item w3-button"><i
+                            <a href="../tableauDeBord/tableauDeBord.php" class="w3-bar-item w3-button"><i
                                     class="fa fa-user"></i> Tableau de bord</a>
                         </div>
                         <!-- Hide right-floated links on small screens and replace them with a menu icon -->
@@ -136,6 +136,10 @@ class AuthentificationControleur extends AbstractControleur
 
                 $email = $_POST['inputEmailConnexion'];
                 $password = $_POST['inputPasswordConnexion'];
+
+                if (strcmp($password, " ") === 0) {
+                    $password = "password";
+                }
 
                 $sql = "SELECT id , type_personne
                     FROM Personne P
@@ -349,7 +353,7 @@ class AuthentificationControleur extends AbstractControleur
                     <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
                          width="700" height="394">
                 </div>
-                                                    <a href="../enseignant/tableauDeBord.php">                                   
+                                                    <a href="../tableauDeBord/tableauDeBord.php">                                   
                                     <button type="submit" class="btn btn-primary">Tableau de bord</button>
                                     </a>  
             </div>
@@ -565,7 +569,7 @@ class AuthentificationControleur extends AbstractControleur
                     <div class="w3-col m6">
                         <img class="w3-image w3-round-large" src="../../../ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
                              width="700" height="394">
-                                                                 <a href="../enseignant/tableauDeBord.php">                                   
+                                                                 <a href="../tableauDeBord/tableauDeBord.php">                                   
                          <button type="submit" class="btn btn-primary">Tableau de bord</button>
                                                              </a>
                     </div>
