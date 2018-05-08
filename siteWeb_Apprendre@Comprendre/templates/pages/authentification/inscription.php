@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- saved from url=(0062) -->
 <html>
 <head>
     <title>Apprendre@Comprendre</title>
@@ -31,6 +30,13 @@
 
 
 <?php
+session_start();
+if (!isset($_SESSION['count'])) {
+    $_SESSION['count'] = 0;
+} else {
+    $_SESSION['count']++;
+}
+var_dump($_SESSION['count']);
 require_once(dirname(__FILE__) . '/../../../controlleurs/pages/AuthentificationControleur.php');
 
 $authCtrl = new AuthentificationControleur();

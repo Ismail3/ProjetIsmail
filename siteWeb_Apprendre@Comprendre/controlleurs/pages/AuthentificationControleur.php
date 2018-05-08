@@ -148,7 +148,7 @@ class AuthentificationControleur extends AbstractControleur
                 ;";
                 $result = $bdd->query($sql);
                 if ($result->num_rows > 0) {
-                    session_start();
+//                    session_start();
                     // output data of each row
                     while ($row = $result->fetch_assoc()) {
 
@@ -502,7 +502,7 @@ class AuthentificationControleur extends AbstractControleur
                 ;";
 
         if ($bdd->query($sql) === TRUE) {
-            session_start();
+//            session_start();
             $id_personne = $bdd->insert_id;
 
             $id = $this->createPersonneType($bdd, $id_personne, $type_compte);
@@ -635,7 +635,7 @@ class AuthentificationControleur extends AbstractControleur
                 ;";
             $result = $bdd->query($sql);
             if ($result->num_rows > 0) {
-                session_start();
+//                session_start();
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
                     $this->initUserConnected(Eleve::$TABLE_NAME, $row);
@@ -650,7 +650,7 @@ class AuthentificationControleur extends AbstractControleur
                 ;";
             $result = $bdd->query($sql);
             if ($result->num_rows > 0) {
-                session_start();
+//                session_start();
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
                     $this->initUserConnected(Enseignant::$TABLE_NAME, $row);
@@ -664,7 +664,7 @@ class AuthentificationControleur extends AbstractControleur
                 ;";
             $result = $bdd->query($sql);
             if ($result->num_rows > 0) {
-                session_start();
+//                session_start();
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
                     $this->initUserConnected(Administrateur::$TABLE_NAME, $row);

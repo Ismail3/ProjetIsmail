@@ -98,7 +98,9 @@ class AccueilControleur extends AbstractControleur
 
     public function destroyConnexion()
     {
-        session_destroy();
+         if (!empty($_SESSION) && empty(session_id()) && session_id() > 0){
+             session_destroy();
+         }
     }
 
     private function getInfosSiteWeb()

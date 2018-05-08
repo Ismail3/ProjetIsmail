@@ -34,7 +34,6 @@ class TableauDeBordControleur extends AbstractControleur
     public function displayNavBar()
     {
 //        session_start();
-
         if ($this->isUserConnected()) {
 
             if ($this->isEleve()) {
