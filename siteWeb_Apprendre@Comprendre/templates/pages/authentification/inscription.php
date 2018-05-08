@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,13 +33,6 @@
 
 
 <?php
-session_start();
-if (!isset($_SESSION['count'])) {
-    $_SESSION['count'] = 0;
-} else {
-    $_SESSION['count']++;
-}
-var_dump($_SESSION['count']);
 require_once(dirname(__FILE__) . '/../../../controlleurs/pages/AuthentificationControleur.php');
 
 $authCtrl = new AuthentificationControleur();

@@ -1,3 +1,7 @@
+<?php
+require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControleur.php');
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,15 +33,7 @@
 
 <body cz-shortcut-listen="true">
 <?php
-session_start();
-if (!isset($_SESSION['count'])) {
-    $_SESSION['count'] = 0;
-} else {
-    $_SESSION['count']++;
-}
-var_dump($_SESSION['count']);
 ob_start();
-require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControleur.php');
 
 $ctrl = new TableauDeBordControleur();
 
