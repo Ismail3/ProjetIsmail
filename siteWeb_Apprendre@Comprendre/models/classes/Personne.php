@@ -1,12 +1,13 @@
 <?php
 require_once(dirname(__FILE__) . '/AbstractModel.php');
+
 class Personne extends AbstractModel
 {
 
     /*
      * Attributes
      */
-    public static $DEFAULT_IMAGE ="team0.jpg";
+    public static $DEFAULT_IMAGE = "team0.jpg";
     protected $id_personne;
     protected $nom;
     protected $prenom;
@@ -191,7 +192,6 @@ class Personne extends AbstractModel
     }
 
 
-
     /**
      * @return string
      */
@@ -207,7 +207,6 @@ class Personne extends AbstractModel
     {
         $this->type_personne = $type_personne;
     }
-
 
 
     /**
@@ -245,7 +244,7 @@ class Personne extends AbstractModel
     {
         $personne = '<div >
             <div >
-                <img src="../../../ressources/images/'.$this->image.'" alt="' . $this->nom . ' ' . $this->prenom . '" height="256">
+                <img src="../../../ressources/images/' . $this->image . '" alt="' . $this->nom . ' ' . $this->prenom . '" height="256">
                 <div class="w3-container">
                     <table style="width: 100%">
                         <tr>
@@ -266,7 +265,7 @@ class Personne extends AbstractModel
         $personne = $personne . "<br>";
         $personne = $personne . "type_personne : " . $this->type_personne;
         $personne = $personne . "<br>";
-        $personne = $personne. '</p>
+        $personne = $personne . '</p>
                     <p>
                         <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> ' . $this->email . ' </button>
                         <button class="w3-button w3-light-grey w3-block"><i class="fa fa-phone"></i> ' . $this->telephone . ' </button>
@@ -279,6 +278,42 @@ class Personne extends AbstractModel
 
         $toString = $toString . "</div>";
         return $personne;
+    }
+
+    public function update($nom, $prenom, $adresse, $email, $tel, $mot_de_passe, $image)
+    {
+        $bdd = $this->getDb()->openConn();
+        $sql = "";
+        $id = $this->getIdPersonne();
+        $date_naissance = $this->getDateNaissance();
+
+        if (strcmp($image, "") == 0) {
+            $sql = "UPDATE Personne
+                SET nom='$nom', prenom='$prenom',email='$email',adresse='$adresse',date_naissance='$date_naissance',telephone='$tel',mot_de_passe='$mot_de_passe'
+                WHERE id=$id
+                ;";
+        } else {
+            $sql = "UPDATE Personne
+                SET nom='$nom', prenom='$prenom',email='$email',adresse='$adresse',date_naissance='$date_naissance',telephone='$tel',mot_de_passe='$mot_de_passe',image='$image'
+                WHERE id=$id
+                ;";
+        }
+
+        return $bdd->query($sql);
+    }
+
+    public function updateEleve($niveau_etude)
+    {
+        $bdd = $this->getDb()->openConn();
+        $sql = "";
+        $id = $this->getIdPersonne();
+
+        $sql = "UPDATE Eleve
+                SET niveau_etude='$niveau_etude'
+                WHERE id=$id
+                ;";
+
+        return $bdd->query($sql);
     }
 
 

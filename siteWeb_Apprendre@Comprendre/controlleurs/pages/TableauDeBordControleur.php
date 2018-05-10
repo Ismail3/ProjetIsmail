@@ -1157,6 +1157,7 @@ class TableauDeBordControleur extends AbstractControleur
     {
         $personne = $this->getUserConnected();
 
+
         $id = $personne->getIdPersonne();
         $nom = $_POST['inputEditProfilNom'];
         $prenom = $_POST['inputEditProfilPrenom'];
@@ -1172,21 +1173,12 @@ class TableauDeBordControleur extends AbstractControleur
         echo "mot_de_passe" . $mot_de_passe;
 
         $date_naissance = $personne->getDateNaissance();;
-        $bdd = $this->getDb()->openConn();
-        $sql = "";
-        if (strcmp($image, "") == 0) {
-            $sql = "UPDATE Personne
-                SET nom='$nom', prenom='$prenom',email='$email',adresse='$adresse',date_naissance='$date_naissance',telephone='$tel',mot_de_passe='$mot_de_passe'
-                WHERE id=$id
-                ;";
-        } else {
-            $sql = "UPDATE Personne
-                SET nom='$nom', prenom='$prenom',email='$email',adresse='$adresse',date_naissance='$date_naissance',telephone='$tel',mot_de_passe='$mot_de_passe',image='$image'
-                WHERE id=$id
-                ;";
-        }
 
-        if ($bdd->query($sql) === TRUE) {
+
+        $personne->update($nom, $prenom, $adresse, $email, $tel, $mot_de_passe, $image);
+
+
+        if ($personne->update($nom, $prenom, $adresse, $email, $tel, $mot_de_passe, $image) === TRUE) {
 
             $personne->setNom($nom);
             $personne->setPrenom($prenom);
@@ -1213,10 +1205,10 @@ class TableauDeBordControleur extends AbstractControleur
   </div>
 </div>';
         } else {
-            echo "<div class=\"alert alert-danger alert-dismissible\">
-  <strong>Error!</strong> Error: " . $sql . "<br>" . $bdd->error . "
-</div>
-";
+//            echo "<div class=\"alert alert-danger alert-dismissible\">
+//  <strong>Error!</strong> Error: " . $sql . "<br>" . $bdd->error . "
+//</div>
+//";
             echo "<br>";
             echo "_SESSION:utilisateur = " . $_SESSION["utilisateur"];
             echo "<br>";
@@ -1225,14 +1217,7 @@ class TableauDeBordControleur extends AbstractControleur
         if (strcmp($personne->getTypePersonne(), Eleve::$TABLE_NAME) === 0) {
             $niveau_etude = $_POST['inputEditProfilNiveauEtude'];
 
-
-            $sql = "UPDATE Eleve
-                SET niveau_etude='$niveau_etude'
-                WHERE id=$id
-                ;";
-
-
-            if ($bdd->query($sql) === TRUE) {
+            if ($personne->updateEleve($niveau_etude) === TRUE) {
 
                 $this->setProfilUpdate(true);
                 $niveau_etude_nom = NiveauEtude::getNiveauEtudeNom($niveau_etude);

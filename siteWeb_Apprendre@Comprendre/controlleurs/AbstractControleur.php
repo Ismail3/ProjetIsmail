@@ -6,35 +6,12 @@ class AbstractControleur
     /*
      * Attributes
      */
-    private $db;
-    private static $cmpt=0;
 
     /**
-     * Cours constructor.
+     * AbstractControleur constructor.
      */
     public function __construct()
     {
-        $this->db = new BdConnexion();
-        if (empty(session_id())){
-//            session_start();
-        }
-        var_dump(AbstractControleur::$cmpt++);
-    }
-
-    /**
-     * @return BdConnexion
-     */
-    public function getDb()
-    {
-        return $this->db;
-    }
-
-    /**
-     * @param BdConnexion $db
-     */
-    public function setDb($db)
-    {
-        $this->db = $db;
     }
 
     public function displayHeader()
