@@ -27,6 +27,68 @@ class Personne extends AbstractModel
     {
     }
 
+    public static function connexion($email, $password)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT id , type_personne
+                    FROM Personne P
+                    WHERE P.email='$email'
+                      and P.mot_de_passe='$password'
+                ;";
+
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+        return $result;
+    }
+
+    public static function newUtilisateur($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte, $image)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $id_personne = -1;
+
+        $sql = "INSERT INTO Personne (nom, prenom, email, date_naissance, mot_de_passe, type_personne,image)
+                VALUES ('$nom','$prenom','$email','$date_naissance','$mot_de_passe','$type_compte','$image')
+                ;";
+
+        if ($bdd->query($sql) === TRUE) {
+            $id_personne = $bdd->insert_id;
+        }
+        $bdd->close();
+        return $id_personne;
+    }
+
+    public static function createPersonneType($id_personne, $type_compte)
+    {
+        $idTypeCompte = -1;
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "INSERT INTO " . $type_compte . " (id_personne)
+                VALUES ('$id_personne')
+                ;";
+
+        if ($bdd->query($sql) === TRUE) {
+//            session_start();
+            $idTypeCompte = $bdd->insert_id;
+        }
+
+        $bdd->close();
+
+        return $idTypeCompte;
+    }
+
     /*
      * Getters & Setters
      */
@@ -282,7 +344,10 @@ class Personne extends AbstractModel
 
     public function update($nom, $prenom, $adresse, $email, $tel, $mot_de_passe, $image)
     {
-        $bdd = $this->getDb()->openConn();
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
         $sql = "";
         $id = $this->getIdPersonne();
         $date_naissance = $this->getDateNaissance();
@@ -298,13 +363,17 @@ class Personne extends AbstractModel
                 WHERE id=$id
                 ;";
         }
-
-        return $bdd->query($sql);
+        $query = $bdd->query($sql);
+        $bdd->close();
+        return $query;
     }
 
     public function updateEleve($niveau_etude)
     {
-        $bdd = $this->getDb()->openConn();
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
         $sql = "";
         $id = $this->getIdPersonne();
 
@@ -313,7 +382,9 @@ class Personne extends AbstractModel
                 WHERE id=$id
                 ;";
 
-        return $bdd->query($sql);
+        $query = $bdd->query($sql);
+        $bdd->close();
+        return $query;
     }
 
 

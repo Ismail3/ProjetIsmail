@@ -1,5 +1,8 @@
+<?php
+require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControleur.php');
+session_start();
+?>
 <!DOCTYPE html>
-<!-- saved from url=(0062) -->
 <html>
 <head>
     <title>Apprendre@Comprendre</title>

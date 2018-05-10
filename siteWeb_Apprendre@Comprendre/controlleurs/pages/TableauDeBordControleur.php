@@ -6,6 +6,7 @@ require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Administrateur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/NiveauEtude.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Ressource.php');
 
 class TableauDeBordControleur extends AbstractControleur
 {
@@ -1193,17 +1194,17 @@ class TableauDeBordControleur extends AbstractControleur
             $_SESSION["utilisateur"] = $personne;
 
             echo '<div class="container">
-<br>
-  <div class="alert alert-success alert-dismissible">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Session Personne updated successfully </h1>
-  </div>
-  <div class="alert alert-info alert-dismissible">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Info!</strong>
-    ' . $_SESSION["utilisateur"] . '
-  </div>
-</div>';
+            <br>
+              <div class="alert alert-success alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Success!</strong> Session Personne updated successfully </h1>
+              </div>
+              <div class="alert alert-info alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Info!</strong>
+                ' . $_SESSION["utilisateur"] . '
+              </div>
+            </div>';
         } else {
 //            echo "<div class=\"alert alert-danger alert-dismissible\">
 //  <strong>Error!</strong> Error: " . $sql . "<br>" . $bdd->error . "
@@ -1229,7 +1230,6 @@ class TableauDeBordControleur extends AbstractControleur
             $this->setProfilUpdate(true);
         }
 
-        $this->getDb()->closeConn();
         $_SESSION["profilUpdated"] = true;
     }
 

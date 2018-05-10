@@ -132,7 +132,6 @@ class AuthentificationControleur extends AbstractControleur
         if (isset($_POST['btnConnexionUtilisateur'])) {
             if ($this->formulaireConnexionComplet()) {
 
-                $bdd = $this->getDb()->openConn();
 
                 $email = $_POST['inputEmailConnexion'];
                 $password = $_POST['inputPasswordConnexion'];
@@ -141,25 +140,21 @@ class AuthentificationControleur extends AbstractControleur
                     $password = "password";
                 }
 
-                $sql = "SELECT id , type_personne
-                    FROM Personne P
-                    WHERE P.email='$email'
-                      and P.mot_de_passe='$password'
-                ;";
-                $result = $bdd->query($sql);
+                $result = Personne::connexion($email,$password);
+
                 if ($result->num_rows > 0) {
 //                    session_start();
                     // output data of each row
                     while ($row = $result->fetch_assoc()) {
 
-                        $this->connexionUtilisateur($bdd, $row);
+                        $this->connexionUtilisateur($row);
 
                     }
                 } else {
                     echo "Vous êtes actuellement déconnecté";
                 }
 
-                $this->getDb()->closeConn();
+                //$this->getDb()->closeConn();
             }
         }
     }
@@ -495,17 +490,11 @@ class AuthentificationControleur extends AbstractControleur
 
     private function insertPersonne($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte, $image)
     {
-        $bdd = $this->getDb()->openConn();
+        $id_personne = Personne::newUtilisateur($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte, $image, $type_compte);
 
-        $sql = "INSERT INTO Personne (nom, prenom, email, date_naissance, mot_de_passe, type_personne,image)
-                VALUES ('$nom','$prenom','$email','$date_naissance','$mot_de_passe','$type_compte','$image')
-                ;";
+        if ($id_personne != -1) {
 
-        if ($bdd->query($sql) === TRUE) {
-//            session_start();
-            $id_personne = $bdd->insert_id;
-
-            $id = $this->createPersonneType($bdd, $id_personne, $type_compte);
+            $id = Personne::createPersonneType($id_personne, $type_compte);
             $personne = new Personne();
 
             if (strcmp($type_compte, Eleve::$TABLE_NAME) === 0) {
@@ -524,13 +513,8 @@ class AuthentificationControleur extends AbstractControleur
             $personne->setTypePersonne($type_compte);
             $personne->setImage($image);
             $_SESSION["utilisateur"] = $personne;
-//            echo "<br>";
-//            echo "New record Personne created successfully. Last inserted ID is: " . $_SESSION["utilisateur"];
-//            echo "<br>";
-
 
         } else {
-            echo "Error: " . $sql . "<br>" . $bdd->error;
             echo "<br>";
             echo "_SESSION:utilisateur = " . $_SESSION["utilisateur"];
             echo "<br>";
@@ -542,6 +526,7 @@ class AuthentificationControleur extends AbstractControleur
     private function createPersonneType($bdd, $id, $type_compte)
     {
         $idTypeCompte = -1;
+
         $sql = "INSERT INTO " . $type_compte . " (id_personne)
                 VALUES ('$id')
                 ;";
@@ -619,7 +604,7 @@ class AuthentificationControleur extends AbstractControleur
         echo $widget;
     }
 
-    private function connexionUtilisateur($bdd, $row)
+    private function connexionUtilisateur($row)
     {
         $id = $row["id"];
         $typePersonne = $row["type_personne"];
@@ -627,13 +612,7 @@ class AuthentificationControleur extends AbstractControleur
         //Recherche des informations de l'utilisateur
         if (strcmp($typePersonne, Eleve::$TABLE_NAME) == 0) {
             //Connexion d'un élève
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne,NE.nom as niveau_etude, telephone, adresse, mot_de_passe, image
-                FROM Eleve E, NiveauEtude NE, Personne P
-                WHERE E.id_personne = P.id
-                      and E.niveau_etude = NE.id
-                      and P.id='$id'
-                ;";
-            $result = $bdd->query($sql);
+            $result = Eleve::getUtilisateur($id);
             if ($result->num_rows > 0) {
 //                session_start();
                 // output data of each row
@@ -643,12 +622,8 @@ class AuthentificationControleur extends AbstractControleur
             }
         } else if (strcmp($typePersonne, Enseignant::$TABLE_NAME) == 0) {
             //Connexion d'un enseignant
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe, image
-                FROM Enseignant E, Personne P
-                WHERE E.id_personne = P.id
-                      and P.id='$id'
-                ;";
-            $result = $bdd->query($sql);
+            $result = Enseignant::getUtilisateur($id);
+
             if ($result->num_rows > 0) {
 //                session_start();
                 // output data of each row
@@ -657,12 +632,9 @@ class AuthentificationControleur extends AbstractControleur
                 }
             }
         } else if (strcmp($typePersonne, Administrateur::$TABLE_NAME) == 0) {
-            //Connexion d'un enseignant
-            $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe, image
-                FROM Personne P
-                WHERE P.id='$id'
-                ;";
-            $result = $bdd->query($sql);
+            //Connexion d'un administrateur
+            $result = Administrateur::getUtilisateur($id);
+
             if ($result->num_rows > 0) {
 //                session_start();
                 // output data of each row

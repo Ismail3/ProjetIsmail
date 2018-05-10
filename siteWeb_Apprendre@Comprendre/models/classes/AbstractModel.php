@@ -6,7 +6,7 @@ class AbstractModel
     /*
      * Attributes
      */
-    private $db;
+    protected $db;
 
     /**
      * Cours constructor.

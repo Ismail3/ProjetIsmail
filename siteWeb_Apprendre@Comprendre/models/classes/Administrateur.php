@@ -17,6 +17,24 @@ class Administrateur extends Personne
     {
     }
 
+    public static function getUtilisateur($id)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe, image
+                FROM Personne P
+                WHERE P.id='$id'
+                ;";
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
+    }
+
 
     /**
      * @return int

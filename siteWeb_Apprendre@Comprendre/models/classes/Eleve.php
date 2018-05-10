@@ -42,6 +42,26 @@ class Eleve extends Personne
         return $result;
     }
 
+    public static function getUtilisateur($id)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne,NE.nom as niveau_etude, telephone, adresse, mot_de_passe, image
+                FROM Eleve E, NiveauEtude NE, Personne P
+                WHERE E.id_personne = P.id
+                      and E.niveau_etude = NE.id
+                      and P.id='$id'
+                ;";
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
+    }
+
     /**
      * @return int
      */
