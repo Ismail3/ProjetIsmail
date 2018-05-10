@@ -259,11 +259,11 @@ class TableauDeBordControleur extends AbstractControleur
         return $widgets;
     }
 
-    function displayEleve($id, $nom, $prenom, $email, $date_naissance, $niveau_etude)
+    function displayEleve($id, $nom, $prenom, $email, $date_naissance, $niveau_etude, $image)
     {
         $eleve = '<div class="w3-col l3 m6 w3-margin-bottom">
             <div class="w3-card">
-                <img src="../../ressources/images/team2.jpg" alt="John" style="width:100%">
+                <img src="../../../ressources/images/' . $image . '" alt="' . $nom . ' ' . $prenom . '" style="width:100%">
                 <div class="w3-container">
                     <table style="width: 100%">
                         <tr>
@@ -294,18 +294,18 @@ class TableauDeBordControleur extends AbstractControleur
 
     function displayEleves()
     {
-        echo "<div class=\"w3-container\" style=\"padding:128px 16px\" id=\"team\">
-    <h3 class=\"w3-center\">Vos élèves</h3>
-    <p class=\"w3-center w3-large\">Dans ces rubriques vous pouvez contacter vos élèves ou visualer les cours ques vous
+        echo '<div class="w3-container" style="padding:128px 16px" id="team">
+    <h3 class="w3-center">Vos élèves</h3>
+    <p class="w3-center w3-large">Dans ces rubriques vous pouvez contacter vos élèves ou visualer les cours ques vous
         avez ou devez réaliser avec eux</p>
-    <div class=\"w3-row-padding w3-grayscale\" style=\"margin-top:64px\">";
+    <div class="w3-row-padding w3-grayscale" style="margin-top:64px">';
 
         $listeEleves = Eleve::getListeEleves();
 
         if ($listeEleves->num_rows > 0) {
             // output data of each row
             while ($row = $listeEleves->fetch_assoc()) {
-                $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"]);
+                $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"], $row["image"]);
             }
         } else {
             echo "displayEleves : 0 results";

@@ -30,7 +30,7 @@ class Eleve extends Personne
             die("Connection failed: " . $bdd->connect_error);
         }
 
-        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
+        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude,image
                 FROM Eleve E, NiveauEtude NE, Personne P
                 WHERE E.id_personne = P.id and E.niveau_etude = NE.id
                 LIMIT 8
