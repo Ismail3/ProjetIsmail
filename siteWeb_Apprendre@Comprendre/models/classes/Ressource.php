@@ -1,6 +1,7 @@
 <?php
+require_once(dirname(__FILE__) . '/AbstractModel.php');
 
-class Ressource
+class Ressource extends AbstractModel
 {
     /**
      * Ressource constructor.

@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(__FILE__) . '/AbstractModel.php');
 
 class Administrateur extends Personne
 {

@@ -110,8 +110,6 @@ class AbstractControleur
 
     public function isEleve()
     {
-        var_dump($this->getUserConnected());
-        var_dump("<br>");
         return (strcmp($this->getUserConnected()->getTypePersonne(), Eleve::$TABLE_NAME) === 0);
     }
 

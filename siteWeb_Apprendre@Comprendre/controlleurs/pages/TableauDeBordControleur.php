@@ -293,32 +293,17 @@ class TableauDeBordControleur extends AbstractControleur
 
     function displayEleves()
     {
-        $bd = new BdConnexion();
+        $listeEleves = Eleve::getListeEleves();
 
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,NE.nom as niveau_etude
-                FROM Eleve E, NiveauEtude NE, Personne P
-                WHERE E.id_personne = P.id and E.niveau_etude = NE.id
-                LIMIT 8
-                ;";
-        $result = $bdd->query($sql);
-
-        if ($result->num_rows > 0) {
+        if ($listeEleves->num_rows > 0) {
             // output data of each row
-            while ($row = $result->fetch_assoc()) {
+            while ($row = $listeEleves->fetch_assoc()) {
                 $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"]);
             }
         } else {
-            echo "0 results";
+            echo "displayEleves : 0 results";
         }
 
-        $bdd->close();
     }
 
     public function displayPage()
@@ -736,19 +721,10 @@ class TableauDeBordControleur extends AbstractControleur
 
     private function getOptitonNiveauEtude($niveauEtude)
     {
-
-        $bd = new BdConnexion();
-
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "select * from " . NiveauEtude::$TABLE_NAME . ";";
-        $result = $bdd->query($sql);
         $widget = '';
+
+        $result = NiveauEtude::getListeNiveauEtude();
+
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
@@ -759,8 +735,6 @@ class TableauDeBordControleur extends AbstractControleur
                 $widget = $widget . '</option>';
             }
         }
-
-        $bdd->close();
 
         return $widget;
     }
@@ -776,23 +750,7 @@ class TableauDeBordControleur extends AbstractControleur
         $widget = $widget . '<p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Compétences</b>
                     </p>';
 
-        $bd = new BdConnexion();
-        $idEnseignant = $enseignant->getIdPersonne();
-
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "SELECT E.tableauDeBord, M.nom as matiere, NE.nom as niveau_etude, NE.id as id_niveau_etude
-                FROM Enseigner E, Matiere M, NiveauEtude NE
-                WHERE E.tableauDeBord = $idEnseignant and E.matiere = M.id and E.niveau_etude = NE.id
-                ORDER BY matiere
-                ;";
-        $result = $bdd->query($sql);
-
+        $result = $enseignant->getListeMatièresEnseigner();
 
         if ($result->num_rows > 0) {
             // output data of each row
@@ -800,10 +758,10 @@ class TableauDeBordControleur extends AbstractControleur
                 $widget = $widget . $this->displayMatiereEnseigner($row);
             }
         } else {
-            echo "0 results";
+            echo "getMatiereEnseigner : 0 results";
         }
 
-        $bdd->close();
+
         $widget = $widget . '<br></div>';
 
         return $widget;
@@ -826,35 +784,16 @@ class TableauDeBordControleur extends AbstractControleur
     {
         $widget = '';
 
-        $bd = new BdConnexion();
-        $idEnseignant = $enseignant->getIdPersonne();
+        $listeCoursEnseignants = $enseignant->getListeDesCours();
 
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom
-                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
-                WHERE C.id_auteur = $idEnseignant and M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
-                ORDER BY date_creation DESC
-                LIMIT 5;";
-        $result = $bdd->query($sql);
-
-
-        if ($result->num_rows > 0) {
+        if ($listeCoursEnseignants->num_rows > 0) {
             // output data of each row
-            while ($row = $result->fetch_assoc()) {
+            while ($row = $listeCoursEnseignants->fetch_assoc()) {
                 $widget = $widget . $this->displayCours($row);
             }
         } else {
-            echo "0 results";
+            echo "<br> getListeDesCours : 0 results";
         }
-
-        $bdd->close();
-//        $widget = $widget . '<br></div>';
 
         return $widget;
     }
@@ -863,22 +802,7 @@ class TableauDeBordControleur extends AbstractControleur
     {
         $widget = '';
 
-        $bd = new BdConnexion();
-
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom
-                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
-                WHERE M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
-                ORDER BY date_creation DESC
-                LIMIT 5;";
-        $result = $bdd->query($sql);
-
+        $result = Cours::getListeDesCours();
 
         if ($result->num_rows > 0) {
             // output data of each row
@@ -886,11 +810,9 @@ class TableauDeBordControleur extends AbstractControleur
                 $widget = $widget . $this->displayCours($row);
             }
         } else {
-            echo "0 results";
+            echo "getListeDesCoursAdmin : 0 results";
         }
 
-        $bdd->close();
-//        $widget = $widget . '<br></div>';
 
         return $widget;
     }
@@ -945,31 +867,10 @@ class TableauDeBordControleur extends AbstractControleur
      */
     private function getListeDesSeancesCoursProposition($enseignant)
     {
-
         $widgets = '';
 
         $bd = new BdConnexion();
-        $idEnseignant = $enseignant->getIdPersonne();
-
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur,
-                M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom,
-                S.date_inscription, S.date_realisation, S.participant, S.duree, S.etat,
-                P.nom as nom_participant,P.prenom as prenom_participant,P.email as email_participant,P.date_naissance as date_naissance_participant, P.type_personne as type_personne_participant
-                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax, SeanceCours S, Personne P
-                WHERE C.id_auteur = $idEnseignant and M.id = C.matiere
-                and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
-                and S.proposition_cours = C.id and P.id = S.participant
-                ORDER BY date_realisation DESC
-                LIMIT 5;";
-        $result = $bdd->query($sql);
-
+        $result = $enseignant->getListeSeanceCoursProposition();
 
         if ($result->num_rows > 0) {
             // output data of each row
@@ -977,10 +878,8 @@ class TableauDeBordControleur extends AbstractControleur
                 $widgets = $widgets . $this->displaySeanceCoursProposition($row);
             }
         } else {
-            echo "0 results";
+            echo "getListeDesSeancesCoursProposition : 0 results";
         }
-
-        $bdd->close();
 
         return $widgets;
     }
@@ -989,27 +888,7 @@ class TableauDeBordControleur extends AbstractControleur
     {
         $widgets = '';
 
-        $bd = new BdConnexion();
-
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur,
-                M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom,
-                S.date_inscription, S.date_realisation, S.participant, S.duree, S.etat,
-                P.nom as nom_participant,P.prenom as prenom_participant,P.email as email_participant,P.date_naissance as date_naissance_participant, P.type_personne as type_personne_participant
-                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax, SeanceCours S, Personne P
-                WHERE M.id = C.matiere
-                and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
-                and S.proposition_cours = C.id and P.id = S.participant
-                ORDER BY date_realisation DESC
-                LIMIT 5;";
-        $result = $bdd->query($sql);
-
+        $result = CoursSeance::getListeDesSeancesCoursProposition();
 
         if ($result->num_rows > 0) {
             // output data of each row
@@ -1017,10 +896,8 @@ class TableauDeBordControleur extends AbstractControleur
                 $widgets = $widgets . $this->displaySeanceCoursProposition($row);
             }
         } else {
-            echo "0 results";
+            echo "getListeDesSeancesCoursPropositionAdmin : 0 results";
         }
-
-        $bdd->close();
 
         return $widgets;
     }
@@ -1095,40 +972,16 @@ class TableauDeBordControleur extends AbstractControleur
     {
         $widgets = '';
 
-        $bd = new BdConnexion();
-        $idEnseignant = $enseignant->getIdPersonne();
+        $listeSeanceCoursDemande = $enseignant->getListeSeanceCoursDemande();
 
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur,
-                M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom,
-                S.date_inscription, S.date_realisation, S.participant, S.duree, S.etat,
-                P.nom as nom_auteur,P.prenom as prenom_auteur,P.email as email_auteur,P.date_naissance as date_naissance_auteur, P.type_personne as type_personne_auteur
-                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax, SeanceCours S, Personne P
-                WHERE S.participant = $idEnseignant and M.id = C.matiere
-                and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
-                and S.proposition_cours = C.id and P.id = C.id_auteur
-                ORDER BY date_realisation DESC
-                LIMIT 5;
-                ";
-        $result = $bdd->query($sql);
-
-
-        if ($result->num_rows > 0) {
+        if ($listeSeanceCoursDemande->num_rows > 0) {
             // output data of each row
-            while ($row = $result->fetch_assoc()) {
+            while ($row = $listeSeanceCoursDemande->fetch_assoc()) {
                 $widgets = $widgets . $this->displaySeanceCoursDemande($row);
             }
         } else {
-            echo "0 results";
+            echo "getListeDesSeancesCoursDemande : 0 results";
         }
-
-        $bdd->close();
 
         return $widgets;
     }
@@ -1137,27 +990,7 @@ class TableauDeBordControleur extends AbstractControleur
     {
         $widgets = '';
 
-        $bd = new BdConnexion();
-
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur,
-                M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom,
-                S.date_inscription, S.date_realisation, S.participant, S.duree, S.etat,
-                P.nom as nom_auteur,P.prenom as prenom_auteur,P.email as email_auteur,P.date_naissance as date_naissance_auteur, P.type_personne as type_personne_auteur
-                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax, SeanceCours S, Personne P
-                WHERE M.id = C.matiere
-                and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
-                and S.proposition_cours = C.id and P.id = C.id_auteur
-                ORDER BY date_realisation DESC
-                LIMIT 5;
-                ";
-        $result = $bdd->query($sql);
+        $result = CoursSeance::getListeDesSeancesCoursDemande();
 
 
         if ($result->num_rows > 0) {
@@ -1166,10 +999,9 @@ class TableauDeBordControleur extends AbstractControleur
                 $widgets = $widgets . $this->displaySeanceCoursDemande($row);
             }
         } else {
-            echo "0 results";
+            echo "getListeDesSeancesCoursDemandeAdmin : 0 results";
         }
 
-        $bdd->close();
 
         return $widgets;
     }
@@ -1403,7 +1235,7 @@ class TableauDeBordControleur extends AbstractControleur
             if ($bdd->query($sql) === TRUE) {
 
                 $this->setProfilUpdate(true);
-                $niveau_etude_nom = $this->getNiveauEtudeNom($niveau_etude);
+                $niveau_etude_nom = NiveauEtude::getNiveauEtudeNom($niveau_etude);
                 $personne->setNiveauEtude($niveau_etude_nom);
                 $_SESSION["utilisateur"] = $personne;
             }
@@ -1414,40 +1246,6 @@ class TableauDeBordControleur extends AbstractControleur
 
         $this->getDb()->closeConn();
         $_SESSION["profilUpdated"] = true;
-    }
-
-    private function getNiveauEtudeNom($niveau_etude)
-    {
-        $niveau_etude_nom = '';
-        $bd = new BdConnexion();
-
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "SELECT nom
-                FROM NiveauEtude
-                WHERE id = $niveau_etude
-                LIMIT 8
-                ;";
-
-        $result = $bdd->query($sql);
-
-        if ($result->num_rows > 0) {
-            // output data of each row
-            while ($row = $result->fetch_assoc()) {
-                $niveau_etude_nom = $row['nom'];
-            }
-        } else {
-            echo "0 results";
-        }
-
-        $bdd->close();
-
-        return $niveau_etude_nom;
     }
 
     private function getImagePath()
@@ -1511,8 +1309,6 @@ class TableauDeBordControleur extends AbstractControleur
             }
         }
     }
-
-
 
 
 }
