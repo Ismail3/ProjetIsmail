@@ -32,42 +32,17 @@ session_start();
 
 <body cz-shortcut-listen="true">
 <?php
-require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControleur.php');
+ob_start();
 
-require_once(dirname(__FILE__) . '/../../widgets/enseignant/navbar.php');
-require_once(dirname(__FILE__) . '/../../widgets/enseignant/header.php');
-require_once(dirname(__FILE__) . '/../../widgets/topButton.php');
+$ctrl = new TableauDeBordControleur();
+
+$ctrl->displayNavBar();
+$ctrl->displayHeader();
+$ctrl->displayTopButton();
+$ctrl->displayEleves();
+$ctrl->displayFooter();
+
 ?>
-
-
-<!-- Team Section -->
-<div class="w3-container" style="padding:128px 16px" id="team">
-    <h3 class="w3-center">Vos élèves</h3>
-    <p class="w3-center w3-large">Dans ces rubriques vous pouvez contacter vos élèves ou visualer les cours ques vous
-        avez ou devez réaliser avec eux</p>
-    <div class="w3-row-padding w3-grayscale" style="margin-top:64px">
-        <?php
-
-        $controlleur = new TableauDeBordControleur();
-
-        $controlleur->displayEleves();
-
-        ?>
-    </div>
-
-    <?php
-    $controlleur->displayPage();
-
-    ?>
-
-</div>
-
-
-<!-- Footer -->
-<?php
-require_once(dirname(__FILE__) . '/../../widgets/footer.php');
-?>
-
 
 </body>
 </html>
