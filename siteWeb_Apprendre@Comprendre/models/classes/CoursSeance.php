@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/AbstractModel.php');
 class CoursSeance extends AbstractModel
 {
     /*
-     * Attributes
+     * Attributs
      */
     private $id;
     private $cours;
@@ -13,13 +13,16 @@ class CoursSeance extends AbstractModel
     private $etat;
     private $listInscrit;
 
-    /**
-     * CoursSeance constructor.
+    /*
+     * Constructeur
      */
     public function __construct()
     {
     }
 
+    /*
+     * Getter & Setter
+     */
     /**
      * @return int
      */
@@ -54,6 +57,10 @@ class CoursSeance extends AbstractModel
 
     /**
      * @return date
+     */
+
+    /**
+     * CoursSeance Methodes
      */
     public function getDateRealisation()
     {
@@ -122,6 +129,13 @@ class CoursSeance extends AbstractModel
         $this->listInscrit = $listInscrit;
     }
 
+    /*
+     * Méthodes
+     */
+
+    /**
+     *
+     */
     public static function getListeDesSeancesCoursProposition()
     {
         $bd = new BdConnexion();

@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/Personne.php');
 class Enseignant extends Personne
 {
     /*
-     * Attributes
+     * Attributs
      */
     private $id;
     private $typeEnseignant;

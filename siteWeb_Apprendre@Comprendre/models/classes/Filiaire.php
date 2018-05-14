@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/AbstractModel.php');
 class Filiaire extends AbstractModel
 {
     /*
-     * Attributes
+     * Attributs
      */
     private $id;
     private $nom;

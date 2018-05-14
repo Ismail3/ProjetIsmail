@@ -3,7 +3,7 @@
 class BdConnexion
 {
     /*
-     * Attributes
+     * Attributs
      */
     private $servername;
     private $username;

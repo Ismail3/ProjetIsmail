@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/../models/basesDeDonnées/BdConnexion.php');
 class AbstractControleur
 {
     /*
-     * Attributes
+     * Attributs
      */
 
     /**

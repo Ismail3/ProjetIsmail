@@ -5,7 +5,7 @@ class Personne extends AbstractModel
 {
 
     /*
-     * Attributes
+     * Attributs
      */
     public static $DEFAULT_IMAGE = "team0.jpg";
     protected $id_personne;

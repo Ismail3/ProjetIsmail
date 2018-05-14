@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/AbstractModel.php');
 class Message extends AbstractModel
 {
     /*
-     * Attributes
+     * Attributs
      */
     private $id;
     private $value;

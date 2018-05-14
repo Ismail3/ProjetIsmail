@@ -4,18 +4,42 @@ require_once(dirname(__FILE__) . '/AbstractModel.php');
 class Administrateur extends Personne
 {
     /*
-     * Attributes
+     * Attributs
      */
     private $id;
     public static $TABLE_NAME="Administrateur";
 
 
-    /**
-     * Administrateur constructor.
+    /*
+     * Constructeur
      */
     public function __construct()
     {
     }
+
+    /*
+     * Getter & Setter
+     */
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /*
+     * Méthodes
+     */
 
     /**
      * Cette fonction permet d'obtenir une personne à partir de son Id
@@ -41,20 +65,5 @@ class Administrateur extends Personne
     }
 
 
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
 
 }

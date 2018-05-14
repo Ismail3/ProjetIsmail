@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/AbstractModel.php');
 class Cours extends AbstractModel
 {
     /*
-     * Attributes
+     * Attributs
      */
     protected $id;
     protected $nom;

@@ -7,7 +7,7 @@ require_once(dirname(__FILE__) . '/../../models/classes/Cours.php');
 class TableauDeBordControleur extends ConnectedUserControleur
 {
     /*
-     * Attributes
+     * Attributs
      */
     private $profilUpdate = false;
 

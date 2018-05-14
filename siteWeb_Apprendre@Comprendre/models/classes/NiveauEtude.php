@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/AbstractModel.php');
 class NiveauEtude extends AbstractModel
 {
     /*
-     * Attributes
+     * Attributs
      */
     public static $TABLE_NAME="NiveauEtude";
     private $id;
