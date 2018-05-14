@@ -594,6 +594,22 @@ class TableauDeBordControleur extends ConnectedUserControleur
     }
 
     /**
+     * @param $niveauEtude
+     */
+    protected function getNiveauEtudeSelect($niveauEtude)
+    {
+        $widget = '<p><i class="fa fa-certificate fa-fw w3-margin-right w3-large w3-text-teal"></i>';
+        $widget = $widget . '<select style="height:30px;"class="form-control" id="inputEditProfilNiveauEtude" name="inputEditProfilNiveauEtude">';
+        $widget = $widget . $this->getOptitonNiveauEtude($niveauEtude);
+
+        $widget = $widget . '                   </select>';
+        $widget = $widget . '</p>
+';
+
+        return $widget;
+    }
+
+    /**
      * @param $enseignant
      * @return Enseignant
      */
@@ -1567,8 +1583,6 @@ class TableauDeBordControleur extends ConnectedUserControleur
         $this->displayListeSeanceCoursEnseignant();
         echo '</div>';
     }
-
-
 }
 
 ?>
