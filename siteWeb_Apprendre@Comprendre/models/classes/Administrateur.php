@@ -17,6 +17,11 @@ class Administrateur extends Personne
     {
     }
 
+    /**
+     * Cette fonction permet d'obtenir une personne à partir de son Id
+     * @param $id
+     * @return bool|mysqli_result
+     */
     public static function getUtilisateur($id)
     {
         $bd = new BdConnexion();
@@ -51,7 +56,5 @@ class Administrateur extends Personne
     {
         $this->id = $id;
     }
-
-
 
 }
