@@ -187,6 +187,42 @@ class ConnectedUserControleur extends AbstractControleur
         return $path;
     }
 
+    /**
+     * @param $niveauEtude
+     */
+    protected function getNiveauEtudeSelect($niveauEtude)
+    {
+        $widget = '<p><i class="fa fa-certificate fa-fw w3-margin-right w3-large w3-text-teal"></i>';
+        $widget = $widget . '<select style="height:30px;"class="form-control" id="inputEditProfilNiveauEtude" name="inputEditProfilNiveauEtude">';
+        $widget = $widget . $this->getOptitonNiveauEtude($niveauEtude);
+
+        $widget = $widget . '                   </select>';
+        $widget = $widget . '</p>
+';
+
+        return $widget;
+    }
+
+    protected function getOptitonNiveauEtude($niveauEtude)
+    {
+        $widget = '';
+
+        $result = NiveauEtude::getListeNiveauEtude();
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $widget = $widget . '<option ';
+                $widget = $widget . 'value="' . $row['id'];
+                $widget = $widget . '"">';
+                $widget = $widget . $row['nom'];
+                $widget = $widget . '</option>';
+            }
+        }
+
+        return $widget;
+    }
+
 }
 
 ?>

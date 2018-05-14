@@ -12,12 +12,24 @@ class CoursControleur extends ConnectedUserControleur
 
     private $inputNomCoursErr;
     private $inputDescriptionCoursErr;
+    private $inputTarifCoursErr;
+    private $inputMatiereCoursErr;
+    private $inputNiveauEtudeMinCoursErr;
+    private $inputNiveauEtudeMaxCoursErr;
 
     /*
      * Méthodes
      */
     public function displayNouveauCours()
     {
+
+        $nomCours = $_POST["inputNomCours"];
+        $descriptionCours = $_POST["inputDescriptionCours"];
+        $tarifCours = $_POST["inputTarifCours"];
+        $matiereCours = $_POST["inputMatiereCours"];
+        $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
+        $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
+
         $widget = '
     <div class="w3-container" style="padding:128px 16px">
     <h3 class="w3-center">Nouveau cours</h3>
@@ -29,14 +41,6 @@ class CoursControleur extends ConnectedUserControleur
                     <div class="w3-container w3-card w3-white w3-margin-bottom">
                         <h2 class="w3-text-grey w3-padding-16"><i
                                     class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Cours </h2>';
-        $email = $_POST['inputEmailInscription'];
-        $mot_de_passe = $_POST['inputPasswordInscription'];
-        $mot_de_passe_confirm = $_POST['inputPasswordConfirmInscription'];
-        $nom = $_POST['inputNomCours'];
-        $description = $_POST['inputDescriptionCours'];
-        $date_naissance = $_POST['inputDateNaisssanceInscription'];
-        $type_compte = $_POST['inputTypeCompteInscription'];
-
         $widget = $widget . '
         <!-- Promo Section - "We know design" -->
         <div id="creationCours" class="w3-container ">
@@ -51,7 +55,7 @@ class CoursControleur extends ConnectedUserControleur
                                 name="inputNomCours"
                                 id="inputNomCours" aria-describedby="nomHelp" 
                                 placeholder="Entrer le nom du cours"
-                                value="' . $nom . '">';
+                                value="' . $nomCours . '">';
         $widget = $widget . '<small style="color:red;" id="nomErr" name="nomErr" class="form-text">' . $this->inputNomCoursErr . '</small>';
         $widget = $widget . '
         </div>';
@@ -61,38 +65,45 @@ class CoursControleur extends ConnectedUserControleur
                                 <textarea type="text" rows="5" class="form-control" 
                                 name="inputDescriptionCours"
                                 id="inputDescriptionCours" aria-describedby="prénomHelp" placeholder="Entrer votre Prénom"
-                                value="' . $description . '">
+                                value="' . $descriptionCours . '">
                                 </textarea>';
         $widget = $widget . '<small style="color:red;" id="emailErr" name="prenomErr" class="form-text">' . $this->inputDescriptionCoursErr . '</small>';
         $widget = $widget . '
                             </div>';
         $widget = $widget . '                            <div class="form-group">
-                                <label for="inputDateNaisssanceInscription">Date de naissance</label>
-                                <input type="date" class="form-control" 
-                                name="inputDateNaisssanceInscription"
-                                id="inputDateNaisssanceInscription"
-                                value="' . $date_naissance . '">';
-        $widget = $widget . '<small style="color:red;" id="dateNaissanceErr" name="dateNaissanceErr" class="form-text">' . $this->inputDateNaisssanceInscriptionErr . '</small>';
+                                <label for="inputTarifCours">Tarif</label>
+                                <input type="number" class="form-control" 
+                                name="inputTarifCours"
+                                id="inputTarifCours"
+                                value="' . $tarifCours . '">';
+        $widget = $widget . '<small style="color:red;" id="dateNaissanceErr" name="dateNaissanceErr" class="form-text">' . $this->inputTarifCoursErr . '</small>';
         $widget = $widget . '
                             </div>';
         $widget = $widget . '                            <div class="form-group">
-                                <label for="inputEmailInscription">Email address</label>
-                                <input type="email" class="form-control" 
-                                name="inputEmailInscription"
-                                id="inputEmailInscription" aria-describedby="emailHelp" placeholder="Enter email"
-                                value="' . $email . '">';
-        $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputEmailInscriptionErr . '</small>';
-        $widget = $widget . '
-                                <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre email avec quelqu\'un d\'autre.</small>
-                            </div>';
+                                <label for="inputMatiereCours">Matière</label>
+                                <input type="number" class="form-control" 
+                                name="inputMatiereCours"
+                                id="inputMatiereCours" aria-describedby="niveauEtudeMinCoursHelp" placeholder="matière"
+                                value="' . $matiereCours . '">';
+        $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputMatiereCoursErr . '</small>';
+        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMinCours);
+        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMaxCours);
+        $widget = $widget . '                            </div>';        $widget = $widget . '                            <div class="form-group">
+                                <label for="inputNiveauEtudeMinCours">Niveaux etude min</label>
+                                <input type="number" class="form-control" 
+                                name="inputNiveauEtudeMinCours"
+                                id="inputNiveauEtudeMinCours" aria-describedby="niveauEtudeMinCoursHelp" placeholder="niveauEtudeMinCours"
+                                value="' . $niveauEtudeMinCours . '">';
+        $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputNiveauEtudeMinCoursErr . '</small>';
+        $widget = $widget . '                            </div>';
         $widget = $widget . '
                             <div class="form-group">
-                                <label for="inputPasswordInscription">Password</label>
-                                <input type="password" class="form-control" 
-                                name="inputPasswordInscription"
-                                id="inputPasswordInscription" placeholder="Password"
-                                value="' . $mot_de_passe . '">';
-        $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">' . $this->inputPasswordInscriptionErr . '</small>';
+                                <label for="inputNiveauEtudeMaxCours">Niveaux etude max</label>
+                                <input type="number" class="form-control" 
+                                name="inputNiveauEtudeMaxCours"
+                                id="inputNiveauEtudeMaxCours" placeholder="niveauEtudeMaxCours"
+                                value="' . $niveauEtudeMaxCours . '">';
+        $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">' . $this->inputNiveauEtudeMaxCoursErr . '</small>';
         $widget = $widget . '
                             </div>';
        $widget = $widget . '
