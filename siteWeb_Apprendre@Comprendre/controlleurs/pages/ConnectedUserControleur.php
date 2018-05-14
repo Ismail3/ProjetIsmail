@@ -18,14 +18,14 @@ class ConnectedUserControleur extends AbstractControleur
                     <div class="w3-bar w3-white w3-card" id="myNavbar">
                         <a onclick="openNav()"
                            class="w3-bar-item w3-button w3-wide">
-                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre Light_Alpha.png" alt="LOGOA@C"/>
                         </a>
                         <!-- Right-sided navbar links -->
                         <div class="w3-right w3-hide-small">
                             <form class="form-inline my-2 my-lg-0">
                                 <input class="form-control mr-sm-2" type="text" placeholder="Search">
                                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                                <a onclick="openNav2()" href="#home" class="w3-bar-item w3-button"><i
+                                <a onclick="openNav2()" href="#" class="w3-bar-item w3-button"><i
                                         class="fa fa-home"></i> Menu' . $this->getUserConnected()->getTypePersonne() . '</a>
                             </form>
                         </div>
@@ -187,21 +187,7 @@ class ConnectedUserControleur extends AbstractControleur
         return $path;
     }
 
-    /**
-     * @param $niveauEtude
-     */
-    protected function getNiveauEtudeSelect($niveauEtude)
-    {
-        $widget = '<p><i class="fa fa-certificate fa-fw w3-margin-right w3-large w3-text-teal"></i>';
-        $widget = $widget . '<select style="height:30px;"class="form-control" id="inputEditProfilNiveauEtude" name="inputEditProfilNiveauEtude">';
-        $widget = $widget . $this->getOptitonNiveauEtude($niveauEtude);
 
-        $widget = $widget . '                   </select>';
-        $widget = $widget . '</p>
-';
-
-        return $widget;
-    }
 
     protected function getOptitonNiveauEtude($niveauEtude)
     {

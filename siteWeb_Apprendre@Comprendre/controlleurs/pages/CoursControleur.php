@@ -86,23 +86,19 @@ class CoursControleur extends ConnectedUserControleur
                                 id="inputMatiereCours" aria-describedby="niveauEtudeMinCoursHelp" placeholder="matière"
                                 value="' . $matiereCours . '">';
         $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputMatiereCoursErr . '</small>';
-        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMinCours);
-        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMaxCours);
-        $widget = $widget . '                            </div>';        $widget = $widget . '                            <div class="form-group">
+        $widget = $widget . '                            </div>';
+        $widget = $widget . '                            <div class="form-group">
                                 <label for="inputNiveauEtudeMinCours">Niveaux etude min</label>
-                                <input type="number" class="form-control" 
-                                name="inputNiveauEtudeMinCours"
-                                id="inputNiveauEtudeMinCours" aria-describedby="niveauEtudeMinCoursHelp" placeholder="niveauEtudeMinCours"
-                                value="' . $niveauEtudeMinCours . '">';
+                                ';
+        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMinCours,"inputNiveauEtudeMinCours");
+
         $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputNiveauEtudeMinCoursErr . '</small>';
         $widget = $widget . '                            </div>';
         $widget = $widget . '
                             <div class="form-group">
                                 <label for="inputNiveauEtudeMaxCours">Niveaux etude max</label>
-                                <input type="number" class="form-control" 
-                                name="inputNiveauEtudeMaxCours"
-                                id="inputNiveauEtudeMaxCours" placeholder="niveauEtudeMaxCours"
-                                value="' . $niveauEtudeMaxCours . '">';
+                                ';
+        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMinCours,"inputNiveauEtudeMaxCours");
         $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">' . $this->inputNiveauEtudeMaxCoursErr . '</small>';
         $widget = $widget . '
                             </div>';
@@ -123,6 +119,20 @@ class CoursControleur extends ConnectedUserControleur
 
         echo $widget;
 
+    }
+
+    /**
+     * @param $niveauEtude
+     */
+    private function getNiveauEtudeSelect($niveauEtude,$idInput)
+    {
+        $widget = '';
+        $widget = $widget . '<select style="height:30px;"class="form-control" id="i'.$idInput.'" name="'.$idInput.'">';
+        $widget = $widget . $this->getOptitonNiveauEtude($niveauEtude);
+
+        $widget = $widget . '                   </select>';
+
+        return $widget;
     }
 }
 
