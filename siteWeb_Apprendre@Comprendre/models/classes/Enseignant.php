@@ -107,11 +107,12 @@ class Enseignant extends Personne
             die("Connection failed: " . $bdd->connect_error);
         }
 
-        $sql = "SELECT E.tableauDeBord, M.nom as matiere, NE.nom as niveau_etude, NE.id as id_niveau_etude
+        $sql = "SELECT E.enseignant, M.nom as matiere, NE.nom as niveau_etude, NE.id as id_niveau_etude
                 FROM Enseigner E, Matiere M, NiveauEtude NE
-                WHERE E.tableauDeBord = $idEnseignant and E.matiere = M.id and E.niveau_etude = NE.id
+                WHERE E.enseignant = $idEnseignant and E.matiere = M.id and E.niveau_etude = NE.id
                 ORDER BY matiere
                 ;";
+
         $result = $bdd->query($sql);
         $bdd->close();
 

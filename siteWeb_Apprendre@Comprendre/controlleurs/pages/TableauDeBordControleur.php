@@ -1,14 +1,10 @@
 <?php
-require_once(dirname(__FILE__) . '/../../models/basesDeDonnées/BdConnexion.php');
-require_once(dirname(__FILE__) . '/../AbstractControleur.php');
-require_once(dirname(__FILE__) . '/../../models/classes/Personne.php');
-require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
-require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
-require_once(dirname(__FILE__) . '/../../models/classes/Administrateur.php');
+require_once(dirname(__FILE__) . '/ConnectedUserControleur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/NiveauEtude.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Ressource.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Cours.php');
 
-class TableauDeBordControleur extends AbstractControleur
+class TableauDeBordControleur extends ConnectedUserControleur
 {
     /*
      * Attributes
@@ -29,180 +25,6 @@ class TableauDeBordControleur extends AbstractControleur
     public function setProfilUpdate($profilUpdate)
     {
         $this->profilUpdate = $profilUpdate;
-    }
-
-
-    public function displayNavBar()
-    {
-//        session_start();
-        if ($this->isUserConnected()) {
-
-            if ($this->isEleve()) {
-                echo '<!-- Navbar (sit on top) -->
-                <div class="w3-top">
-                    <div class="w3-bar w3-white w3-card" id="myNavbar">
-                        <a onclick="openNav()"
-                           class="w3-bar-item w3-button w3-wide">
-                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
-                        </a>
-                        <!-- Right-sided navbar links -->
-                        <div class="w3-right w3-hide-small">
-                            <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                                <a onclick="openNav2()" href="#home" class="w3-bar-item w3-button"><i
-                                        class="fa fa-home"></i> Menu' . $this->getUserConnected()->getTypePersonne() . '</a>
-                            </form>
-                        </div>
-                        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
-                
-                        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
-                           onclick="w3_open()">
-                            <i class="fa fa-bars"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div id="sideNavLeft" class="sidenav-left">
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()">&times;</a>
-                    <a href="tableauDeBord.php"><img class="profil-picture" src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '"></a>
-                    <a href="tableauDeBordProfil.php">Profil</a>
-                    <a href="tableauDeBordMessagerie.php">Messagerie</a>
-                    <a href="tableauDeBordEleves.php">Élèves</a>
-                    <a href="tableauDeBordRessources.php">Ressources</a>
-                </div>
-                
-                <div id="sideNavRight" class="sidenav-right">
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeNavRight()">&times;</a>
-                    <a href="../../../index.php#home">Deconnexion</a>
-                </div>
-                
-                <!-- Sidebar on small screens when clicking the menu icon -->
-                <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none"
-                     id="mySidebar">
-                    <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
-                    <a href="#team" onclick="w3_close()"
-                       class="w3-bar-item w3-button">Tableau de bord</a>
-                </nav>
-                ';
-            } else if ($this->isEnseignant()) {
-                echo '<!-- Navbar (sit on top) -->
-                <div class="w3-top">
-                    <div class="w3-bar w3-white w3-card" id="myNavbar">
-                        <a onclick="openNav()"
-                           class="w3-bar-item w3-button w3-wide">
-                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
-                        </a>
-                        <!-- Right-sided navbar links -->
-                        <div class="w3-right w3-hide-small">
-                            <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                                <a onclick="openNav2()" href="#home" class="w3-bar-item w3-button"><i
-                                        class="fa fa-home"></i> Menu' . $this->getUserConnected()->getTypePersonne() . '</a>
-                            </form>
-                        </div>
-                        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
-                
-                        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
-                           onclick="w3_open()">
-                            <i class="fa fa-bars"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div id="sideNavLeft" class="sidenav-left">
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()">&times;</a>
-                    <a href="tableauDeBord.php"><img class="profil-picture" src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '"></a>
-                    <a href="tableauDeBordProfil.php">Profil</a>
-                    <a href="tableauDeBordMessagerie.php">Messagerie</a>
-                    <a href="tableauDeBordEleves.php">Élèves</a>
-                    <a href="tableauDeBordRessources.php">Ressources</a>
-                </div>
-                
-                <div id="sideNavRight" class="sidenav-right">
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeNavRight()">&times;</a>
-                    <a href="../../../index.php#home">Deconnexion</a>
-                </div>
-                
-                <!-- Sidebar on small screens when clicking the menu icon -->
-                <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none"
-                     id="mySidebar">
-                    <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
-                    <a href="#team" onclick="w3_close()"
-                       class="w3-bar-item w3-button">Tableau de bord</a>
-                </nav>
-                ';
-            } else if ($this->isAdministrateur()) {
-                echo '<!-- Navbar (sit on top) -->
-                <div class="w3-top">
-                    <div class="w3-bar w3-white w3-card" id="myNavbar">
-                        <a onclick="openNav()"
-                           class="w3-bar-item w3-button w3-wide">
-                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
-                        </a>
-                        <!-- Right-sided navbar links -->
-                        <div class="w3-right w3-hide-small">
-                            <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                                <a onclick="openNav2()" href="#home" class="w3-bar-item w3-button"><i
-                                        class="fa fa-home"></i> Menu' . $this->getUserConnected()->getTypePersonne() . '</a>
-                            </form>
-                        </div>
-                        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
-                
-                        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
-                           onclick="w3_open()">
-                            <i class="fa fa-bars"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div id="sideNavLeft" class="sidenav-left">
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()">&times;</a>
-                    <a href="tableauDeBord.php"><img class="profil-picture" src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '"></a>
-                    <a href="tableauDeBordProfil.php">Profil</a>
-                    <a href="tableauDeBordEleves.php">Élèves</a>
-                    <a href="tableauDeBordEleves.php">Enseignants</a>
-                    <a href="tableauDeBordEleves.php">Cours</a>
-                    <a href="tableauDeBordEleves.php">SeanceCours</a>
-                    <a href="tableauDeBordRessources.php">Ressources</a>
-                </div>
-                
-                <div id="sideNavRight" class="sidenav-right">
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeNavRight()">&times;</a>
-                    <a href="../../../index.php#home">Deconnexion</a>
-                </div>
-                
-                <!-- Sidebar on small screens when clicking the menu icon -->
-                <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none"
-                     id="mySidebar">
-                    <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
-                    <a href="#team" onclick="w3_close()"
-                       class="w3-bar-item w3-button">Tableau de bord</a>
-                </nav>
-                ';
-            }
-        } else {
-            //Rediriger vers la page d'accueil
-        }
-    }
-
-    public function displayHeader()
-    {
-        if ($this->isUserConnected()) {
-
-            if ($this->isEleve()) {
-                echo '<header class="bgimg-2 w3-display-container w3-grayscale-min" id="top"> </header>';
-            } else if ($this->isEnseignant()) {
-                echo '<header class="bgimg-1 w3-display-container w3-grayscale-min" id="top"> </header>';
-            } else if ($this->isAdministrateur()) {
-                echo '<header class="bgimg-1 w3-display-container w3-grayscale-min" id="top"> </header>';
-            }
-        } else {
-            //Rediriger vers la page d'accueil
-        }
     }
 
     public function editProfilSave()
@@ -312,6 +134,65 @@ class TableauDeBordControleur extends AbstractControleur
         }
         echo "</div>";
         echo "</div>";
+
+    }
+
+    function displayListeCoursEnseignant()
+    {
+        $widgets = '
+    <h3 class="w3-center">Votre liste de cours</h3>
+    <p class="w3-left w3-large">Dans ces rubriques vous pouvez créer vos cours ou visualer les cours ques vous
+        avez ou devez réaliser avec vous élèves</p>
+    <div class="" style="margin-top:16px">';
+
+        $enseignant = $this->getUserConnected();
+
+        //Liste des cours crées
+        $widgets = $widgets . '
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <h2 class="w3-text-grey w3-padding-16"><i
+                                    class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Cours </h2>';
+        $widgets = $widgets . $this->getListeDesCours($enseignant);
+        $widgets = $widgets . '
+                    </div>';
+
+
+        echo $widgets;
+
+    }
+
+    function displayListeSeanceCoursEnseignant()
+    {
+        $widgets = '
+    <h3 class="w3-center">Votre liste de séances de cours</h3>
+    <p class="w3-left w3-large">Dans ces rubriques vous pouvez créer vos cours ou visualer les cours ques vous
+        avez ou devez réaliser avec vous élèves</p>
+    <div class="" style="margin-top:16px">';
+
+        $enseignant = $this->getUserConnected();
+
+//        Liste des cours crées
+
+        //Liste des séance de cours inscrit
+        $widgets = $widgets . '
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <h2 class="w3-text-grey w3-padding-16"><i
+                                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Séances programmés (Demande)</h2>';
+        $widgets = $widgets . $this->getListeDesSeancesCoursDemande($enseignant);
+        $widgets = $widgets . '
+                    </div>';
+
+        //Liste des séance de cours crées
+        $widgets = $widgets . '
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <h2 class="w3-text-grey w3-padding-16"><i
+                                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Séances programmés (Proposition)</h2>';
+        $widgets = $widgets . $this->getListeDesSeancesCoursProposition($enseignant);
+        $widgets = $widgets . '
+                    </div>
+        
+                    ';
+        echo $widgets;
 
     }
 
@@ -826,7 +707,12 @@ class TableauDeBordControleur extends AbstractControleur
         return $widget;
     }
 
-    private function displayCours($row)
+//    private function displayCours($id, $nom, $description, $tarif, $date_creation, $id_auteur, $matiere, $ niveau_etude_min,$niveau_etude_max,$ matiere_nom,$niveau_min_nom,$niveau_max_nom){
+//
+//    }
+
+    private
+    function displayCours($row)
     {
         $id = $row['id'];
         $nom = $row['nom'];
@@ -874,7 +760,8 @@ class TableauDeBordControleur extends AbstractControleur
      * @param $enseignant
      * @return string
      */
-    private function getListeDesSeancesCoursProposition($enseignant)
+    private
+    function getListeDesSeancesCoursProposition($enseignant)
     {
         $widgets = '';
 
@@ -893,7 +780,8 @@ class TableauDeBordControleur extends AbstractControleur
         return $widgets;
     }
 
-    private function getListeDesSeancesCoursPropositionAdmin()
+    private
+    function getListeDesSeancesCoursPropositionAdmin()
     {
         $widgets = '';
 
@@ -911,7 +799,8 @@ class TableauDeBordControleur extends AbstractControleur
         return $widgets;
     }
 
-    private function displaySeanceCoursProposition($row)
+    private
+    function displaySeanceCoursProposition($row)
     {
         $id = $row['id'];
         $nom = $row['nom'];
@@ -977,7 +866,8 @@ class TableauDeBordControleur extends AbstractControleur
         return $widget;
     }
 
-    private function getListeDesSeancesCoursDemande($enseignant)
+    private
+    function getListeDesSeancesCoursDemande($enseignant)
     {
         $widgets = '';
 
@@ -995,7 +885,8 @@ class TableauDeBordControleur extends AbstractControleur
         return $widgets;
     }
 
-    private function getListeDesSeancesCoursDemandeAdmin()
+    private
+    function getListeDesSeancesCoursDemandeAdmin()
     {
         $widgets = '';
 
@@ -1015,7 +906,8 @@ class TableauDeBordControleur extends AbstractControleur
         return $widgets;
     }
 
-    private function displaySeanceCoursDemande($row)
+    private
+    function displaySeanceCoursDemande($row)
     {
         $id = $row['id'];
         $nom = $row['nom'];
@@ -1081,7 +973,8 @@ class TableauDeBordControleur extends AbstractControleur
         return $widget;
     }
 
-    private function displayEleveProfilEdit()
+    private
+    function displayEleveProfilEdit()
     {
         $eleve = $this->getUserConnected();
         $widgets = '<!-- Header with full-height image -->
@@ -1121,7 +1014,8 @@ class TableauDeBordControleur extends AbstractControleur
         return $widgets;
     }
 
-    private function displayEnseignantProfilEdit()
+    private
+    function displayEnseignantProfilEdit()
     {
         $enseignant = $this->getUserConnected();
         $widgets = '<!-- Header with full-height image -->
@@ -1162,7 +1056,8 @@ class TableauDeBordControleur extends AbstractControleur
         return $widgets;
     }
 
-    private function updateProfil($mot_de_passe)
+    private
+    function updateProfil($mot_de_passe)
     {
         $personne = $this->getUserConnected();
 
@@ -1241,13 +1136,8 @@ class TableauDeBordControleur extends AbstractControleur
         $_SESSION["profilUpdated"] = true;
     }
 
-    private function getImagePath()
-    {
-        $path = "../../../ressources/images/";
-        return $path;
-    }
-
-    private function getUploadImage()
+    private
+    function getUploadImage()
     {
         $files = $_FILES;
         $target_dir = $this->getImagePath();
@@ -1303,7 +1193,8 @@ class TableauDeBordControleur extends AbstractControleur
         }
     }
 
-    public function displayMessages()
+    public
+    function displayMessages()
     {
         echo '<div class="row">
 
@@ -1455,7 +1346,8 @@ class TableauDeBordControleur extends AbstractControleur
 </div>';
     }
 
-    public function displayMessagerie()
+    public
+    function displayMessagerie()
     {
         echo '<div class="w3-container w3-row w3-center w3-dark-grey w3-padding-64">
     <div class="w3-quarter">
@@ -1607,7 +1499,8 @@ class TableauDeBordControleur extends AbstractControleur
 </div>';
     }
 
-    public function displayRessources()
+    public
+    function displayRessources()
     {
         echo '<div class="w3-container" style="padding:128px 16px" id="team">
     <h3 class="w3-center">Ressources pédagogiques</h3>
@@ -1617,7 +1510,8 @@ class TableauDeBordControleur extends AbstractControleur
         echo '</div>';
     }
 
-    public function displayRessource($nom, $type, $image)
+    public
+    function displayRessource($nom, $type, $image)
     {
         $eleve = '<div class="w3-col l3 m6 w3-margin-bottom">
             <div class="w3-card">
@@ -1647,9 +1541,10 @@ class TableauDeBordControleur extends AbstractControleur
         echo $eleve;
     }
 
-    public function listRessources()
+    public
+    function listRessources()
     {
-        $id=1;
+        $id = 1;
         $listRessources = array();
         $googleDrive = new Ressource($id++, "Google Drive", "Google Drive", "logo_google_drive_01.png", "Travaux collaboratifs");
         array_puSH($listRessources, $googleDrive);
@@ -1683,14 +1578,32 @@ class TableauDeBordControleur extends AbstractControleur
                 $col++;
             }
             echo $this->displayRessource($listRessources[$x]->getNom(), $listRessources[$x]->getTypeRessource(), $listRessources[$x]->getImage());
-            if ($col == 4 || $x == count($listRessources)-1) {
+            if ($col == 4 || $x == count($listRessources) - 1) {
                 //Nouvelle ligne
                 echo '</div>';
-                $col=0;
+                $col = 0;
             }
         }
     }
 
+    public function displayAddCoursEnseignant()
+    {
+        $widget = '<a class="w3-button w3-light-grey w3-block" href="../cours/creation.php">
+                      <i class="fa fa-suitcase"></i> Créer un cours
+                    </a>';
+        echo $widget;
+    }
+
+    public function displayManageCoursEnseignant()
+    {
+        echo '<div class="w3-container" style="padding:128px 16px">';
+        $this->displayAddCoursEnseignant();
+        echo '<br/>';
+        $this->displayListeCoursEnseignant();
+        echo '<br/>';
+        $this->displayListeSeanceCoursEnseignant();
+        echo '</div>';
+    }
 
 
 }
