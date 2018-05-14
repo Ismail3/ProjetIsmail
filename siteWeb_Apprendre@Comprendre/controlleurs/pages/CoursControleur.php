@@ -80,25 +80,21 @@ class CoursControleur extends ConnectedUserControleur
         $widget = $widget . '
                             </div>';
         $widget = $widget . '                            <div class="form-group">
-                                <label for="inputMatiereCours">Matière</label>
-                                <input type="number" class="form-control" 
-                                name="inputMatiereCours"
-                                id="inputMatiereCours" aria-describedby="niveauEtudeMinCoursHelp" placeholder="matière"
-                                value="' . $matiereCours . '">';
+                                <label for="inputMatiereCours">Matière</label>';
+        $widget = $widget . $this->getMatiereSelect($matiereCours,"inputMatiereCours");
         $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputMatiereCoursErr . '</small>';
         $widget = $widget . '                            </div>';
         $widget = $widget . '                            <div class="form-group">
                                 <label for="inputNiveauEtudeMinCours">Niveaux etude min</label>
                                 ';
         $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMinCours,"inputNiveauEtudeMinCours");
-
         $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputNiveauEtudeMinCoursErr . '</small>';
         $widget = $widget . '                            </div>';
         $widget = $widget . '
                             <div class="form-group">
                                 <label for="inputNiveauEtudeMaxCours">Niveaux etude max</label>
                                 ';
-        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMinCours,"inputNiveauEtudeMaxCours");
+        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMaxCours,"inputNiveauEtudeMaxCours");
         $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">' . $this->inputNiveauEtudeMaxCoursErr . '</small>';
         $widget = $widget . '
                             </div>';
@@ -106,7 +102,7 @@ class CoursControleur extends ConnectedUserControleur
                             </div>';
         $widget = $widget . '        
                             </fieldset>
-                                <button name="btnInscriptionUtilisateur" id="btnInscriptionUtilisateur" value="btnInscriptionUtilisateur" type="submit" class="btn btn-primary" value = "Envoyer">Submit</button>
+                                <button name="btnNouveauCours" id="btnNouveauCours" value="btnNouveauCours" type="submit" class="btn btn-primary" value = "Envoyer">Submit</button>
                         </fieldset>
                     </form>
             </div>
@@ -127,13 +123,32 @@ class CoursControleur extends ConnectedUserControleur
     private function getNiveauEtudeSelect($niveauEtude,$idInput)
     {
         $widget = '';
-        $widget = $widget . '<select style="height:30px;"class="form-control" id="i'.$idInput.'" name="'.$idInput.'">';
-        $widget = $widget . $this->getOptitonNiveauEtude($niveauEtude);
-
-        $widget = $widget . '                   </select>';
+        $widget = $widget . $this->getHtmlSelectHead($idInput);
+        $widget = $widget . $this->getOptitonNiveauEtude();
+        $widget = $widget . '</select>';
 
         return $widget;
     }
+
+    /**
+     * @param $matière
+     */
+    private function getMatiereSelect($matière,$idInput)
+    {
+        $widget = '';
+        $widget = $widget . $this->getHtmlSelectHead($idInput);
+        $widget = $widget . $this->getOptitonMatiere();
+        $widget = $widget . '</select>';
+
+        return $widget;
+    }
+
+    private function getHtmlSelectHead($idInput)
+    {
+        return '<select style="height:30px;"class="form-control" id="'.$idInput.'" name="'.$idInput.'">';;
+    }
+
+
 }
 
 ?>

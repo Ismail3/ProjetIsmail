@@ -6,6 +6,7 @@ class Matiere extends AbstractModel
     /*
      * Attributs
      */
+    public static $TABLE_NAME="Matiere";
     private $id;
     private $nom;
 
@@ -49,6 +50,28 @@ class Matiere extends AbstractModel
     public function setNom($nom)
     {
         $this->nom = $nom;
+    }
+
+    /*
+     * Méthodes
+     */
+
+    public static function getListeMatiere()
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select * from " . Matiere::$TABLE_NAME . ";";
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+        return $result;
     }
 
 

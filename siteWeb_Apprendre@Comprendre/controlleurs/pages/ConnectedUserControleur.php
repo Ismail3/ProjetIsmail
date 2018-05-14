@@ -1,5 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/../AbstractControleur.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Matiere.php');
+require_once(dirname(__FILE__) . '/../../models/classes/NiveauEtude.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Administrateur.php');
@@ -189,11 +191,51 @@ class ConnectedUserControleur extends AbstractControleur
 
 
 
-    protected function getOptitonNiveauEtude($niveauEtude)
+    protected function getOptitonNiveauEtude()
     {
         $widget = '';
 
         $result = NiveauEtude::getListeNiveauEtude();
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $widget = $widget . '<option ';
+                $widget = $widget . 'value="' . $row['id'];
+                $widget = $widget . '"">';
+                $widget = $widget . $row['nom'];
+                $widget = $widget . '</option>';
+            }
+        }
+
+        return $widget;
+    }
+
+    protected function getOptitonMatiere()
+    {
+        $widget = '';
+
+        $result = Matiere::getListeMatiere();
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $widget = $widget . '<option ';
+                $widget = $widget . 'value="' . $row['id'];
+                $widget = $widget . '"">';
+                $widget = $widget . $row['nom'];
+                $widget = $widget . '</option>';
+            }
+        }
+
+        return $widget;
+    }
+
+    protected function getListeMatiere($matiere)
+    {
+        $widget = '';
+
+        $result = Matiere::getListeMatiere();
 
         if ($result->num_rows > 0) {
             // output data of each row

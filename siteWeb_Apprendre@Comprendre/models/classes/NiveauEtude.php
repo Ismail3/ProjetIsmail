@@ -18,6 +18,10 @@ class NiveauEtude extends AbstractModel
     {
     }
 
+    /*
+     * Méthodes
+     */
+
     public static function getListeNiveauEtude()
     {
         $bd = new BdConnexion();
