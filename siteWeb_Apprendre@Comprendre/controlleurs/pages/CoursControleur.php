@@ -20,6 +20,41 @@ class CoursControleur extends ConnectedUserControleur
     /*
      * Méthodes
      */
+    /**
+     * @param $niveauEtude
+     */
+    private function getNiveauEtudeSelect($niveauEtude, $idInput)
+    {
+        $widget = '';
+        $widget = $widget . $this->getHtmlSelectHead($idInput);
+        $widget = $widget . $this->getOptitonNiveauEtude();
+        $widget = $widget . '</select>';
+
+        return $widget;
+    }
+
+    /**
+     * @param $matière
+     */
+    private function getMatiereSelect($matière, $idInput)
+    {
+        $widget = '';
+        $widget = $widget . $this->getHtmlSelectHead($idInput);
+        $widget = $widget . $this->getOptitonMatiere();
+        $widget = $widget . '</select>';
+
+        return $widget;
+    }
+
+    /**
+     * @param $idInput
+     * @return string
+     */
+    private function getHtmlSelectHead($idInput)
+    {
+        return '<select style="height:30px;"class="form-control" id="' . $idInput . '" name="' . $idInput . '">';;
+    }
+
     public function displayNouveauCours()
     {
 
@@ -81,24 +116,24 @@ class CoursControleur extends ConnectedUserControleur
                             </div>';
         $widget = $widget . '                            <div class="form-group">
                                 <label for="inputMatiereCours">Matière</label>';
-        $widget = $widget . $this->getMatiereSelect($matiereCours,"inputMatiereCours");
+        $widget = $widget . $this->getMatiereSelect($matiereCours, "inputMatiereCours");
         $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputMatiereCoursErr . '</small>';
         $widget = $widget . '                            </div>';
         $widget = $widget . '                            <div class="form-group">
                                 <label for="inputNiveauEtudeMinCours">Niveaux etude min</label>
                                 ';
-        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMinCours,"inputNiveauEtudeMinCours");
+        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMinCours, "inputNiveauEtudeMinCours");
         $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputNiveauEtudeMinCoursErr . '</small>';
         $widget = $widget . '                            </div>';
         $widget = $widget . '
                             <div class="form-group">
                                 <label for="inputNiveauEtudeMaxCours">Niveaux etude max</label>
                                 ';
-        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMaxCours,"inputNiveauEtudeMaxCours");
+        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMaxCours, "inputNiveauEtudeMaxCours");
         $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">' . $this->inputNiveauEtudeMaxCoursErr . '</small>';
         $widget = $widget . '
                             </div>';
-       $widget = $widget . '
+        $widget = $widget . '
                             </div>';
         $widget = $widget . '        
                             </fieldset>
@@ -117,38 +152,84 @@ class CoursControleur extends ConnectedUserControleur
 
     }
 
-    /**
-     * @param $niveauEtude
-     */
-    private function getNiveauEtudeSelect($niveauEtude,$idInput)
+    public function nouveauCours()
     {
-        $widget = '';
-        $widget = $widget . $this->getHtmlSelectHead($idInput);
-        $widget = $widget . $this->getOptitonNiveauEtude();
-        $widget = $widget . '</select>';
+        if (isset($_POST['btnNouveauCours'])) {
+            if ($this->formulaireNouveauCoursComplet()) {
 
-        return $widget;
+                $enseignant = $this->getUserConnected();
+
+                $nomCours = $_POST["inputNomCours"];
+                $descriptionCours = $_POST["inputDescriptionCours"];
+                $tarifCours = $_POST["inputTarifCours"];
+                $matiereCours = $_POST["inputMatiereCours"];
+                $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
+                $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
+
+                $id_cours = Cours::nouveauCours($enseignant,$nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours);
+
+                if ($id_cours != -1) {
+                    header('Location: http://apprendreacomprendre.fr/siteWeb_Apprendre@Comprendre/templates/pages/tableauDeBord/tableauDeBordCours.php');
+                    exit();
+                    echo "Nouveau cours";
+                } else {
+                    echo "Vous êtes actuellement déconnecté";
+                }
+            }
+        }
     }
 
-    /**
-     * @param $matière
-     */
-    private function getMatiereSelect($matière,$idInput)
+    private function formulaireNouveauCoursComplet()
     {
-        $widget = '';
-        $widget = $widget . $this->getHtmlSelectHead($idInput);
-        $widget = $widget . $this->getOptitonMatiere();
-        $widget = $widget . '</select>';
+        $formulaire_complet = true;
 
-        return $widget;
+        $nomCours = $_POST["inputNomCours"];
+        $descriptionCours = $_POST["inputDescriptionCours"];
+        $tarifCours = $_POST["inputTarifCours"];
+        $matiereCours = $_POST["inputMatiereCours"];
+        $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
+        $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
+
+
+        if (empty($nomCours)) {
+            $this->inputNomCoursErr = $this->inputNomCoursErr . "email manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputNomCoursErr = "";
+        }
+        if (empty($descriptionCours)) {
+            $this->inputDescriptionCoursErr = $this->inputDescriptionCoursErr . "mot_de_passe manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputDescriptionCoursErr = "";
+        }
+        if (empty($tarifCours)) {
+            $this->inputTarifCoursErr = $this->inputTarifCoursErr . "mot_de_passe_confirm manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputTarifCoursErr = "";
+        }
+        if (empty($matiereCours)) {
+            $this->inputMatiereCoursErr = $this->inputMatiereCoursErr . "nom manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputMatiereCoursErr = "";
+        }
+        if (empty($niveauEtudeMinCours)) {
+            $this->inputNiveauEtudeMinCoursErr = $this->inputNiveauEtudeMinCoursErr . "prenom manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputNiveauEtudeMinCoursErr = "";
+        }
+        if (empty($niveauEtudeMaxCours)) {
+            $this->inputNiveauEtudeMaxCoursErr = $this->inputNiveauEtudeMaxCoursErr . "date_naissance manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputNiveauEtudeMaxCoursErr = "";
+        }
+
+        return $formulaire_complet;
     }
-
-    private function getHtmlSelectHead($idInput)
-    {
-        return '<select style="height:30px;"class="form-control" id="'.$idInput.'" name="'.$idInput.'">';;
-    }
-
-
 }
 
 ?>

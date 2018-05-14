@@ -40,6 +40,7 @@ $ctrl->displayNavBar();
 $ctrl->displayHeader();
 $ctrl->displayTopButton();
 $ctrl->displayNouveauCours();
+$ctrl->nouveauCours();
 $ctrl->displayFooter();
 ?>
 </body>

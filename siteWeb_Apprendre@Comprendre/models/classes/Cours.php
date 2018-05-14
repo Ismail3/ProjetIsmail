@@ -15,6 +15,7 @@ class Cours extends AbstractModel
     protected $typeAuteur;
     protected $matiere;
     protected $niveauEtude;
+    public static $TABLE_NAME = "Cours";
 
     /**
      * Cours constructor.
@@ -23,6 +24,28 @@ class Cours extends AbstractModel
     {
     }
 
+    public static function nouveauCours($enseignant,$nom, $description, $tarif, $matiere, $niveauEtudeMin, $niveauEtudeMax)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $id_cours = -1;
+        $id_auteur = $enseignant->getIdPersonne();
+
+        $sql = "INSERT INTO " . Cours::$TABLE_NAME . " (nom, description, tarif, id_auteur, matiere, niveau_etude_min, niveau_etude_max)
+                VALUES ('$nom','$description',$tarif,$id_auteur,$matiere,$niveauEtudeMin,$niveauEtudeMax)
+                ;";
+
+        echo $sql;
+
+        if ($bdd->query($sql) === TRUE) {
+            $id_cours = $bdd->insert_id;
+        }
+        $bdd->close();
+        return $id_cours;
+    }
 
     /**
      * @return int

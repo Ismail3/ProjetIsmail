@@ -55,7 +55,7 @@ class Personne extends AbstractModel
 
         $id_personne = -1;
 
-        $sql = "INSERT INTO Personne (nom, prenom, email, date_naissance, mot_de_passe, type_personne,image)
+        $sql = "INSERT INTO " . Personne::$TABLE_NAME . " (nom, prenom, email, date_naissance, mot_de_passe, type_personne,image)
                 VALUES ('$nom','$prenom','$email','$date_naissance','$mot_de_passe','$type_compte','$image')
                 ;";
 

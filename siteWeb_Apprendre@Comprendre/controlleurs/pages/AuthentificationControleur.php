@@ -140,7 +140,7 @@ class AuthentificationControleur extends AbstractControleur
                     $password = "password";
                 }
 
-                $result = Personne::connexion($email,$password);
+                $result = Personne::connexion($email, $password);
 
                 if ($result->num_rows > 0) {
 //                    session_start();
@@ -153,8 +153,6 @@ class AuthentificationControleur extends AbstractControleur
                 } else {
                     echo "Vous êtes actuellement déconnecté";
                 }
-
-                //$this->getDb()->closeConn();
             }
         }
     }

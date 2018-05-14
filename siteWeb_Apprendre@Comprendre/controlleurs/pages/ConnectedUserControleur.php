@@ -6,7 +6,7 @@ require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Administrateur.php');
 
-class ConnectedUserControleur extends AbstractControleur
+class connectedusercontroleur extends AbstractControleur
 {
 
     public function displayNavBar()
