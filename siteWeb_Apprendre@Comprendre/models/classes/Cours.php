@@ -47,6 +47,26 @@ class Cours extends AbstractModel
         return $id_cours;
     }
 
+    public static function publierCours($id, $en_ligne)
+    {
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "UPDATE Cours
+                SET en_ligne='$en_ligne'
+                WHERE id=$id
+                ;";
+
+        echo $sql;
+
+        $query = $bdd->query($sql);
+        $bdd->close();
+        return $query;
+    }
+
     /**
      * @return int
      */

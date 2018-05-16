@@ -690,8 +690,40 @@ class TableauDeBordControleur extends ConnectedUserControleur
 //
 //    }
 
-    private
-    function displayCours($row)
+    /**
+     * @param $id
+     * @return bool
+     */
+    private function testBtnPress($id)
+    {
+        return isset($_POST['btnEnLigneCours' . $id]);
+    }
+
+    /**
+     *
+     */
+    public function publierCours()
+    {
+        $listeCours = $this->getUserConnected()->getListeDesCours();
+        if ($listeCours->num_rows > 0) {
+            // output data of each row
+            while ($row = $listeCours->fetch_assoc()) {
+                $id = $row['id'];
+                $en_ligne = ($row['en_ligne'] + 1) % 2;
+                if ($this->testBtnPress($id)) {
+                    Cours::publierCours($id, $en_ligne);
+                }
+            }
+        } else {
+            echo "<br> getListeDesCours : 0 results";
+        }
+    }
+
+    /**
+     * @param $row
+     * @return string
+     */
+    private function displayCours($row)
     {
         $id = $row['id'];
         $nom = $row['nom'];
@@ -702,6 +734,7 @@ class TableauDeBordControleur extends ConnectedUserControleur
         $matiere_nom = $row['matiere_nom'];
         $niveau_min_nom = $row['niveau_min_nom'];
         $niveau_max_nom = $row['niveau_max_nom'];
+        $en_ligne = $row['en_ligne'];
         $widget = '<div class="w3-container">
                     <table style="width: 100%">
                         <tr>
@@ -709,7 +742,19 @@ class TableauDeBordControleur extends ConnectedUserControleur
                             <h4 class="w3-opacity"><b>' . $nom . '</b></h4>                            </td>
                             <td style="text-align: right">
 <span
-                                        class="w3-tag w3-teal w3-round">' . $matiere_nom . '</span>
+                                        class="w3-tag w3-teal w3-round">' . $matiere_nom . '</span>';
+        if ($en_ligne == 0) {
+            $widget = $widget . '                            <form action="tableauDeBordCours.php" method="post">
+                            <button value="btnEnLigneCours' . $id . ' id="btnEnLigneCours' . $id . ' name="btnEnLigneCours' . $id . '" type="submit" class="btn">HorsLigne</button>
+                            </form>';
+        } else {
+            $widget = $widget . '
+<form action="tableauDeBordCours.php" method="post">
+                            <button value="btnEnLigneCours' . $id . ' id="btnEnLigneCours' . $id . ' name="btnEnLigneCours' . $id . '" type="submit" class="btn btn-primary">En ligne</button>
+                            </form>';
+        }
+        $widget = $widget . '
+
 
                             </td>
                         </tr>
@@ -1583,6 +1628,8 @@ class TableauDeBordControleur extends ConnectedUserControleur
         $this->displayListeSeanceCoursEnseignant();
         echo '</div>';
     }
+
+
 }
 
 ?>

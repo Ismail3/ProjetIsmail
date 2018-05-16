@@ -39,6 +39,7 @@ $ctrl = new TableauDeBordControleur();
 $ctrl->displayNavBar();
 $ctrl->displayHeader();
 $ctrl->displayTopButton();
+$ctrl->publierCours();
 $ctrl->displayManageCoursEnseignant();
 $ctrl->displayFooter();
 ?>
