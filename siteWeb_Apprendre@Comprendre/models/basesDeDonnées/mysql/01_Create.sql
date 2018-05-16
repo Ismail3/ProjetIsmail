@@ -94,6 +94,7 @@ CREATE TABLE Cours (
   matiere          INT,
   niveau_etude_min INT,
   niveau_etude_max INT,
+  en_ligne         INT,
   CONSTRAINT PK_Cours PRIMARY KEY (id),
   CONSTRAINT FK_Cours_Auteur FOREIGN KEY (id_auteur)
   REFERENCES Personne (id),

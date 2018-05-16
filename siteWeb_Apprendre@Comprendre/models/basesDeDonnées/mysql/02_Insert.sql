@@ -79,7 +79,7 @@ OPTIONALLY ENCLOSED BY '"'
 ESCAPED BY ''
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(id,nom,description,tarif,date_creation,id_auteur,matiere,niveau_etude_min,niveau_etude_max);
+(id,nom,description,tarif,date_creation,id_auteur,matiere,niveau_etude_min,niveau_etude_max,en_ligne);
 
 LOAD DATA INFILE "seance_cours_enseignant.csv" IGNORE
 INTO TABLE SeanceCours
@@ -98,7 +98,7 @@ OPTIONALLY ENCLOSED BY '"'
 ESCAPED BY ''
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(id,nom,description,tarif,date_creation,id_auteur,matiere,niveau_etude_min,niveau_etude_max);
+(id,nom,description,tarif,date_creation,id_auteur,matiere,niveau_etude_min,niveau_etude_max,en_ligne);
 
 
 LOAD DATA INFILE "seance_cours_eleve.csv" IGNORE
