@@ -169,7 +169,7 @@ class CoursControleur extends ConnectedUserControleur
                 $id_cours = Cours::nouveauCours($enseignant,$nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours);
 
                 if ($id_cours != -1) {
-                    header('Location: http://apprendreacomprendre.fr/siteWeb_Apprendre@Comprendre/templates/pages/tableauDeBord/tableauDeBordCours.php');
+                    header('Location: '.$this->url.'templates/pages/tableauDeBord/tableauDeBordCours.php');
                     exit();
                     echo "Nouveau cours";
                 } else {

@@ -6,6 +6,7 @@ class AbstractControleur
     /*
      * Attributs
      */
+    public $url = "http://localhost/LAMP/ProjetIsmail/siteWeb_Apprendre@Comprendre";
 
     /**
      * AbstractControleur constructor.

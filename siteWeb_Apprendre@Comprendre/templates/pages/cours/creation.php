@@ -1,6 +1,8 @@
 <?php
 require_once(dirname(__FILE__) . '/../../../controlleurs/pages/CoursControleur.php');
 session_start();
+$ctrl = new CoursControleur();
+$ctrl->checkUserSession();
 ?>
 <!DOCTYPE html>
 <html>

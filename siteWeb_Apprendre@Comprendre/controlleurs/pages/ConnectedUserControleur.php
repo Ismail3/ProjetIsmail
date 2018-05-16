@@ -6,8 +6,15 @@ require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Administrateur.php');
 
-class connectedusercontroleur extends AbstractControleur
+class Connectedusercontroleur extends AbstractControleur
 {
+
+    public function checkUserSession()
+    {
+        if (!$this->isUserConnected())  {
+            header('Location: '.$this->url);
+        }
+    }
 
     public function displayNavBar()
     {
