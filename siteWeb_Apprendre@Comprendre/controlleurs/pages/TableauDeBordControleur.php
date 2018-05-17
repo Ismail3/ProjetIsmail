@@ -152,7 +152,7 @@ class TableauDeBordControleur extends ConnectedUserControleur
                     <div class="w3-container w3-card w3-white w3-margin-bottom">
                         <h2 class="w3-text-grey w3-padding-16"><i
                                     class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Cours </h2>';
-        $widgets = $widgets . $this->getListeDesCours($enseignant);
+        $widgets = $widgets . $this->getListeDesCoursEnLigne($enseignant);
         $widgets = $widgets . '
                     </div>';
 
@@ -658,7 +658,25 @@ class TableauDeBordControleur extends ConnectedUserControleur
         if ($listeCoursEnseignants->num_rows > 0) {
             // output data of each row
             while ($row = $listeCoursEnseignants->fetch_assoc()) {
-                $widget = $widget . $this->displayCours($row);
+                $widget = $widget . $this->displayCoursProfil($row);
+            }
+        } else {
+            echo "<br> getListeDesCours : 0 results";
+        }
+
+        return $widget;
+    }
+
+    private function getListeDesCoursEnLigne($enseignant)
+    {
+        $widget = '';
+
+        $listeCoursEnseignants = $enseignant->getListeDesCours();
+
+        if ($listeCoursEnseignants->num_rows > 0) {
+            // output data of each row
+            while ($row = $listeCoursEnseignants->fetch_assoc()) {
+                $widget = $widget . $this->displayCoursGestion($row);
             }
         } else {
             echo "<br> getListeDesCours : 0 results";
@@ -723,7 +741,7 @@ class TableauDeBordControleur extends ConnectedUserControleur
      * @param $row
      * @return string
      */
-    private function displayCours($row)
+    private function displayCours($row, $gestion)
     {
         $id = $row['id'];
         $nom = $row['nom'];
@@ -739,19 +757,27 @@ class TableauDeBordControleur extends ConnectedUserControleur
                     <table style="width: 100%">
                         <tr>
                             <td style="text-align: left">
-                            <h4 class="w3-opacity"><b>' . $nom . '</b></h4>                            </td>
+                            <h4 class="w3-opacity"><b>';
+        if ($gestion == 1) {
+            $widget = $widget . '<a href="../cours/modification.php?id=' . $id . '">' . $nom . '</a>';
+        } else {
+            $widget = $widget . $nom;
+        }
+        $widget = $widget . '</b></h4>                            </td>
                             <td style="text-align: right">
 <span
                                         class="w3-tag w3-teal w3-round">' . $matiere_nom . '</span>';
-        if ($en_ligne == 0) {
-            $widget = $widget . '                            <form action="tableauDeBordCours.php" method="post">
+        if ($gestion == 1) {
+            if ($en_ligne == 0) {
+                $widget = $widget . '                            <form action="tableauDeBordCours.php" method="post">
                             <button value="btnEnLigneCours' . $id . ' id="btnEnLigneCours' . $id . ' name="btnEnLigneCours' . $id . '" type="submit" class="btn">HorsLigne</button>
                             </form>';
-        } else {
-            $widget = $widget . '
+            } else {
+                $widget = $widget . '
 <form action="tableauDeBordCours.php" method="post">
                             <button value="btnEnLigneCours' . $id . ' id="btnEnLigneCours' . $id . ' name="btnEnLigneCours' . $id . '" type="submit" class="btn btn-primary">En ligne</button>
                             </form>';
+            }
         }
         $widget = $widget . '
 
@@ -778,6 +804,24 @@ class TableauDeBordControleur extends ConnectedUserControleur
                         </div>';
 
         return $widget;
+    }
+
+    /**
+     * @param $row
+     * @return string
+     */
+    private function displayCoursProfil($row)
+    {
+        return $this->displayCours($row, 0);
+    }
+
+    /**
+     * @param $row
+     * @return string
+     */
+    private function displayCoursGestion($row)
+    {
+        return $this->displayCours($row, 1);
     }
 
     /**
@@ -1623,32 +1667,9 @@ class TableauDeBordControleur extends ConnectedUserControleur
         echo '<div class="w3-container" style="padding:128px 16px">';
         $this->displayAddCoursEnseignant();
         echo '<br/>';
-        echo '<div class="container">
-  <h2>Dynamic Pills</h2>
-  <p>To make the tabs toggleable, add the data-toggle="pill" attribute to each link. Then add a .tab-pane class with a unique ID for every tab and wrap them inside a div element with class .tab-content.</p>
-  <ul class="nav nav-pills">
-    <li class="active"><a data-toggle="pill" href="#home">Home</a></li>
-    <li><a data-toggle="pill" href="#menu1">Menu 1</a></li>
-    <li><a data-toggle="pill" href="#menu2">Menu 2</a></li>
-  </ul>
-  
-  <div class="tab-content">';
-        echo'
-    <div id="home" class="tab-pane fade in active">';
         $this->displayListeCoursEnseignant();
-        echo'</div>';
-        echo'
-    <div id="menu1" class="tab-pane fade">';
-        $this->displayListeSeanceCoursEnseignant();
-        echo' </div>';
-        echo'
-    <div id="menu2" class="tab-pane fade">
-      <h3>Menu 2</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-    </div>
-  </div>
-</div>';
         echo '<br/>';
+        $this->displayListeSeanceCoursEnseignant();
         echo '</div>';
     }
 

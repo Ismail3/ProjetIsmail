@@ -24,7 +24,7 @@ class Cours extends AbstractModel
     {
     }
 
-    public static function nouveauCours($enseignant,$nom, $description, $tarif, $matiere, $niveauEtudeMin, $niveauEtudeMax)
+    public static function nouveauCours($enseignant, $nom, $description, $tarif, $matiere, $niveauEtudeMin, $niveauEtudeMax)
     {
         $bd = new BdConnexion();
 
@@ -67,10 +67,31 @@ class Cours extends AbstractModel
         return $query;
     }
 
+    public static function majCours($id, $enseignant, $nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours, $en_ligne)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "UPDATE Cours
+                SET enseignant='$enseignant', nomCours='$nomCours', descriptionCours='$descriptionCours', tarifCours='$tarifCours', matiereCours='$matiereCours', niveauEtudeMinCours='$niveauEtudeMinCours', niveauEtudeMaxCours='$niveauEtudeMaxCours', en_ligne='$en_ligne'
+                WHERE id=$id
+                ;";
+
+        echo $sql;
+
+        $query = $bdd->query($sql);
+        $bdd->close();
+        return $query;
+    }
+
+
     /**
      * @return int
      */
-    public function getId()
+    public
+    function getId()
     {
         return $this->id;
     }
@@ -78,7 +99,8 @@ class Cours extends AbstractModel
     /**
      * @param int $id
      */
-    public function setId($id)
+    public
+    function setId($id)
     {
         $this->id = $id;
     }
@@ -86,7 +108,8 @@ class Cours extends AbstractModel
     /**
      * @return string
      */
-    public function getNom()
+    public
+    function getNom()
     {
         return $this->nom;
     }
@@ -94,7 +117,8 @@ class Cours extends AbstractModel
     /**
      * @param string $nom
      */
-    public function setNom($nom)
+    public
+    function setNom($nom)
     {
         $this->nom = $nom;
     }
@@ -102,7 +126,8 @@ class Cours extends AbstractModel
     /**
      * @return string
      */
-    public function getDescription()
+    public
+    function getDescription()
     {
         return $this->description;
     }
@@ -110,7 +135,8 @@ class Cours extends AbstractModel
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public
+    function setDescription($description)
     {
         $this->description = $description;
     }
@@ -118,7 +144,8 @@ class Cours extends AbstractModel
     /**
      * @return float
      */
-    public function getTarif()
+    public
+    function getTarif()
     {
         return $this->tarif;
     }
@@ -126,7 +153,8 @@ class Cours extends AbstractModel
     /**
      * @param float $tarif
      */
-    public function setTarif($tarif)
+    public
+    function setTarif($tarif)
     {
         $this->tarif = $tarif;
     }
@@ -134,7 +162,8 @@ class Cours extends AbstractModel
     /**
      * @return date
      */
-    public function getDateProposition()
+    public
+    function getDateProposition()
     {
         return $this->dateProposition;
     }
@@ -142,7 +171,8 @@ class Cours extends AbstractModel
     /**
      * @param date $dateProposition
      */
-    public function setDateProposition($dateProposition)
+    public
+    function setDateProposition($dateProposition)
     {
         $this->dateProposition = $dateProposition;
     }
@@ -150,7 +180,8 @@ class Cours extends AbstractModel
     /**
      * @return Personne
      */
-    public function getAuteur()
+    public
+    function getAuteur()
     {
         return $this->auteur;
     }
@@ -158,7 +189,8 @@ class Cours extends AbstractModel
     /**
      * @param Personne $auteur
      */
-    public function setAuteur($auteur)
+    public
+    function setAuteur($auteur)
     {
         $this->auteur = $auteur;
     }
@@ -166,7 +198,8 @@ class Cours extends AbstractModel
     /**
      * @return Matiere
      */
-    public function getMatiere()
+    public
+    function getMatiere()
     {
         return $this->matiere;
     }
@@ -174,7 +207,8 @@ class Cours extends AbstractModel
     /**
      * @param Matiere $matiere
      */
-    public function setMatiere($matiere)
+    public
+    function setMatiere($matiere)
     {
         $this->matiere = $matiere;
     }
@@ -182,7 +216,8 @@ class Cours extends AbstractModel
     /**
      * @return NiveauEtude
      */
-    public function getNiveauEtude()
+    public
+    function getNiveauEtude()
     {
         return $this->niveauEtude;
     }
@@ -190,7 +225,8 @@ class Cours extends AbstractModel
     /**
      * @param NiveauEtude $niveauEtude
      */
-    public function setNiveauEtude($niveauEtude)
+    public
+    function setNiveauEtude($niveauEtude)
     {
         $this->niveauEtude = $niveauEtude;
     }
@@ -200,7 +236,8 @@ class Cours extends AbstractModel
      * 1 : eleve
      * @return int
      */
-    public function getTypeAuteur()
+    public
+    function getTypeAuteur()
     {
         return $this->typeAuteur;
     }
@@ -210,12 +247,14 @@ class Cours extends AbstractModel
      * 1 : eleve
      * @param int $typeAuteur
      */
-    public function setTypeAuteur($typeAuteur)
+    public
+    function setTypeAuteur($typeAuteur)
     {
         $this->typeAuteur = $typeAuteur;
     }
 
-    public static function getListeDesCours()
+    public
+    static function getListeDesCours()
     {
         $bd = new BdConnexion();
 
@@ -238,7 +277,8 @@ class Cours extends AbstractModel
         return $result;
     }
 
-    public static function getListeDesCoursEnseignant($idpersonne)
+    public
+    static function getListeDesCoursEnseignant($idpersonne)
     {
         $bd = new BdConnexion();
 

@@ -10,12 +10,20 @@ class CoursControleur extends ConnectedUserControleur
      * Attributs
      */
 
+    //Nouveau cours
     private $inputNomCoursErr;
     private $inputDescriptionCoursErr;
     private $inputTarifCoursErr;
     private $inputMatiereCoursErr;
     private $inputNiveauEtudeMinCoursErr;
     private $inputNiveauEtudeMaxCoursErr;
+    //Maj cours
+    private $inputNomCoursMajErr;
+    private $inputDescriptionCoursMajErr;
+    private $inputTarifCoursMajErr;
+    private $inputMatiereCoursMajErr;
+    private $inputNiveauEtudeMinCoursMajErr;
+    private $inputNiveauEtudeMaxCoursMajErr;
 
     /*
      * Méthodes
@@ -54,6 +62,12 @@ class CoursControleur extends ConnectedUserControleur
     {
         return '<select style="height:30px;"class="form-control" id="' . $idInput . '" name="' . $idInput . '">';;
     }
+
+    /*
+     * ===============================================================
+     * Nouveau cours
+     * ===============================================================
+     */
 
     public function displayNouveauCours()
     {
@@ -166,10 +180,10 @@ class CoursControleur extends ConnectedUserControleur
                 $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
                 $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
 
-                $id_cours = Cours::nouveauCours($enseignant,$nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours);
+                $id_cours = Cours::nouveauCours($enseignant, $nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours);
 
                 if ($id_cours != -1) {
-                    header('Location: '.$this->url.'templates/pages/tableauDeBord/tableauDeBordCours.php');
+                    header('Location: ' . $this->url . 'templates/pages/tableauDeBord/tableauDeBordCours.php');
                     exit();
                     echo "Nouveau cours";
                 } else {
@@ -226,6 +240,188 @@ class CoursControleur extends ConnectedUserControleur
             $formulaire_complet = false;
         } else {
             $this->inputNiveauEtudeMaxCoursErr = "";
+        }
+
+        return $formulaire_complet;
+    }
+
+    /*
+     * ===============================================================
+     * Nouveau cours
+     * ===============================================================
+     */
+
+    public function displayMajCours()
+    {
+        $nomCours = $_POST["inputNomCours"];
+        $descriptionCours = $_POST["inputDescriptionCours"];
+        $tarifCours = $_POST["inputTarifCours"];
+        $matiereCours = $_POST["inputMatiereCours"];
+        $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
+        $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
+
+        $widget = '
+    <div class="w3-container" style="padding:128px 16px">
+    <h3 class="w3-center">Nouveau cours</h3>
+    <p class="w3-left w3-large">Veuillez renseigner ci-dessous l\'ensemble des informations nécessaires à la création d\'un nouveau cours : </p>
+    <div class="" style="margin-top:16px">';
+
+        //Liste des cours crées
+        $widget = $widget . '
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <h2 class="w3-text-grey w3-padding-16"><i
+                                    class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Cours </h2>';
+        $widget = $widget . '
+        <!-- Promo Section - "We know design" -->
+        <div id="creationCours" class="w3-container ">
+            <div class="w3-row-padding">
+                    <form action="" method="post">
+                        <fieldset>';
+        $widget = $widget . '
+                            <legend>Nouveau cours</legend>
+                            <div class="form-group">
+                                <label for="inputNomCours">Nom</label>
+                                <input type="text" class="form-control" 
+                                name="inputNomCours"
+                                id="inputNomCours" aria-describedby="nomHelp" 
+                                placeholder="Entrer le nom du cours"
+                                value="' . $nomCours . '">';
+        $widget = $widget . '<small style="color:red;" id="nomErr" name="nomErr" class="form-text">' . $this->inputNomCoursErr . '</small>';
+        $widget = $widget . '
+        </div>';
+        $widget = $widget . '
+                            <div class="form-group">
+                                <label for="inputDescriptionCours">Description</label>
+                                <textarea type="text" rows="5" class="form-control" 
+                                name="inputDescriptionCours"
+                                id="inputDescriptionCours" aria-describedby="prénomHelp" placeholder="Entrer votre Prénom"
+                                value="' . $descriptionCours . '">
+                                </textarea>';
+        $widget = $widget . '<small style="color:red;" id="emailErr" name="prenomErr" class="form-text">' . $this->inputDescriptionCoursErr . '</small>';
+        $widget = $widget . '
+                            </div>';
+        $widget = $widget . '                            <div class="form-group">
+                                <label for="inputTarifCours">Tarif</label>
+                                <input type="number" class="form-control" 
+                                name="inputTarifCours"
+                                id="inputTarifCours"
+                                value="' . $tarifCours . '">';
+        $widget = $widget . '<small style="color:red;" id="dateNaissanceErr" name="dateNaissanceErr" class="form-text">' . $this->inputTarifCoursErr . '</small>';
+        $widget = $widget . '
+                            </div>';
+        $widget = $widget . '                            <div class="form-group">
+                                <label for="inputMatiereCours">Matière</label>';
+        $widget = $widget . $this->getMatiereSelect($matiereCours, "inputMatiereCours");
+        $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputMatiereCoursErr . '</small>';
+        $widget = $widget . '                            </div>';
+        $widget = $widget . '                            <div class="form-group">
+                                <label for="inputNiveauEtudeMinCours">Niveaux etude min</label>
+                                ';
+        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMinCours, "inputNiveauEtudeMinCours");
+        $widget = $widget . '<small style="color:red;" id="emailErr" name="emailErr" class="form-text">' . $this->inputNiveauEtudeMinCoursErr . '</small>';
+        $widget = $widget . '                            </div>';
+        $widget = $widget . '
+                            <div class="form-group">
+                                <label for="inputNiveauEtudeMaxCours">Niveaux etude max</label>
+                                ';
+        $widget = $widget . $this->getNiveauEtudeSelect($niveauEtudeMaxCours, "inputNiveauEtudeMaxCours");
+        $widget = $widget . '<small style="color:red;" id="passwordErr" name="passwordErr" class="form-text">' . $this->inputNiveauEtudeMaxCoursErr . '</small>';
+        $widget = $widget . '
+                            </div>';
+        $widget = $widget . '
+                            </div>';
+        $widget = $widget . '        
+                            </fieldset>
+                                <button name="btnNouveauCours" id="btnNouveauCours" value="btnNouveauCours" type="submit" class="btn btn-primary" value = "Envoyer">Submit</button>
+                        </fieldset>
+                    </form>
+            </div>
+        </div>';
+
+        $widget = $widget . '
+                    </div>
+                    </div>';
+
+
+        echo $widget;
+    }
+
+    public function majCours()
+    {
+        if (isset($_POST['btnMajCours'])) {
+            if ($this->formulaireMajCoursComplet()) {
+
+                $enseignant = $this->getUserConnected();
+
+                $idCours = 0;
+                $nomCours = $_POST["inputNomCours"];
+                $descriptionCours = $_POST["inputDescriptionCours"];
+                $tarifCours = $_POST["inputTarifCours"];
+                $matiereCours = $_POST["inputMatiereCours"];
+                $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
+                $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
+                $enligne = $_POST["inputEnLigneCours"];
+
+                $id_cours = Cours::majCours($idCours, $enseignant, $nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours,$enligne);
+
+                if ($id_cours != -1) {
+                    header('Location: ' . $this->url . 'templates/pages/tableauDeBord/tableauDeBordCours.php');
+                    exit();
+                    echo "Maj cours";
+                } else {
+                    echo "Vous êtes actuellement déconnecté";
+                }
+            }
+        }
+    }
+
+    private function formulaireMajCoursComplet()
+    {
+        $formulaire_complet = true;
+
+        $nomCours = $_POST["inputNomCours"];
+        $descriptionCours = $_POST["inputDescriptionCours"];
+        $tarifCours = $_POST["inputTarifCours"];
+        $matiereCours = $_POST["inputMatiereCours"];
+        $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
+        $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
+
+
+        if (empty($nomCours)) {
+            $this->inputNomCoursMajErr = $this->inputNomCoursMajErr . "email manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputNomCoursMajErr = "";
+        }
+        if (empty($descriptionCours)) {
+            $this->inputDescriptionCoursMajErr = $this->inputDescriptionCoursMajErr . "mot_de_passe manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputDescriptionCoursMajErr = "";
+        }
+        if (empty($tarifCours)) {
+            $this->inputTarifCoursMajErr = $this->inputTarifCoursMajErr . "mot_de_passe_confirm manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputTarifCoursMajErr = "";
+        }
+        if (empty($matiereCours)) {
+            $this->inputMatiereCoursMajErr = $this->inputMatiereCoursMajErr . "nom manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputMatiereCoursMajErr = "";
+        }
+        if (empty($niveauEtudeMinCours)) {
+            $this->inputNiveauEtudeMinCoursMajErr = $this->inputNiveauEtudeMinCoursMajErr . "prenom manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputNiveauEtudeMinCoursMajErr = "";
+        }
+        if (empty($niveauEtudeMaxCours)) {
+            $this->inputNiveauEtudeMaxCoursMajErr = $this->inputNiveauEtudeMaxCoursMajErr . "date_naissance manquant";
+            $formulaire_complet = false;
+        } else {
+            $this->inputNiveauEtudeMaxCoursMajErr = "";
         }
 
         return $formulaire_complet;

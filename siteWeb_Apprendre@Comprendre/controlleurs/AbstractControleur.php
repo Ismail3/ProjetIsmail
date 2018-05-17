@@ -6,7 +6,7 @@ class AbstractControleur
     /*
      * Attributs
      */
-    public $url = "http://apprendreacomprendre.fr/siteWeb_Apprendre@Comprendre";
+    public $url = "http://apprendreacomprendre.fr/siteWeb_Apprendre@Comprendre/";
 
     /**
      * AbstractControleur constructor.
