@@ -1,10 +1,10 @@
 <?php
 require_once(dirname(__FILE__) . '/../../../controlleurs/pages/CoursControleur.php');
 session_start();
+ob_start();
 $ctrl = new CoursControleur();
 $ctrl->checkUserSession();
-?>
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html>
 <head>
     <title>Apprendre@Comprendre</title>
@@ -31,11 +31,8 @@ $ctrl->checkUserSession();
     <script src="../../../ressources/javascript/js"></script>
     <script src="../../../ressources/javascript/apprendre@comprendre.js"></script>
 </head>
-
 <body cz-shortcut-listen="true">
 <?php
-ob_start();
-
 $ctrl = new CoursControleur();
 
 $ctrl->displayNavBar();

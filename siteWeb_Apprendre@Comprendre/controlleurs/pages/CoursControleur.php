@@ -94,7 +94,7 @@ class CoursControleur extends ConnectedUserControleur
         <!-- Promo Section - "We know design" -->
         <div id="creationCours" class="w3-container ">
             <div class="w3-row-padding">
-                    <form action="creationValidation" method="post">
+                    <form action="" method="post">
                         <fieldset>';
         $widget = $widget . '
                             <legend>Nouveau cours</legend>
@@ -247,7 +247,7 @@ class CoursControleur extends ConnectedUserControleur
 
     /*
      * ===============================================================
-     * Nouveau cours
+     * Mise à jours cours
      * ===============================================================
      */
 
@@ -273,7 +273,8 @@ class CoursControleur extends ConnectedUserControleur
                     $matiereCours = $row["matiere"];
                     $niveauEtudeMinCours = $row["niveau_etude_min"];
                     $niveauEtudeMaxCours = $row["niveau_etude_max"];
-                    $enLigneCours = $row["en_ligne"];                }
+                    $enLigneCours = $row["en_ligne"];
+                }
             } else {
                 echo "getNiveauEtudeNom : 0 results";
             }
@@ -394,9 +395,8 @@ class CoursControleur extends ConnectedUserControleur
                 if ($id_cours != -1) {
                     header('Location: ' . $this->url . 'templates/pages/tableauDeBord/tableauDeBordCours.php');
                     exit();
-                    echo "Maj cours";
                 } else {
-                    echo "Vous êtes actuellement déconnecté";
+                    echo "Erreur à la mise à jour du cours";
                 }
             }
         }

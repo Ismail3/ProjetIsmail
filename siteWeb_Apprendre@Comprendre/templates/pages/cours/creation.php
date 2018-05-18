@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/../../../controlleurs/pages/CoursControleur.php');
 session_start();
+ob_start();
 $ctrl = new CoursControleur();
 $ctrl->checkUserSession();
 ?>
@@ -34,8 +35,6 @@ $ctrl->checkUserSession();
 
 <body cz-shortcut-listen="true">
 <?php
-ob_start();
-
 $ctrl = new CoursControleur();
 
 $ctrl->displayNavBar();
