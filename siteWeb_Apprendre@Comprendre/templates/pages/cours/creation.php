@@ -10,7 +10,7 @@ $ctrl->checkUserSession();
     <title>Apprendre@Comprendre</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="ConÒtent-Type" content="text/html; charset=UTF-8">
 
     <link type="text/css" rel="stylesheet" href="../../../ressources/styles/css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">

@@ -198,18 +198,23 @@ class Connectedusercontroleur extends AbstractControleur
 
 
 
-    protected function getOptitonNiveauEtude()
+    protected function getOptitonNiveauEtude($niveauEtude)
     {
         $widget = '';
 
         $result = NiveauEtude::getListeNiveauEtude();
-
+        $i=0;
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
+                $i++;
                 $widget = $widget . '<option ';
                 $widget = $widget . 'value="' . $row['id'];
-                $widget = $widget . '"">';
+                if ($i == $niveauEtude) {
+                    $widget = $widget . '"" selected>';
+                } else {
+                    $widget = $widget . '"">';
+                }
                 $widget = $widget . $row['nom'];
                 $widget = $widget . '</option>';
             }
@@ -218,18 +223,24 @@ class Connectedusercontroleur extends AbstractControleur
         return $widget;
     }
 
-    protected function getOptitonMatiere()
+    protected function getOptitonMatiere($matiere)
     {
         $widget = '';
 
         $result = Matiere::getListeMatiere();
+        $i=0;
 
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
+                $i++;
                 $widget = $widget . '<option ';
                 $widget = $widget . 'value="' . $row['id'];
+                if ($i == $matiere) {
+                    $widget = $widget . '"" selected>';
+                } else {
                 $widget = $widget . '"">';
+                }
                 $widget = $widget . $row['nom'];
                 $widget = $widget . '</option>';
             }

@@ -35,7 +35,7 @@ class CoursControleur extends ConnectedUserControleur
     {
         $widget = '';
         $widget = $widget . $this->getHtmlSelectHead($idInput);
-        $widget = $widget . $this->getOptitonNiveauEtude();
+        $widget = $widget . $this->getOptitonNiveauEtude($niveauEtude);
         $widget = $widget . '</select>';
 
         return $widget;
@@ -44,11 +44,11 @@ class CoursControleur extends ConnectedUserControleur
     /**
      * @param $matière
      */
-    private function getMatiereSelect($matière, $idInput)
+    private function getMatiereSelect($matiere, $idInput)
     {
         $widget = '';
         $widget = $widget . $this->getHtmlSelectHead($idInput);
-        $widget = $widget . $this->getOptitonMatiere();
+        $widget = $widget . $this->getOptitonMatiere($matiere);
         $widget = $widget . '</select>';
 
         return $widget;
@@ -94,7 +94,7 @@ class CoursControleur extends ConnectedUserControleur
         <!-- Promo Section - "We know design" -->
         <div id="creationCours" class="w3-container ">
             <div class="w3-row-padding">
-                    <form action="" method="post">
+                    <form action="creationValidation" method="post">
                         <fieldset>';
         $widget = $widget . '
                             <legend>Nouveau cours</legend>
@@ -253,12 +253,40 @@ class CoursControleur extends ConnectedUserControleur
 
     public function displayMajCours()
     {
-        $nomCours = $_POST["inputNomCours"];
-        $descriptionCours = $_POST["inputDescriptionCours"];
-        $tarifCours = $_POST["inputTarifCours"];
-        $matiereCours = $_POST["inputMatiereCours"];
-        $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
-        $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
+        $idCours = $_GET["id"];
+        $nomCours = "";
+        $descriptionCours = "";
+        $tarifCours = "";
+        $matiereCours = "";
+        $niveauEtudeMinCours = "";
+        $niveauEtudeMaxCours = "";
+
+        if ($this->formulaireMajCoursVide()) {
+            //Avant modification du formulaire
+            $result = Cours::getCours($idCours);
+            if ($result->num_rows > 0) {
+                // output data of each row
+                while ($row = $result->fetch_assoc()) {
+                    $nomCours = $row["nom"];
+                    $descriptionCours = $row["description"];
+                    $tarifCours = $row["tarif"];
+                    $matiereCours = $row["matiere"];
+                    $niveauEtudeMinCours = $row["niveau_etude_min"];
+                    $niveauEtudeMaxCours = $row["niveau_etude_max"];
+                    $enLigneCours = $row["en_ligne"];                }
+            } else {
+                echo "getNiveauEtudeNom : 0 results";
+            }
+
+        } else {
+            //Après modification du formulaire
+            $nomCours = $_POST["inputNomCours"];
+            $descriptionCours = $_POST["inputDescriptionCours"];
+            $tarifCours = $_POST["inputTarifCours"];
+            $matiereCours = $_POST["inputMatiereCours"];
+            $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
+            $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
+        }
 
         $widget = '
     <div class="w3-container" style="padding:128px 16px">
@@ -295,8 +323,7 @@ class CoursControleur extends ConnectedUserControleur
                                 <textarea type="text" rows="5" class="form-control" 
                                 name="inputDescriptionCours"
                                 id="inputDescriptionCours" aria-describedby="prénomHelp" placeholder="Entrer votre Prénom"
-                                value="' . $descriptionCours . '">
-                                </textarea>';
+                                value="">' . $descriptionCours . '</textarea>';
         $widget = $widget . '<small style="color:red;" id="emailErr" name="prenomErr" class="form-text">' . $this->inputDescriptionCoursErr . '</small>';
         $widget = $widget . '
                             </div>';
@@ -332,7 +359,7 @@ class CoursControleur extends ConnectedUserControleur
                             </div>';
         $widget = $widget . '        
                             </fieldset>
-                                <button name="btnNouveauCours" id="btnNouveauCours" value="btnNouveauCours" type="submit" class="btn btn-primary" value = "Envoyer">Submit</button>
+                                <button name="btnMajCours" id="btnMajCours" value="btnMajCours" type="submit" class="btn btn-primary" value = "Envoyer">Submit</button>
                         </fieldset>
                     </form>
             </div>
@@ -351,18 +378,18 @@ class CoursControleur extends ConnectedUserControleur
         if (isset($_POST['btnMajCours'])) {
             if ($this->formulaireMajCoursComplet()) {
 
-                $enseignant = $this->getUserConnected();
+                $enseignant = $this->getUserConnected()->getIdPersonne();
 
-                $idCours = 0;
+                $idCours = $_GET["id"];
                 $nomCours = $_POST["inputNomCours"];
                 $descriptionCours = $_POST["inputDescriptionCours"];
                 $tarifCours = $_POST["inputTarifCours"];
                 $matiereCours = $_POST["inputMatiereCours"];
                 $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
                 $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
-                $enligne = $_POST["inputEnLigneCours"];
+                $enligne = 0;
 
-                $id_cours = Cours::majCours($idCours, $enseignant, $nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours,$enligne);
+                $id_cours = Cours::majCours($idCours, $enseignant, $nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours, $enligne);
 
                 if ($id_cours != -1) {
                     header('Location: ' . $this->url . 'templates/pages/tableauDeBord/tableauDeBordCours.php');
@@ -426,6 +453,42 @@ class CoursControleur extends ConnectedUserControleur
 
         return $formulaire_complet;
     }
+
+    private function formulaireMajCoursVide()
+    {
+        $formulaire_vide = true;
+
+        $nomCours = $_POST["inputNomCours"];
+        $descriptionCours = $_POST["inputDescriptionCours"];
+        $tarifCours = $_POST["inputTarifCours"];
+        $matiereCours = $_POST["inputMatiereCours"];
+        $niveauEtudeMinCours = $_POST["inputNiveauEtudeMinCours"];
+        $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
+
+
+        if (!empty($nomCours)) {
+            $formulaire_vide = false;
+        }
+        if (!empty($descriptionCours)) {
+            $formulaire_vide = false;
+        }
+        if (!empty($tarifCours)) {
+            $formulaire_vide = false;
+        }
+        if (!empty($matiereCours)) {
+            $formulaire_vide = false;
+        }
+        if (!empty($niveauEtudeMinCours)) {
+            $formulaire_vide = false;
+        }
+        if (!empty($niveauEtudeMaxCours)) {
+            $formulaire_vide = false;
+        }
+
+        return $formulaire_vide;
+    }
+
+
 }
 
 ?>

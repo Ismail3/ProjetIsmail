@@ -67,7 +67,7 @@ class Cours extends AbstractModel
         return $query;
     }
 
-    public static function majCours($id, $enseignant, $nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours, $en_ligne)
+    public static function majCours($id, $enseignant, $nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours, $enLigne)
     {
         $bd = new BdConnexion();
 
@@ -75,23 +75,52 @@ class Cours extends AbstractModel
         $bdd = $bd->openConn();
 
         $sql = "UPDATE Cours
-                SET enseignant='$enseignant', nomCours='$nomCours', descriptionCours='$descriptionCours', tarifCours='$tarifCours', matiereCours='$matiereCours', niveauEtudeMinCours='$niveauEtudeMinCours', niveauEtudeMaxCours='$niveauEtudeMaxCours', en_ligne='$en_ligne'
+                SET id_auteur=$enseignant, nom='$nomCours', description='$descriptionCours', tarif=$tarifCours, matiere=$matiereCours, niveau_etude_min=$niveauEtudeMinCours, niveau_etude_max=$niveauEtudeMaxCours, en_ligne=$enLigne
                 WHERE id=$id
                 ;";
 
         echo $sql;
 
-        $query = $bdd->query($sql);
+
+        if ($bdd->query($sql) === TRUE) {
+            $id_cours = $bdd->insert_id;
+        } else {
+            $id_cours = -1;
+        }
         $bdd->close();
-        return $query;
+        echo $id_cours;
+        return $id_cours;
+    }
+
+    public static function getCours($idCours)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom, C.en_ligne
+                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
+                WHERE M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max and C.id = $idCours
+                ;";
+        echo "<br/><br/><br/>";
+        echo $sql;
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
     }
 
 
     /**
      * @return int
      */
-    public
-    function getId()
+    public function getId()
     {
         return $this->id;
     }
@@ -99,8 +128,7 @@ class Cours extends AbstractModel
     /**
      * @param int $id
      */
-    public
-    function setId($id)
+    public function setId($id)
     {
         $this->id = $id;
     }
@@ -108,8 +136,7 @@ class Cours extends AbstractModel
     /**
      * @return string
      */
-    public
-    function getNom()
+    public function getNom()
     {
         return $this->nom;
     }
@@ -117,8 +144,7 @@ class Cours extends AbstractModel
     /**
      * @param string $nom
      */
-    public
-    function setNom($nom)
+    public function setNom($nom)
     {
         $this->nom = $nom;
     }
@@ -126,8 +152,7 @@ class Cours extends AbstractModel
     /**
      * @return string
      */
-    public
-    function getDescription()
+    public function getDescription()
     {
         return $this->description;
     }
@@ -135,8 +160,7 @@ class Cours extends AbstractModel
     /**
      * @param string $description
      */
-    public
-    function setDescription($description)
+    public function setDescription($description)
     {
         $this->description = $description;
     }
@@ -144,8 +168,7 @@ class Cours extends AbstractModel
     /**
      * @return float
      */
-    public
-    function getTarif()
+    public function getTarif()
     {
         return $this->tarif;
     }
@@ -153,8 +176,7 @@ class Cours extends AbstractModel
     /**
      * @param float $tarif
      */
-    public
-    function setTarif($tarif)
+    public function setTarif($tarif)
     {
         $this->tarif = $tarif;
     }
@@ -162,8 +184,7 @@ class Cours extends AbstractModel
     /**
      * @return date
      */
-    public
-    function getDateProposition()
+    public function getDateProposition()
     {
         return $this->dateProposition;
     }
@@ -171,8 +192,7 @@ class Cours extends AbstractModel
     /**
      * @param date $dateProposition
      */
-    public
-    function setDateProposition($dateProposition)
+    public function setDateProposition($dateProposition)
     {
         $this->dateProposition = $dateProposition;
     }
@@ -180,8 +200,7 @@ class Cours extends AbstractModel
     /**
      * @return Personne
      */
-    public
-    function getAuteur()
+    public function getAuteur()
     {
         return $this->auteur;
     }
@@ -189,8 +208,7 @@ class Cours extends AbstractModel
     /**
      * @param Personne $auteur
      */
-    public
-    function setAuteur($auteur)
+    public function setAuteur($auteur)
     {
         $this->auteur = $auteur;
     }
@@ -198,8 +216,7 @@ class Cours extends AbstractModel
     /**
      * @return Matiere
      */
-    public
-    function getMatiere()
+    public function getMatiere()
     {
         return $this->matiere;
     }
@@ -207,8 +224,7 @@ class Cours extends AbstractModel
     /**
      * @param Matiere $matiere
      */
-    public
-    function setMatiere($matiere)
+    public function setMatiere($matiere)
     {
         $this->matiere = $matiere;
     }
@@ -216,8 +232,7 @@ class Cours extends AbstractModel
     /**
      * @return NiveauEtude
      */
-    public
-    function getNiveauEtude()
+    public function getNiveauEtude()
     {
         return $this->niveauEtude;
     }
@@ -225,8 +240,7 @@ class Cours extends AbstractModel
     /**
      * @param NiveauEtude $niveauEtude
      */
-    public
-    function setNiveauEtude($niveauEtude)
+    public function setNiveauEtude($niveauEtude)
     {
         $this->niveauEtude = $niveauEtude;
     }
@@ -236,8 +250,7 @@ class Cours extends AbstractModel
      * 1 : eleve
      * @return int
      */
-    public
-    function getTypeAuteur()
+    public function getTypeAuteur()
     {
         return $this->typeAuteur;
     }
@@ -247,8 +260,7 @@ class Cours extends AbstractModel
      * 1 : eleve
      * @param int $typeAuteur
      */
-    public
-    function setTypeAuteur($typeAuteur)
+    public function setTypeAuteur($typeAuteur)
     {
         $this->typeAuteur = $typeAuteur;
     }
@@ -277,8 +289,7 @@ class Cours extends AbstractModel
         return $result;
     }
 
-    public
-    static function getListeDesCoursEnseignant($idpersonne)
+    public static function getListeDesCoursEnseignant($idpersonne)
     {
         $bd = new BdConnexion();
 
