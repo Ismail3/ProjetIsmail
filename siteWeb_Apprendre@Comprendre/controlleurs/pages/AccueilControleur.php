@@ -98,15 +98,16 @@ class AccueilControleur extends AbstractControleur
 
     public function destroyConnexion()
     {
-        if ($this->isUserConnected()){
-             session_destroy();
-         }
+        if ($this->isUserConnected()) {
+            session_destroy();
+        }
     }
 
     private function getInfosSiteWeb()
     {
         $widget = $this->getInfosApropos();
         $widget = $widget . $this->getStatistiques();
+        $widget = $widget . $this->getCharts();
 
         return $widget;
     }
@@ -116,35 +117,8 @@ class AccueilControleur extends AbstractControleur
         $widget = '
 <!-- About Section -->
 <div class="w3-container" style="padding:128px 16px" id="about">
-    <h3 class="w3-center">À propos de <strong> Aprendre@Comprendre</strong></h3>
-    <p class="w3-center w3-large">Quelques caractéristiques clé</p>
-    <div class="w3-row-padding w3-center" style="margin-top:64px">
-        <div class="w3-quarter">
-            <i class="fa fa-desktop w3-margin-bottom w3-jumbo w3-center"></i>
-            <p class="w3-large">Numérique</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore. Site Web</p>
-        </div>
-        <div class="w3-quarter">
-            <i class="fa fa-heart w3-margin-bottom w3-jumbo"></i>
-            <p class="w3-large">Passion</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore. Volontariat</p>
-        </div>
-        <div class="w3-quarter">
-            <i class="fa fa-diamond w3-margin-bottom w3-jumbo"></i>
-            <p class="w3-large">Union</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore.Solide comme le diamant</p>
-        </div>
-        <div class="w3-quarter">
-            <i class="fa fa-cog w3-margin-bottom w3-jumbo"></i>
-            <p class="w3-large">Méthodologies</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore.Méthodologie</p>
-        </div>
-    </div>
-</div>';
+    <h3 class="w3-center">À propos de <strong> Aprendre@Comprendre</strong></h3>';
+        $widget = $widget . $this->displayQuelquesCaracteristiques();
         $widget = $widget . '
 
 <!-- Promo Section - "We know design" -->
@@ -229,7 +203,6 @@ class AccueilControleur extends AbstractControleur
     </div>
 </div>
 ';
-
         return $widget;
     }
 
@@ -243,7 +216,7 @@ class AccueilControleur extends AbstractControleur
                 <!-- Promo Section "Statistics" -->
                 <div class="w3-container w3-row w3-center w3-dark-grey w3-padding-64">
                     <div class="w3-quarter">
-                        <span class="w3-xxlarge">+ '.$nb_h_seance.'</span>
+                        <span class="w3-xxlarge">+ ' . $nb_h_seance . '</span>
                         <br>Heures réalisés
                     </div>
                     <div class="w3-quarter">
@@ -374,5 +347,74 @@ class AccueilControleur extends AbstractControleur
         $bdd->close();
 
         return $nbHRealisees;
+    }
+
+    private function displayQuelquesCaracteristiques()
+    {
+        return '
+    <p class="w3-center w3-large">Quelques caractéristiques clé</p>
+    <div class="w3-row-padding w3-center" style="margin-top:64px">
+        <div class="w3-quarter">
+            <i class="fa fa-desktop w3-margin-bottom w3-jumbo w3-center"></i>
+            <p class="w3-large">Numérique</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore. Site Web</p>
+        </div>
+        <div class="w3-quarter">
+            <i class="fa fa-heart w3-margin-bottom w3-jumbo"></i>
+            <p class="w3-large">Passion</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore. Volontariat</p>
+        </div>
+        <div class="w3-quarter">
+            <i class="fa fa-diamond w3-margin-bottom w3-jumbo"></i>
+            <p class="w3-large">Union</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore.Solide comme le diamant</p>
+        </div>
+        <div class="w3-quarter">
+            <i class="fa fa-cog w3-margin-bottom w3-jumbo"></i>
+            <p class="w3-large">Méthodologies</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore.Méthodologie</p>
+        </div>
+    </div>
+</div>';
+    }
+
+    private function getCharts()
+    {
+        return '
+    <p class="w3-center w3-large">Quelques graphiques</p>
+    <h1>My Web Page</h1>
+
+<div id="piechart"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+// Load google charts
+google.charts.load(\'current\', {\'packages\':[\'corechart\']});
+google.charts.setOnLoadCallback(drawChart);
+
+// Draw the chart and set the chart values
+function drawChart() {
+  var data = google.visualization.arrayToDataTable([
+  [\'Task\', \'Hours per Day\'],
+  [\'Work\', 8],
+  [\'Eat\', 2],
+  [\'TV\', 4],
+  [\'Gym\', 2],
+  [\'Sleep\', 8]
+]);
+
+  // Optional; add a title and set the width and height of the chart
+  var options = {\'title\':\'My Average Day\', \'width\':550, \'height\':400};
+
+  // Display the chart inside the <div> element with id="piechart"
+  var chart = new google.visualization.PieChart(document.getElementById(\'piechart\'));
+  chart.draw(data, options);
+}
+</script>';
     }
 }

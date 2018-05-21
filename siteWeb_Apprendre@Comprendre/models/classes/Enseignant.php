@@ -73,25 +73,26 @@ class Enseignant extends Personne
     public function getListeDesCours()
     {
         $idEnseignant = $this->getIdPersonne();
-        $bd = new BdConnexion();
-
-        // Create connection
-        $bdd = $bd->openConn();
-        // Check connection
-        if ($bdd->connect_error) {
-            die("Connection failed: " . $bdd->connect_error);
-        }
-
-        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom, en_ligne
-                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
-                WHERE C.id_auteur = " . $idEnseignant . " and M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
-                ORDER BY date_creation DESC
-                LIMIT 5;";
-
-        $result = $bdd->query($sql);
-        $bdd->close();
-
-        return $result;
+        return Cours::getListeDesCoursEnseignant($idEnseignant);
+//        $bd = new BdConnexion();
+//
+//        // Create connection
+//        $bdd = $bd->openConn();
+//        // Check connection
+//        if ($bdd->connect_error) {
+//            die("Connection failed: " . $bdd->connect_error);
+//        }
+//
+//        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom, en_ligne
+//                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
+//                WHERE C.id_auteur = " . $idEnseignant . " and M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
+//                ORDER BY date_creation DESC
+//                LIMIT 5;";
+//
+//        $result = $bdd->query($sql);
+//        $bdd->close();
+//
+//        return $result;
 
     }
 
