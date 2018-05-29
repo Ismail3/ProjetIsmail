@@ -27,6 +27,11 @@ class Personne extends AbstractModel
     {
     }
 
+    /**
+     * @param $email
+     * @param $password
+     * @return bool|mysqli_result
+     */
     public static function connexion($email, $password)
     {
         $bd = new BdConnexion();
@@ -46,6 +51,16 @@ class Personne extends AbstractModel
         return $result;
     }
 
+    /**
+     * @param $nom
+     * @param $prenom
+     * @param $email
+     * @param $date_naissance
+     * @param $mot_de_passe
+     * @param $type_compte
+     * @param $image
+     * @return int|mixed
+     */
     public static function newUtilisateur($nom, $prenom, $email, $date_naissance, $mot_de_passe, $type_compte, $image)
     {
         $bd = new BdConnexion();
@@ -66,6 +81,11 @@ class Personne extends AbstractModel
         return $id_personne;
     }
 
+    /**
+     * @param $id_personne
+     * @param $type_compte
+     * @return int|mixed
+     */
     public static function createPersonneType($id_personne, $type_compte)
     {
         $idTypeCompte = -1;
@@ -87,6 +107,87 @@ class Personne extends AbstractModel
         $bdd->close();
 
         return $idTypeCompte;
+    }
+
+    /**
+     * @param $ageMin
+     * @param $ageMax
+     * @return bool|mysqli_result
+     */
+    public static function countUserBetweenAge($ageMin, $ageMax)
+    {
+        $dateNaissanceMin = date('Y - m - d', strtotime(date("Y-m-d") . " - " . ($ageMin) . " year"));
+        $dateNaissanceMax = date('Y - m - d', strtotime(date("Y-m-d") . " - " . ($ageMax) . " year"));
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "select * from Personne where date_naissance >= '$dateNaissanceMin' and date_naissance <'$dateNaissanceMax' limit 20;";
+        echo $sql;
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+        return $result;
+
+    }
+
+    /**
+     * @return bool|mysqli_result
+     */
+    public static function getMinAge()
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        $sql = "select max(date_naissance) as ageMin from Personne ;";
+        echo $sql;
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+        echo date('Y - m - d');
+        echo "<br/>";
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+
+                echo $row["ageMax"];
+                return $row["ageMax"];
+
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return bool|mysqli_result
+     */
+    public static function getMaxAge()
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "select min(date_naissance) as ageMax from Personne ;";
+        echo $sql;
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+
+                echo $row["ageMax"];
+                return $row["ageMax"];
+
+            }
+        }
+
+        return 0;
+
+        return $result;
     }
 
     /*
@@ -302,6 +403,9 @@ class Personne extends AbstractModel
         return $toString;
     }
 
+    /**
+     * @return string
+     */
     public function getMiniature()
     {
         $personne = '<div >
@@ -342,7 +446,17 @@ class Personne extends AbstractModel
         return $personne;
     }
 
-    public function update($nom, $prenom, $adresse, $email, $tel, $mot_de_passe, $image)
+    /**
+     * @param $nom
+     * @param $prenom
+     * @param $adresse
+     * @param $email
+     * @param $tel
+     * @param $mot_de_passe
+     * @param $image
+     * @return bool|mysqli_result
+     */
+    public function updxate($nom, $prenom, $adresse, $email, $tel, $mot_de_passe, $image)
     {
         $bd = new BdConnexion();
 
@@ -368,6 +482,10 @@ class Personne extends AbstractModel
         return $query;
     }
 
+    /**
+     * @param $niveau_etude
+     * @return bool|mysqli_result
+     */
     public function updateEleve($niveau_etude)
     {
         $bd = new BdConnexion();

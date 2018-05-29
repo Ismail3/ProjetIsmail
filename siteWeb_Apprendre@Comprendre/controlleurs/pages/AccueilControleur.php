@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/../AbstractControleur.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Personne.php');
 
 
 class AccueilControleur extends AbstractControleur
@@ -384,6 +385,11 @@ class AccueilControleur extends AbstractControleur
 
     private function getCharts()
     {
+        $ageMin =Personne::getMinAge();
+        $ageMax =Personne::getMaxAge();
+        for ($i=$ageMin;$i<$ageMax;$i=$i+5){
+            Personne::countUserBetweenAge($i,$i+5);
+        }
         return '
     <p class="w3-center w3-large">Quelques graphiques</p>
     <h1>My Web Page</h1>
