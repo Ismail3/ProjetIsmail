@@ -123,7 +123,7 @@ class Personne extends AbstractModel
         // Create connection
         $bdd = $bd->openConn();
 
-        $sql = "select * from Personne where date_naissance >= '$dateNaissanceMin' and date_naissance <'$dateNaissanceMax' limit 20;";
+        $sql = "select count(*) from Personne where date_naissance < '$dateNaissanceMin' and date_naissance >='$dateNaissanceMax'";
         echo $sql;
         $result = $bdd->query($sql);
         $bdd->close();
@@ -132,9 +132,6 @@ class Personne extends AbstractModel
 
     }
 
-    /**
-     * @return bool|mysqli_result
-     */
     public static function getMinAge()
     {
         $bd = new BdConnexion();
@@ -143,6 +140,7 @@ class Personne extends AbstractModel
         $bdd = $bd->openConn();
         $sql = "select max(date_naissance) as ageMin from Personne ;";
         echo $sql;
+        echo "<br/>";
         $result = $bdd->query($sql);
         $bdd->close();
 
@@ -151,12 +149,20 @@ class Personne extends AbstractModel
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
 
-                echo $row["ageMax"];
-                return $row["ageMax"];
+                echo "<br>";
+                echo "ageMin : " .  $row["ageMin"];
+                echo "<br>";
+                echo "ageMin : " . date('Y', strtotime($row["ageMin"]));
+                echo "<br>";
+                echo "currentDate : " . date('Y');
+                echo "<br>";
+                echo "ageMin : " . intval(date('Y', strtotime(date("Y") . " - " . date('Y', strtotime($row["ageMin"])) . " year")));
+                echo "<br>";
+
+                return intval(date('Y', strtotime(date("Y") . " - " . date('Y', strtotime($row["ageMin"])) . " year")));
 
             }
         }
-
         return 0;
     }
 
@@ -172,22 +178,29 @@ class Personne extends AbstractModel
 
         $sql = "select min(date_naissance) as ageMax from Personne ;";
         echo $sql;
+        echo "<br/>";
         $result = $bdd->query($sql);
         $bdd->close();
 
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
+                echo "<br>";
+                echo "ageMax : " .  $row["ageMax"];
+                echo "<br>";
+                echo "ageMax : " . date('Y', strtotime($row["ageMax"]));
+                echo "<br>";
+                echo "currentDate : " . date('Y');
+                echo "<br>";
+                echo "ageMax : " . intval(date('Y', strtotime(date("Y") . " - " . date('Y', strtotime($row["ageMax"])) . " year")));
+                echo "<br>";
 
-                echo $row["ageMax"];
-                return $row["ageMax"];
+                return intval(date('Y', strtotime(date("Y") . " - " . date('Y', strtotime($row["ageMax"])) . " year")));
 
             }
         }
 
         return 0;
-
-        return $result;
     }
 
     /*

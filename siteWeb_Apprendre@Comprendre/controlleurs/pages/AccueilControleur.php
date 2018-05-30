@@ -383,44 +383,146 @@ class AccueilControleur extends AbstractControleur
 </div>';
     }
 
+    /**
+     * @return mixed
+     */
     private function getCharts()
     {
-        $ageMin =Personne::getMinAge();
-        $ageMax =Personne::getMaxAge();
-        for ($i=$ageMin;$i<$ageMax;$i=$i+5){
-            Personne::countUserBetweenAge($i,$i+5);
+        $ageMin = Personne::getMinAge();
+        $ageMax = Personne::getMaxAge();
+        $plageAge = array();
+        $nbParPlage = array();
+        for ($i = $ageMin; $i < $ageMax; $i = $i + 5) {
+            $result = Personne::countUserBetweenAge($i, $i + 5);
+            if ($result->num_rows > 0) {
+                // output data of each row
+                while ($row = $result->fetch_assoc()) {
+                    $nbPersonne = $row['count(*)'];
+                    echo "<br/>";
+                    array_push($plageAge, $i . "-" . ($i + 5));
+                    array_push($nbParPlage, intval($nbPersonne));
+                    echo $i . "-" . ($i + 5) . " ans : " . $nbPersonne;
+                }
+            }
+            echo "<br/>";
         }
-        return '
+        var_dump($plageAge);
+        var_dump($nbParPlage);
+        return $this->getPieChart("pieChartPersonneAge", $plageAge, $nbParPlage);
+    }
+
+    private function getPieChart($idPieChart, $plageAge, $nbParPlage)
+    {
+        $widget = '
     <p class="w3-center w3-large">Quelques graphiques</p>
     <h1>My Web Page</h1>
 
-<div id="piechart"></div>
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-<script type="text/javascript">
-// Load google charts
-google.charts.load(\'current\', {\'packages\':[\'corechart\']});
-google.charts.setOnLoadCallback(drawChart);
-
-// Draw the chart and set the chart values
+    <div id="' . $idPieChart . '"></div>
+    <div id="' . $idPieChart . '2"></div>
+    <div id="' . $idPieChart . '3"></div>
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+    <script type="text/javascript">
+    // Load google charts
+    google.charts.load(\'current\', {\'packages\':[\'corechart\']});
+    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(drawChart2);
+    google.charts.setOnLoadCallback(drawChart3);
+    
+    // Draw the chart and set the chart values
+    ';
+        $widget = $widget . '
 function drawChart() {
-  var data = google.visualization.arrayToDataTable([
-  [\'Task\', \'Hours per Day\'],
-  [\'Work\', 8],
-  [\'Eat\', 2],
-  [\'TV\', 4],
-  [\'Gym\', 2],
-  [\'Sleep\', 8]
-]);
+        var data = google . visualization . arrayToDataTable([
+            [\'Task\', \'Hours per Day\'],
+      [\'Work\', 8],
+      [\'Eat\', 2],
+      [\'TV\', 4],
+      [\'Gym\', 2],
+      [\'Sleep\', 8]
+    ]);
 
-  // Optional; add a title and set the width and height of the chart
-  var options = {\'title\':\'My Average Day\', \'width\':550, \'height\':400};
+    // Optional; add a title and set the width and height of the chart
+var options = {
+\'title\':\'My Average Day\', \'width\':1100, \'height\':800};
+    
+      // Display the chart inside the <div> element with id="piechart"
+      var chart = new google.visualization.PieChart(document.getElementById(\'' . $idPieChart . '\'));
+      chart.draw(data, options);
+    }
 
-  // Display the chart inside the <div> element with id="piechart"
-  var chart = new google.visualization.PieChart(document.getElementById(\'piechart\'));
-  chart.draw(data, options);
-}
-</script>';
+';
+
+        $widget = $widget . '
+function drawChart2() { 
+    var data = google . visualization . arrayToDataTable([ 
+        [\'Age\', \'Nombre individus\'],
+        [\'7-12\', 176],
+        [\'12-17\', 178],
+        [\'17-22\', 198],
+        [\'22-27\', 174],
+        [\'27-32\', 210],
+        [\'32-37\', 59],
+        [\'37-42\', 19],
+        [\'42-47\', 14],
+        [\'47-52\', 20],
+        [\'52-57\', 11],
+        [\'57-62\', 3]
+    ]);
+
+    // Optional; add a title and set the width and height of the chart
+var options = {
+\'title\':\'My Average Day\', \'width\':550, \'height\':400};
+    
+      // Display the chart inside the <div> element with id="piechart"
+      var chart = new google.visualization.PieChart(document.getElementById(\'' . $idPieChart . '2\'));
+      chart.draw(data, options);
+    }
+    
+    ';
+
+
+        $widget2 = '
+function drawChart2() {
+        var data = google . visualization . arrayToDataTable([
+        [\'Age\', \'Nombre individus\'],';
+        for ($i = 0; $i < count($plageAge); $i++) {
+            $widget2 = $widget2 . '
+              [\'' . $plageAge[$i] . '\', ' . $nbParPlage[$i] . ']';
+            if ($i < count($plageAge) - 1) {
+                $widget2 = $widget2 . ',';
+            }
+        }
+        $widget2 = $widget2 . ']);\';';
+        echo $widget2;
+
+        $widget = $widget . '
+function drawChart3() {
+        var data = google . visualization . arrayToDataTable([
+        [\'Age\', \'Nombre individus\'],';
+        for ($i = 0; $i < count($plageAge); $i++) {
+            $widget = $widget . '
+              [\'' . $plageAge[$i] . '\', ' . $nbParPlage[$i] . ']';
+            if ($i < count($plageAge) - 1) {
+                $widget = $widget . ',';
+            }
+        }
+        $widget = $widget . ']);';
+        $widget = $widget . '
+
+    // Optional; add a title and set the width and height of the chart
+var options = {
+\'title\':\'My Average Day\', \'width\':550, \'height\':400};
+    
+      // Display the chart inside the <div> element with id="piechart"
+      var chart = new google.visualization.PieChart(document.getElementById(\'' . $idPieChart . '3\'));
+      chart.draw(data, options);
+    }
+    
+    ';
+        $widget = $widget . '     
+    </script>';
+        return $widget;
     }
 }
