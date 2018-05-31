@@ -20,6 +20,34 @@ class CoursSeance extends AbstractModel
     {
     }
 
+    public static function getNombreHeuresRealises()
+    {
+        $nbHRealisees = 0;
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select sum(duree) as nbHRealisees from SeanceCours ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $nbHRealisees = $row['nbHRealisees'];
+            }
+        }
+
+        $bdd->close();
+
+        return $nbHRealisees;
+    }
+
     /*
      * Getter & Setter
      */

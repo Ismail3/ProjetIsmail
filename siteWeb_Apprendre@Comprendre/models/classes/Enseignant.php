@@ -37,6 +37,78 @@ class Enseignant extends Personne
         return $result;
     }
 
+    /**
+     * @return int
+     */
+    public static function getNombreEnseignants()
+    {
+        $nbEnseignant = 0;
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select count(*) as nbEnseignant from Enseignant ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $nbEnseignant = $row['nbEnseignant'];
+            }
+        }
+
+        $bdd->close();
+
+        return $nbEnseignant;
+    }
+
+    public static function getMinAge()
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        $sql = "select max(date_naissance) as ageMin from Personne where type_personne='".Enseignant::$TABLE_NAME."';";
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                return intval(date('Y', strtotime(date("Y") . " - " . date('Y', strtotime($row["ageMin"])) . " year")));
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * @return bool|mysqli_result
+     */
+    public static function getMaxAge()
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "select min(date_naissance) as ageMax from Personne where type_personne='".Enseignant::$TABLE_NAME."';";
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                return intval(date('Y', strtotime(date("Y") . " - " . date('Y', strtotime($row["ageMax"])) . " year")));
+            }
+        }
+
+        return 0;
+    }
 
     /**
      * @return int

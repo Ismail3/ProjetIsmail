@@ -1,6 +1,10 @@
 <?php
 require_once(dirname(__FILE__) . '/../AbstractControleur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Personne.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Cours.php');
+require_once(dirname(__FILE__) . '/../../models/classes/CoursSeance.php');
 
 
 class AccueilControleur extends AbstractControleur
@@ -108,7 +112,6 @@ class AccueilControleur extends AbstractControleur
     {
         $widget = $this->getInfosApropos();
         $widget = $widget . $this->getStatistiques();
-        $widget = $widget . $this->getCharts();
 
         return $widget;
     }
@@ -209,13 +212,16 @@ class AccueilControleur extends AbstractControleur
 
     private function getStatistiques()
     {
-        $nb_eleves = $this->getNombreEleves();
-        $nb_enseignants = $this->getNombreEnseignants();
-        $nb_cours = $this->getNombreCours();
-        $nb_h_seance = $this->getNombreHeuresRealises();
+        $nb_eleves = Eleve::getNombreEleves();
+        $nb_enseignants = Enseignant::getNombreEnseignants();
+        $nb_cours = Cours::getNombreCours();
+        $nb_h_seance = CoursSeance::getNombreHeuresRealises();
         $widget = '
                 <!-- Promo Section "Statistics" -->
                 <div class="w3-container w3-row w3-center w3-dark-grey w3-padding-64">
+                <a href="./templates/pages/statistiques/statistiques.php">
+                                    <h3 class="w3-center">Quelques statistiques</h3>
+                  </a>
                     <div class="w3-quarter">
                         <span class="w3-xxlarge">+ ' . $nb_h_seance . '</span>
                         <br>Heures réalisés
@@ -406,8 +412,6 @@ class AccueilControleur extends AbstractControleur
             }
             echo "<br/>";
         }
-        var_dump($plageAge);
-        var_dump($nbParPlage);
         return $this->getPieChart("pieChartPersonneAge", $plageAge, $nbParPlage);
     }
 

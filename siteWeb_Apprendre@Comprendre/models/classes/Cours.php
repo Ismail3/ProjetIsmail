@@ -24,6 +24,37 @@ class Cours extends AbstractModel
     {
     }
 
+    /**
+     * @return int
+     */
+    public static function getNombreCours()
+    {
+        $nbCours = 0;
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select count(*) as nbCours from Cours ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $nbCours = $row['nbCours'];
+            }
+        }
+
+        $bdd->close();
+
+        return $nbCours;
+    }
+
     /*
      * Getter & Setter
      */
