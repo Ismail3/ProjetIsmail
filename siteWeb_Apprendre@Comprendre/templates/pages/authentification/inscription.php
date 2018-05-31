@@ -1,6 +1,8 @@
 <?php
+require_once(dirname(__FILE__) . '/../../../controlleurs/pages/AuthentificationControleur.php');
 session_start();
-?>
+ob_start();
+s?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,7 +39,7 @@ require_once(dirname(__FILE__) . '/../../../controlleurs/pages/AuthentificationC
 
 $authCtrl = new AuthentificationControleur();
 
-$authCtrl->displayNavBar();
+//$authCtrl->displayNavBar();
 $authCtrl->displayTopButton();
 $authCtrl->uInscription();
 $authCtrl->displayInscription();

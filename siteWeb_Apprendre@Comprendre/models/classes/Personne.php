@@ -8,6 +8,7 @@ class Personne extends AbstractModel
      * Attributs
      */
     public static $DEFAULT_IMAGE = "team0.jpg";
+    public static $TABLE_NAME = "Personne";
     protected $id_personne;
     protected $nom;
     protected $prenom;
@@ -73,6 +74,8 @@ class Personne extends AbstractModel
         $sql = "INSERT INTO " . Personne::$TABLE_NAME . " (nom, prenom, email, date_naissance, mot_de_passe, type_personne,image)
                 VALUES ('$nom','$prenom','$email','$date_naissance','$mot_de_passe','$type_compte','$image')
                 ;";
+
+        echo $sql;
 
         if ($bdd->query($sql) === TRUE) {
             $id_personne = $bdd->insert_id;
