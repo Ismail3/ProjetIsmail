@@ -6,6 +6,7 @@ require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Cours.php');
 require_once(dirname(__FILE__) . '/../../models/classes/CoursSeance.php');
 
+//https://developers.google.com/chart/interactive/docs/gallery/barchart
 
 /**
  * Class StatistiquesControleur
