@@ -1,20 +1,53 @@
 <?php
 require_once(dirname(__FILE__) . '/AbstractModel.php');
 
+/**
+ * Class Cours
+ */
 class Cours extends AbstractModel
 {
     /*
      * Attributs
      */
+    /**
+     * @var
+     */
     protected $id;
+    /**
+     * @var
+     */
     protected $nom;
+    /**
+     * @var
+     */
     protected $description;
+    /**
+     * @var
+     */
     protected $tarif;
+    /**
+     * @var
+     */
     protected $dateProposition;
+    /**
+     * @var
+     */
     protected $auteur;
+    /**
+     * @var
+     */
     protected $typeAuteur;
+    /**
+     * @var
+     */
     protected $matiere;
+    /**
+     * @var
+     */
     protected $niveauEtude;
+    /**
+     * @var string
+     */
     public static $TABLE_NAME = "Cours";
 
     /**
@@ -52,7 +85,67 @@ class Cours extends AbstractModel
 
         $bdd->close();
 
-        return $nbCours;
+        return intval($nbCours);
+    }
+
+    /**
+     * @param $idMatiere
+     * @return int
+     */
+    public static function getNbCoursParMatiere($idMatiere)
+    {
+        $nbCours = 0;
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select count(*) as nbCours from Cours where matiere=" . $idMatiere . " ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $nbCours = $row['nbCours'];
+            }
+        }
+
+        $bdd->close();
+
+        return intval($nbCours);
+    }
+
+    public static function getNbCoursParNiveauEtude($idNiveauEtude)
+    {
+        $nbCours = 0;
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select count(*) as nbCours from Cours where niveau_etude_min=" . $idNiveauEtude . " ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $nbCours = $row['nbCours'];
+            }
+        }
+
+        $bdd->close();
+
+        return intval($nbCours);
     }
 
     /*

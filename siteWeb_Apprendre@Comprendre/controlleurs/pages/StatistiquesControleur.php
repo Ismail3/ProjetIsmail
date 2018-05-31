@@ -1,5 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/../AbstractControleur.php');
+require_once(dirname(__FILE__) . '/../../models/classes/NiveauEtude.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Matiere.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Personne.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
@@ -113,9 +115,36 @@ class StatistiquesControleur extends AbstractControleur
     private function getCharts()
     {
         $widget = "";
+        $widget = $widget . $this->getPieCharts();
+        $widget = $widget . $this->getBarCharts();
+        return $widget;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getPieCharts()
+    {
+        $widget = "<h1 class=\"w3-center\"> Pie Charts </h1>";
+        $widget = $widget . "<div class=\"w3-center\">";
         $widget = $widget . $this->getPieChartPersonneAge();
         $widget = $widget . $this->getPieChartEleveAge();
         $widget = $widget . $this->getPieChartEnseignantAge();
+        $widget = $widget . "</div>";
+        return $widget;
+    }
+
+
+    private function getBarCharts()
+    {
+        $widget = "<h1 class=\"w3-center\"> Bar Charts </h1>";
+        $widget = $widget . "<div class=\"w3-center\">";
+
+        $widget = $widget . $this->getBarChartCoursParMatiere();
+        $widget = $widget . $this->getBarChartCoursParNiveauEtude();
+
+        $widget = $widget . "</div>";
+
         return $widget;
     }
 
@@ -134,12 +163,12 @@ class StatistiquesControleur extends AbstractControleur
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
                     $nbPersonne = $row['count(*)'];
-                    array_push($plageAge, $i . "-" . ($i + 5)." ans");
+                    array_push($plageAge, $i . "-" . ($i + 5) . " ans");
                     array_push($nbParPlage, intval($nbPersonne));
                 }
             }
         }
-        return $this->getPieChart("pieChartPersonneAge", $plageAge, $nbParPlage,"Nombre de personnes par tranche d age");
+        return $this->getPieChart("pieChartPersonneAge", $plageAge, $nbParPlage, "Nombre de personnes par tranche d age");
     }
 
     private function getPieChartEleveAge()
@@ -154,12 +183,12 @@ class StatistiquesControleur extends AbstractControleur
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
                     $nbEleve = $row['count(*)'];
-                    array_push($plageAge, $i . "-" . ($i + 5)." ans");
+                    array_push($plageAge, $i . "-" . ($i + 5) . " ans");
                     array_push($nbParPlage, intval($nbEleve));
                 }
             }
         }
-        return $this->getPieChart("pieChartEleveAge", $plageAge, $nbParPlage,"Nombre d élèves par tranche d age");
+        return $this->getPieChart("pieChartEleveAge", $plageAge, $nbParPlage, "Nombre d élèves par tranche d age");
     }
 
     private function getPieChartEnseignantAge()
@@ -174,12 +203,12 @@ class StatistiquesControleur extends AbstractControleur
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
                     $nbEnseignant = $row['count(*)'];
-                    array_push($plageAge, $i . "-" . ($i + 5)." ans");
+                    array_push($plageAge, $i . "-" . ($i + 5) . " ans");
                     array_push($nbParPlage, intval($nbEnseignant));
                 }
             }
         }
-        return $this->getPieChart("pieChartEnseignantAge", $plageAge, $nbParPlage,"Nombre d enseignants par tranche d age");
+        return $this->getPieChart("pieChartEnseignantAge", $plageAge, $nbParPlage, "Nombre d enseignants par tranche d age");
     }
 
 
@@ -189,7 +218,7 @@ class StatistiquesControleur extends AbstractControleur
      * @param $nbParPlage
      * @return string
      */
-    private function getPieChart($idPieChart, $plageAge, $nbParPlage,$title)
+    private function getPieChart($idPieChart, $plageAge, $nbParPlage, $title)
     {
         $widget = '
 <div>
@@ -201,12 +230,12 @@ class StatistiquesControleur extends AbstractControleur
     <script type="text/javascript">
     // Load google charts
     google.charts.load(\'current\', {\'packages\':[\'corechart\']});
-    google.charts.setOnLoadCallback(drawChart3);
+    google.charts.setOnLoadCallback(drawPieChart);
     
     // Draw the chart and set the chart values
     ';
         $widget = $widget . '
-function drawChart3() {
+function drawPieChart() {
         var data = google . visualization . arrayToDataTable([
         [\'Age\', \'Nombre individus\'],';
         for ($i = 0; $i < count($plageAge); $i++) {
@@ -221,7 +250,7 @@ function drawChart3() {
 
     // Optional; add a title and set the width and height of the chart
 var options = {
-\'title\':\''.$title.'\', \'width\':1100, \'height\':800};
+\'title\':\'' . $title . '\', \'width\':1100, \'height\':800};
     
       // Display the chart inside the <div> element with id="piechart"
       var chart = new google.visualization.PieChart(document.getElementById(\'' . $idPieChart . '\'));
@@ -246,6 +275,113 @@ var options = {
         echo $widget;
     }
 
+    private function getBarChartCoursParMatiere()
+    {
+        $widget = "";
+        $listeMatieres = array();
+        $listeNbCours = array();
+        $queryMatieres = Matiere::getListeMatiere();
+        if ($queryMatieres->num_rows > 0) {
+            while ($row = $queryMatieres->fetch_assoc()) {
+                $idMatiere = $row['id'];
+                $nomMatiere = strval($row['nom']);
+                array_push($listeMatieres, $nomMatiere);
+                $nbCoursParMatiere = Cours::getNbCoursParMatiere($idMatiere);
+                array_push($listeNbCours, $nbCoursParMatiere);
+                echo $nomMatiere." : ".$nbCoursParMatiere."<br/>";
+            }
+        }
+
+        return $this->getBarChart("barChartCoursMatiere", $listeMatieres, $listeNbCours, "Nombre de cours par matière");
+
+
+        return $widget;
+    }
+
+    private function getBarChartCoursParNiveauEtude()
+    {
+        $widget = "";
+        $listeNiveauEtude = array();
+        $listeNbCours = array();
+        $queryNiveauxEtudes = NiveauEtude::getListeNiveauEtude();
+        if ($queryNiveauxEtudes->num_rows > 0) {
+            while ($row = $queryNiveauxEtudes->fetch_assoc()) {
+                $idNiveauEtude = $row['id'];
+                $nomNiveauEtude = strval($row['nom']);
+                array_push($listeNiveauEtude, $nomNiveauEtude);
+                $nbCoursParNiveauEtude = Cours::getNbCoursParNiveauEtude($idNiveauEtude);
+                array_push($listeNbCours, $nbCoursParNiveauEtude);
+                echo $nomNiveauEtude." : ".$nbCoursParNiveauEtude."<br/>";
+            }
+        }
+
+        return $this->getBarChart("barChartCoursNiveauEtude", $listeNiveauEtude, $listeNbCours, "Nombre de cours par niveau etude min");
+
+
+        return $widget;
+    }
+
+    private function getBarChart($idBarChart, $listeMatieres, $listeNbCours, $title)
+    {
+        var_dump($listeMatieres);
+        $widget = '
+<div>
+<br>
+    <div  class="w3-center" id="' . $idBarChart . '" style="width: 900px; height: 500px;"></div>
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+    <script type="text/javascript">
+    // Load google charts
+    google.charts.load(\'current\', {\'packages\':[\'bar\']});
+    google.charts.setOnLoadCallback(drawBarChart);
+    
+    // Draw the chart and set the chart values
+    ';
+        $widget = $widget . '
+function drawBarChart() {
+        var data = google.visualization.arrayToDataTable([
+        [\'Matiere\', \'Nombre de cours\'],';
+        for ($i = 0; $i < count($listeMatieres); $i++) {
+            $widget = $widget . '
+              [\'' . $listeMatieres[$i] . '\', ' . $listeNbCours[$i] . ']';
+            if ($i < count($listeMatieres) - 1) {
+                $widget = $widget . ',';
+            }
+        }
+        $widget = $widget . ']);';
+        $widget2 = '
+        function drawBarChart() {
+        var data = google.visualization.arrayToDataTable([
+        [\'Matiere\', \'Nombre de cours\'],';
+        for ($i = 0; $i < count($listeMatieres); $i++) {
+            echo "listeMatieres[$i] : " . $listeMatieres[$i] . "<br>";
+            $widget2 = $widget2 . '
+              [\'' . ($listeMatieres[$i]) . '\', ' . $listeNbCours[$i] . ']';
+            if ($i < count($listeMatieres) - 1) {
+                $widget2 = $widget2 . ',';
+            }
+        }
+        $widget2 = $widget2 . ']);';
+        echo $widget2 . "<br/>";
+        $widget = $widget . '
+            var options = {
+          chart: {
+            title: \'' . $title . '\',
+          },
+          bars: \'horizontal\' // Required for Material Bar Charts.
+        };
+
+        var chart = new google.charts.Bar(document.getElementById(\'' . $idBarChart . '\'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    
+    }';
+        $widget = $widget . '     
+    </script>
+    </div>';
+        return $widget;
+    }
 
 
 }
