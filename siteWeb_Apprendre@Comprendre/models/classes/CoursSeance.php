@@ -48,6 +48,76 @@ class CoursSeance extends AbstractModel
         return $nbHRealisees;
     }
 
+    public static function getMinDate()
+    {
+        $minDate = "2013-12";
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select min(date_realisation) as minDate from SeanceCours ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $minDate = $row['minDate'];
+            }
+        }
+
+        $bdd->close();
+
+        return date('Y-M', strtotime($minDate));
+    }
+
+    public static function getMaxDate()
+    {
+        $maxDate = "2017-03";
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select max(date_realisation) as maxDate from SeanceCours ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $maxDate = $row['maxDate'];
+            }
+        }
+
+        $bdd->close();
+
+        return date('Y-M', strtotime($maxDate));
+    }
+
+    public static function countCoursBetweenDate($dateMin, $dateMax)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "select count(*) from SeanceCours where date_realisation < '$dateMax' and date_realisation >='$dateMin'";
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+        return $result;
+    }
+
     /*
      * Getter & Setter
      */

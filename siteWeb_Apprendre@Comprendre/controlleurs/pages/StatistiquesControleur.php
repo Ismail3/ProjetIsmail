@@ -142,6 +142,7 @@ class StatistiquesControleur extends AbstractControleur
 
         $widget = $widget . $this->getBarChartCoursParMatiere();
         $widget = $widget . $this->getBarChartCoursParNiveauEtude();
+        $widget = $widget . $this->getBarChartCoursParMois();
 
         $widget = $widget . "</div>";
 
@@ -288,11 +289,11 @@ var options = {
                 array_push($listeMatieres, $nomMatiere);
                 $nbCoursParMatiere = Cours::getNbCoursParMatiere($idMatiere);
                 array_push($listeNbCours, $nbCoursParMatiere);
-                echo $nomMatiere." : ".$nbCoursParMatiere."<br/>";
+                echo $nomMatiere . " : " . $nbCoursParMatiere . "<br/>";
             }
         }
 
-        return $this->getBarChart("barChartCoursMatiere", $listeMatieres, $listeNbCours, "Nombre de cours par matière");
+        return $this->getBarChart("barChartCoursMatiere", $listeMatieres, $listeNbCours, "Nombre de cours par matière","horizontal");
 
 
         return $widget;
@@ -300,7 +301,6 @@ var options = {
 
     private function getBarChartCoursParNiveauEtude()
     {
-        $widget = "";
         $listeNiveauEtude = array();
         $listeNbCours = array();
         $queryNiveauxEtudes = NiveauEtude::getListeNiveauEtude();
@@ -311,23 +311,53 @@ var options = {
                 array_push($listeNiveauEtude, $nomNiveauEtude);
                 $nbCoursParNiveauEtude = Cours::getNbCoursParNiveauEtude($idNiveauEtude);
                 array_push($listeNbCours, $nbCoursParNiveauEtude);
-                echo $nomNiveauEtude." : ".$nbCoursParNiveauEtude."<br/>";
+                echo $nomNiveauEtude . " : " . $nbCoursParNiveauEtude . "<br/>";
             }
         }
 
-        return $this->getBarChart("barChartCoursNiveauEtude", $listeNiveauEtude, $listeNbCours, "Nombre de cours par niveau etude min");
-
-
-        return $widget;
+        return $this->getBarChart("barChartCoursNiveauEtude", $listeNiveauEtude, $listeNbCours, "Nombre de cours par niveau etude min","horizontal");
     }
 
-    private function getBarChart($idBarChart, $listeMatieres, $listeNbCours, $title)
+    private function getBarChartCoursParMois()
     {
-        var_dump($listeMatieres);
+
+        $dateMin = CoursSeance::getMinDate();
+        $dateMax = CoursSeance::getMaxDate();
+        echo $dateMin;
+        echo "<br/>";
+        echo $dateMax;
+        echo "<br/>";
+        $nbMoisInterval = intval(intval(strtotime($dateMax) - strtotime($dateMin)) / (60 * 60 * 24 * 30.4375));
+        echo $nbMoisInterval;
+        echo "<br/>";
+        $ladate = '2011-01-01';
+        date('Y-m-d', strtotime('+12 month', strtotime($ladate)));
+        echo date("Y-M", strtotime('+1 month', strtotime($dateMin)));
+        echo "<br/>";
+//
+        $plageMois = array();
+        $nbParPlage = array();
+        for ($i = 0; $i < $nbMoisInterval; $i = $i + 1) {
+            $result = CoursSeance::countCoursBetweenDate($dateMin, date("Y-M", strtotime('+1 month', strtotime($dateMin))));
+            if ($result->num_rows > 0) {
+                // output data of each row
+                while ($row = $result->fetch_assoc()) {
+                    $nbSeanceCours = $row['count(*)'];
+                    array_push($plageMois, $dateMin);
+                    array_push($nbParPlage, intval($nbSeanceCours));
+                }
+            }
+            $dateMin = date("Y-M", strtotime('+1 month', strtotime($dateMin)));
+        }
+        return $this->getBarChart("barChartCoursNiveauEtude", $plageMois, $nbParPlage, "Nombre de cours par mois", "vertical");
+    }
+
+    private function getBarChart($idBarChart, $listeLabels, $listeValeurs, $titre, $typeBarChart)
+    {
         $widget = '
-<div>
+<div class="my-container">
 <br>
-    <div  class="w3-center" id="' . $idBarChart . '" style="width: 900px; height: 500px;"></div>
+    <div  class="w3-center" id="' . $idBarChart . '"></div>
     
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     
@@ -342,10 +372,10 @@ var options = {
 function drawBarChart() {
         var data = google.visualization.arrayToDataTable([
         [\'Matiere\', \'Nombre de cours\'],';
-        for ($i = 0; $i < count($listeMatieres); $i++) {
+        for ($i = 0; $i < count($listeLabels); $i++) {
             $widget = $widget . '
-              [\'' . $listeMatieres[$i] . '\', ' . $listeNbCours[$i] . ']';
-            if ($i < count($listeMatieres) - 1) {
+              [\'' . $listeLabels[$i] . '\', ' . $listeValeurs[$i] . ']';
+            if ($i < count($listeLabels) - 1) {
                 $widget = $widget . ',';
             }
         }
@@ -354,22 +384,22 @@ function drawBarChart() {
         function drawBarChart() {
         var data = google.visualization.arrayToDataTable([
         [\'Matiere\', \'Nombre de cours\'],';
-        for ($i = 0; $i < count($listeMatieres); $i++) {
-            echo "listeMatieres[$i] : " . $listeMatieres[$i] . "<br>";
+        for ($i = 0; $i < count($listeLabels); $i++) {
+//            echo "listeMatieres[$i] : " . $listeLabels[$i] . "<br>";
             $widget2 = $widget2 . '
-              [\'' . ($listeMatieres[$i]) . '\', ' . $listeNbCours[$i] . ']';
-            if ($i < count($listeMatieres) - 1) {
+              [\'' . ($listeLabels[$i]) . '\', ' . $listeValeurs[$i] . ']';
+            if ($i < count($listeLabels) - 1) {
                 $widget2 = $widget2 . ',';
             }
         }
         $widget2 = $widget2 . ']);';
-        echo $widget2 . "<br/>";
+//        echo $widget2 . "<br/>";
         $widget = $widget . '
             var options = {
           chart: {
-            title: \'' . $title . '\',
+            title: \'' . $titre . '\',
           },
-          bars: \'horizontal\' // Required for Material Bar Charts.
+          bars: \'' . $typeBarChart . '\' // Required for Material Bar Charts.
         };
 
         var chart = new google.charts.Bar(document.getElementById(\'' . $idBarChart . '\'));

@@ -8,3 +8,9 @@
 header {
     margin-top: 40px;
 }
+
+.my-container {
+    width: 30em;
+    overflow-x: auto;
+    white-space: nowrap;
+}

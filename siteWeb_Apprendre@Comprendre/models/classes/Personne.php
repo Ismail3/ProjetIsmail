@@ -131,7 +131,6 @@ class Personne extends AbstractModel
         $bdd->close();
 
         return $result;
-
     }
 
     public static function getMinAge()
