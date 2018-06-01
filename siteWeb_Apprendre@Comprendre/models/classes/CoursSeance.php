@@ -157,10 +157,6 @@ class CoursSeance extends AbstractModel
     }
 
     /**
-     * @return date
-     */
-
-    /**
      * CoursSeance Methodes
      */
     public function getDateRealisation()
