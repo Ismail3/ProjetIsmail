@@ -330,14 +330,12 @@ var options = {
         $nbMoisInterval = intval(intval(strtotime($dateMax) - strtotime($dateMin)) / (60 * 60 * 24 * 30.4375));
         echo $nbMoisInterval;
         echo "<br/>";
-        $ladate = '2011-01-01';
-        date('Y-m-d', strtotime('+12 month', strtotime($ladate)));
-        echo date("Y-M", strtotime('+1 month', strtotime($dateMin)));
+//        echo date("Y-M", strtotime('+1 month', strtotime($dateMin)));
         echo "<br/>";
 //
         $plageMois = array();
         $nbParPlage = array();
-        for ($i = 0; $i < $nbMoisInterval; $i = $i + 1) {
+        for ($i = 0; $i <= $nbMoisInterval; $i++) {
             $result = CoursSeance::countCoursBetweenDate($dateMin, date("Y-M", strtotime('+1 month', strtotime($dateMin))));
             if ($result->num_rows > 0) {
                 // output data of each row
@@ -349,15 +347,15 @@ var options = {
             }
             $dateMin = date("Y-M", strtotime('+1 month', strtotime($dateMin)));
         }
-        return $this->getBarChart("barChartCoursNiveauEtude", $plageMois, $nbParPlage, "Nombre de cours par mois", "vertical");
+        return $this->getBarChart("barChartCoursMois", $plageMois, $nbParPlage, "Nombre de cours par mois", "vertical");
     }
 
     private function getBarChart($idBarChart, $listeLabels, $listeValeurs, $titre, $typeBarChart)
     {
         $widget = '
-<div class="my-container">
+<div class="my-container" style="width: 100%; height: 100%;">
 <br>
-    <div  class="w3-center" id="' . $idBarChart . '"></div>
+    <div  class="w3-center" id="' . $idBarChart . '" style="width: 100%; height: 400px;"></div>
     
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     

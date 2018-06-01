@@ -106,12 +106,15 @@ class CoursSeance extends AbstractModel
 
     public static function countCoursBetweenDate($dateMin, $dateMax)
     {
+        $dateTimeMin =  date('Y-m-d H:i:s', strtotime($dateMin));
+        $dateTimeMax =  date('Y-m-d H:i:s', strtotime($dateMax));
         $bd = new BdConnexion();
 
         // Create connection
         $bdd = $bd->openConn();
 
-        $sql = "select count(*) from SeanceCours where date_realisation < '$dateMax' and date_realisation >='$dateMin'";
+        $sql = "select count(*) from SeanceCours where date_realisation < '$dateTimeMax' and date_realisation >='$dateTimeMin'";
+        echo $sql;
         $result = $bdd->query($sql);
         $bdd->close();
 

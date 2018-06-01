@@ -12,5 +12,6 @@ header {
 .my-container {
     width: 30em;
     overflow-x: auto;
+    overflow-y: auto;
     white-space: nowrap;
 }
