@@ -296,7 +296,6 @@ var options = {
                 array_push($listeMatieres, $nomMatiere);
                 $nbCoursParMatiere = Cours::getNbCoursParMatiere($idMatiere);
                 array_push($listeNbCours, $nbCoursParMatiere);
-                echo $nomMatiere . " : " . $nbCoursParMatiere . "<br/>";
             }
         }
 
@@ -318,7 +317,7 @@ var options = {
                 array_push($listeNiveauEtude, $nomNiveauEtude);
                 $nbCoursParNiveauEtude = Cours::getNbCoursParNiveauEtude($idNiveauEtude);
                 array_push($listeNbCours, $nbCoursParNiveauEtude);
-                echo $nomNiveauEtude . " : " . $nbCoursParNiveauEtude . "<br/>";
+//                echo $nomNiveauEtude . " : " . $nbCoursParNiveauEtude . "<br/>";
             }
         }
 
@@ -329,16 +328,8 @@ var options = {
     {
         $dateMin = CoursSeance::getMinDate();
         $dateMax = CoursSeance::getMaxDate();
-        echo $dateMin;
-        echo "<br/>";
-        echo $dateMax;
-        echo "<br/>";
+
         $nbMoisInterval = intval(intval(strtotime($dateMax) - strtotime($dateMin)) / (60 * 60 * 24 * 30.4375));
-        echo $nbMoisInterval;
-        echo "<br/>";
-//        echo date("Y-M", strtotime('+1 month', strtotime($dateMin)));
-        echo "<br/>";
-//
         $plageMois = array();
         $nbParPlage = array();
         for ($i = 0; $i <= $nbMoisInterval; $i++) {
@@ -361,16 +352,9 @@ var options = {
     {
         $dateMin = Personne::getMinDate();
         $dateMax = Personne::getMaxDate();
-        echo $dateMin;
-        echo "<br/>";
-        echo $dateMax;
-        echo "<br/>";
+
         $nbMoisInterval = intval(intval(strtotime($dateMax) - strtotime($dateMin)) / (60 * 60 * 24 * 30.4375));
-        echo $nbMoisInterval;
-        echo "<br/>";
-//        echo date("Y-M", strtotime('+1 month', strtotime($dateMin)));
-        echo "<br/>";
-//
+
         $plageMois = array();
         $nbParPlage = array();
         for ($i = 0; $i <= $nbMoisInterval; $i++) {
@@ -392,16 +376,8 @@ var options = {
     {
         $dateMin = Eleve::getMinDate();
         $dateMax = Eleve::getMaxDate();
-        echo $dateMin;
-        echo "<br/>";
-        echo $dateMax;
-        echo "<br/>";
         $nbMoisInterval = intval(intval(strtotime($dateMax) - strtotime($dateMin)) / (60 * 60 * 24 * 30.4375));
-        echo $nbMoisInterval;
-        echo "<br/>";
-//        echo date("Y-M", strtotime('+1 month', strtotime($dateMin)));
-        echo "<br/>";
-//
+
         $plageMois = array();
         $nbParPlage = array();
         for ($i = 0; $i <= $nbMoisInterval; $i++) {
@@ -423,16 +399,9 @@ var options = {
     {
         $dateMin = Enseignant::getMinDate();
         $dateMax = Enseignant::getMaxDate();
-        echo $dateMin;
-        echo "<br/>";
-        echo $dateMax;
-        echo "<br/>";
+
         $nbMoisInterval = intval(intval(strtotime($dateMax) - strtotime($dateMin)) / (60 * 60 * 24 * 30.4375));
-        echo $nbMoisInterval;
-        echo "<br/>";
-//        echo date("Y-M", strtotime('+1 month', strtotime($dateMin)));
-        echo "<br/>";
-//
+
         $plageMois = array();
         $nbParPlage = array();
         for ($i = 0; $i <= $nbMoisInterval; $i++) {

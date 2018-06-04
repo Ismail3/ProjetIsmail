@@ -176,7 +176,7 @@ class Enseignant extends Personne
         $bdd = $bd->openConn();
 
         $sql = "select count(*) from ".Personne::$TABLE_NAME." where date_inscription < '$dateTimeMax' and date_inscription >='$dateTimeMin' and type_personne='".Enseignant::$TABLE_NAME."'";
-        echo $sql;
+//        echo $sql;
         $result = $bdd->query($sql);
         $bdd->close();
 

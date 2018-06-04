@@ -330,7 +330,7 @@ class Cours extends AbstractModel
                 VALUES ('$nom','$description',$tarif,$id_auteur,$matiere,$niveauEtudeMin,$niveauEtudeMax)
                 ;";
 
-        echo $sql;
+//        echo $sql;
 
         if ($bdd->query($sql) === TRUE) {
             $id_cours = $bdd->insert_id;
@@ -359,7 +359,7 @@ class Cours extends AbstractModel
                 WHERE id=$id
                 ;";
 
-        echo $sql;
+//        echo $sql;
 
         $query = $bdd->query($sql);
         $bdd->close();
@@ -392,7 +392,7 @@ class Cours extends AbstractModel
                 WHERE id=$id
                 ;";
 
-        echo $sql;
+//        echo $sql;
 
 
         if ($bdd->query($sql) === TRUE) {
@@ -426,8 +426,8 @@ class Cours extends AbstractModel
                 FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
                 WHERE M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max and C.id = $idCours
                 ;";
-        echo "<br/><br/><br/>";
-        echo $sql;
+//        echo "<br/><br/><br/>";
+//        echo $sql;
         $result = $bdd->query($sql);
 
         $bdd->close();

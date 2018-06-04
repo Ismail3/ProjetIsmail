@@ -75,7 +75,7 @@ class Personne extends AbstractModel
                 VALUES ('$nom','$prenom','$email','$date_naissance','$mot_de_passe','$type_compte','$image')
                 ;";
 
-        echo $sql;
+//        echo $sql;
 
         if ($bdd->query($sql) === TRUE) {
             $id_personne = $bdd->insert_id;
@@ -241,7 +241,7 @@ class Personne extends AbstractModel
         $bdd = $bd->openConn();
 
         $sql = "select count(*) from ".Personne::$TABLE_NAME." where date_inscription < '$dateTimeMax' and date_inscription >='$dateTimeMin'";
-        echo $sql;
+//        echo $sql;
         $result = $bdd->query($sql);
         $bdd->close();
 

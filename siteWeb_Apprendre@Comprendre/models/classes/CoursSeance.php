@@ -114,7 +114,7 @@ class CoursSeance extends AbstractModel
         $bdd = $bd->openConn();
 
         $sql = "select count(*) from SeanceCours where date_realisation < '$dateTimeMax' and date_realisation >='$dateTimeMin'";
-        echo $sql;
+//        echo $sql;
         $result = $bdd->query($sql);
         $bdd->close();
 
