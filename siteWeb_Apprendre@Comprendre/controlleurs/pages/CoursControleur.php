@@ -114,8 +114,7 @@ class CoursControleur extends ConnectedUserControleur
                                 <textarea type="text" rows="5" class="form-control" 
                                 name="inputDescriptionCours"
                                 id="inputDescriptionCours" aria-describedby="prénomHelp" placeholder="Entrer votre Prénom"
-                                value="' . $descriptionCours . '">
-                                </textarea>';
+                                value="' . $descriptionCours . '"></textarea>';
         $widget = $widget . '<small style="color:red;" id="emailErr" name="prenomErr" class="form-text">' . $this->inputDescriptionCoursErr . '</small>';
         $widget = $widget . '
                             </div>';

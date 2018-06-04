@@ -1,8 +1,8 @@
 <?php
-require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControleur.php');
+require_once(dirname(__FILE__) . '/../../../controlleurs/pages/RechercheControleur.php');
 session_start();
 ob_start();
-$ctrl = new TableauDeBordControleur();
+$ctrl = new RechercheControleur();
 $ctrl->checkUserSession();
 ?>
 <!DOCTYPE html>
@@ -21,7 +21,7 @@ $ctrl->checkUserSession();
     <link rel="stylesheet" href="../../../ressources/styles/bootstrap.min.css">
     <link rel="stylesheet" href="../../../ressources/styles/apprendre@comprendre.css">
     <link rel="stylesheet" href="../../../ressources/styles/template.css">
-    <link rel="stylesheet" href="../../../ressources/styles/template-tableau-de-bord.css">
+    <link rel="stylesheet" href="../../../ressources/styles/template-recherche.css">
 
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/common.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/map.js"></script>
@@ -38,12 +38,12 @@ $ctrl->checkUserSession();
 <?php
 ob_start();
 
-$ctrl = new TableauDeBordControleur();
+$ctrl = new RechercheControleur();
 
 $ctrl->displayNavBar();
 $ctrl->displayHeader();
 $ctrl->displayTopButton();
-$ctrl->displayUilisateurProfil();
+$ctrl->displayRechercheResult();
 $ctrl->displayFooter();
 
 ?>

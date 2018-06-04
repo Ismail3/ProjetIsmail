@@ -1,0 +1,17 @@
+/* Full height image header */
+.bgimg-1 {
+    background-position: center;
+    background-size: cover;
+    background-image: url("../images/recherche_header.jpg");
+    min-height: 100%;
+}
+header {
+    margin-top: 40px;
+}
+
+.my-container {
+    width: 30em;
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: nowrap;
+}

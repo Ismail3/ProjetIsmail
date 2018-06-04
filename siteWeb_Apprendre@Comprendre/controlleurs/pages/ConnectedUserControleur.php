@@ -9,16 +9,20 @@ require_once(dirname(__FILE__) . '/../../models/classes/Administrateur.php');
 class Connectedusercontroleur extends AbstractControleur
 {
 
+
+    protected $inputRecherche;
+    protected $inputRechercheErr;
+
     public function checkUserSession()
     {
-        if (!$this->isUserConnected())  {
-            header('Location: '.$this->url);
+        if (!$this->isUserConnected()) {
+            header('Location: ' . $this->url);
         }
     }
 
     public function displayNavBar()
     {
-//        session_start();
+        $this->rechercheByEnseignant();
         if ($this->isUserConnected()) {
 
             if ($this->isEleve()) {
@@ -31,7 +35,7 @@ class Connectedusercontroleur extends AbstractControleur
                         </a>
                         <!-- Right-sided navbar links -->
                         <div class="w3-right w3-hide-small">
-                            <form class="form-inline my-2 my-lg-0">
+                            <form class="form-inline my-2 my-lg-0" method="post">
                                 <input class="form-control mr-sm-2" type="text" placeholder="Search">
                                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                                 <a onclick="openNav2()" href="#" class="w3-bar-item w3-button"><i
@@ -79,10 +83,14 @@ class Connectedusercontroleur extends AbstractControleur
                         </a>
                         <!-- Right-sided navbar links -->
                         <div class="w3-right w3-hide-small">
-                            <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                                <a onclick="openNav2()" href="#home" class="w3-bar-item w3-button"><i
+                            <form class="form-inline my-2 my-lg-0" method="post">
+                                <input type="text" class="form-control" 
+                                name="inputRecherche"
+                                id="inputRecherche" 
+                                type="text" 
+                                aria-describedby="inputRechercheHelp" placeholder="Recherche">
+                                <button name="btnRechercheByEnseignant" id="btnRechercheByEnseignant" value="btnRechercheByEnseignant" type="submit" class="btn btn-primary" value = "Envoyer">Recherche</button>
+                                 <a onclick="openNav2()" href="#" class="w3-bar-item w3-button"><i
                                         class="fa fa-home"></i> Menu' . $this->getUserConnected()->getTypePersonne() . '</a>
                             </form>
                         </div>
@@ -128,7 +136,7 @@ class Connectedusercontroleur extends AbstractControleur
                         </a>
                         <!-- Right-sided navbar links -->
                         <div class="w3-right w3-hide-small">
-                            <form class="form-inline my-2 my-lg-0">
+                            <form class="form-inline my-2 my-lg-0" method="post">
                                 <input class="form-control mr-sm-2" type="text" placeholder="Search">
                                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                                 <a onclick="openNav2()" href="#home" class="w3-bar-item w3-button"><i
@@ -196,14 +204,12 @@ class Connectedusercontroleur extends AbstractControleur
         return $path;
     }
 
-
-
     protected function getOptitonNiveauEtude($niveauEtude)
     {
         $widget = '';
 
         $result = NiveauEtude::getListeNiveauEtude();
-        $i=0;
+        $i = 0;
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
@@ -228,7 +234,7 @@ class Connectedusercontroleur extends AbstractControleur
         $widget = '';
 
         $result = Matiere::getListeMatiere();
-        $i=0;
+        $i = 0;
 
         if ($result->num_rows > 0) {
             // output data of each row
@@ -239,7 +245,7 @@ class Connectedusercontroleur extends AbstractControleur
                 if ($i == $matiere) {
                     $widget = $widget . '"" selected>';
                 } else {
-                $widget = $widget . '"">';
+                    $widget = $widget . '"">';
                 }
                 $widget = $widget . $row['nom'];
                 $widget = $widget . '</option>';
@@ -267,6 +273,45 @@ class Connectedusercontroleur extends AbstractControleur
         }
 
         return $widget;
+    }
+
+    protected function rechercheByEnseignant()
+    {
+        if (isset($_POST['btnRechercheByEnseignant'])) {
+            echo "btnRechercheByEnseignant";
+
+            if ($this->barreDeRechecheVide()) {
+
+                $recherche = $_POST["inputRecherche"];
+
+                echo $recherche;
+
+                if ($recherche) {
+                    header('Location: ' . $this->url . 'templates/pages/recherche/recherche.php?recherche='.$recherche);
+                    exit();
+                }
+            }
+        }
+    }
+
+    private function barreDeRechecheVide()
+    {
+        echo "<br/><br/><br/><br/><br/><br/><br/><br/>barreDeRechecheVide";
+
+        $barreDeRechercheVide = true;
+
+        $recherche = $_POST['inputRecherche'];
+        echo "<br/><br/><br/><br/><br/><br/>" . $recherche;
+        echo "<br/><br/><br/><br/><br/><br/>" . $this->inputRechercheErr;
+
+        if (empty($recherche)) {
+            $this->inputRechercheErr = "Barre de recherche vide";
+            $barreDeRechercheVide = false;
+        } else {
+            $this->inputRechercheErr = "";
+        }
+
+        return $barreDeRechercheVide;
     }
 
 }
