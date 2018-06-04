@@ -110,6 +110,79 @@ class Enseignant extends Personne
         return 0;
     }
 
+    public static function getMinDate()
+    {
+        $minDate = "2013-12";
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select min(date_inscription) as minDate from ".Personne::$TABLE_NAME." where type_personne='".Enseignant::$TABLE_NAME."' ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $minDate = $row['minDate'];
+            }
+        }
+
+        $bdd->close();
+
+        return date('Y-M', strtotime($minDate));
+    }
+
+    public static function getMaxDate()
+    {
+        $minDate = "2013-12";
+
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "select max(date_inscription) as maxDate from ".Personne::$TABLE_NAME." where type_personne='".Enseignant::$TABLE_NAME."' ;";
+        $result = $bdd->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $minDate = $row['maxDate'];
+            }
+        }
+
+        $bdd->close();
+
+        return date('Y-M', strtotime($minDate));
+    }
+
+    public static function countPersonneIncritBetweenDate($dateMin, $dateMax)
+    {
+        $dateTimeMin =  date('Y-m-d H:i:s', strtotime($dateMin));
+        $dateTimeMax =  date('Y-m-d H:i:s', strtotime($dateMax));
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "select count(*) from ".Personne::$TABLE_NAME." where date_inscription < '$dateTimeMax' and date_inscription >='$dateTimeMin' and type_personne='".Enseignant::$TABLE_NAME."'";
+        echo $sql;
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+        return $result;
+    }
+
     /**
      * @return int
      */

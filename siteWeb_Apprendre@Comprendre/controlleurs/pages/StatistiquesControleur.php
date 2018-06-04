@@ -148,6 +148,8 @@ class StatistiquesControleur extends AbstractControleur
         $widget = $widget . "<div class=\"w3-center\">";
         $widget = $widget . $this->getBarChartCoursParMois();
         $widget = $widget . $this->getBarChartPersonneParMois();
+        $widget = $widget . $this->getBarChartEleveParMois();
+        $widget = $widget . $this->getBarChartEnseignantParMois();
 
         $widget = $widget . "</div>";
 
@@ -298,7 +300,7 @@ var options = {
             }
         }
 
-        return $this->getBarChart("barChartCoursMatiere", $listeMatieres, $listeNbCours, "Nombre de cours par matière","horizontal");
+        return $this->getBarChart("barChartCoursMatiere", $listeMatieres, $listeNbCours, "Nombre de cours par matière","horizontal","Matières","Nb Cours");
 
 
         return $widget;
@@ -320,7 +322,7 @@ var options = {
             }
         }
 
-        return $this->getBarChart("barChartCoursNiveauEtude", $listeNiveauEtude, $listeNbCours, "Nombre de cours par niveau etude min","horizontal");
+        return $this->getBarChart("barChartCoursNiveauEtude", $listeNiveauEtude, $listeNbCours, "Nombre de cours par niveau etude min","horizontal","Niveaux d\'études","Nb Cours");
     }
 
     private function getBarChartCoursParMois()
@@ -351,7 +353,7 @@ var options = {
             }
             $dateMin = date("Y-M", strtotime('+1 month', strtotime($dateMin)));
         }
-        return $this->getBarChart("barChartCoursMois", $plageMois, $nbParPlage, "Nombre de cours par mois", "vertical");
+        return $this->getBarChart("barChartCoursMois", $plageMois, $nbParPlage, "Nombre de cours par mois", "vertical","Date","Nb Cours");
     }
 
 
@@ -383,10 +385,72 @@ var options = {
             }
             $dateMin = date("Y-M", strtotime('+1 month', strtotime($dateMin)));
         }
-        return $this->getBarChart("barChartPersonnesInscritesMois", $plageMois, $nbParPlage, "Nombre de personnes inscrites par mois", "vertical");
+        return $this->getBarChart("barChartPersonnesInscritesMois", $plageMois, $nbParPlage, "Nombre de personnes inscrites par mois", "vertical","Date","Nb Personnes");
     }
 
-    private function getBarChart($idBarChart, $listeLabels, $listeValeurs, $titre, $typeBarChart)
+    private function getBarChartEleveParMois()
+    {
+        $dateMin = Eleve::getMinDate();
+        $dateMax = Eleve::getMaxDate();
+        echo $dateMin;
+        echo "<br/>";
+        echo $dateMax;
+        echo "<br/>";
+        $nbMoisInterval = intval(intval(strtotime($dateMax) - strtotime($dateMin)) / (60 * 60 * 24 * 30.4375));
+        echo $nbMoisInterval;
+        echo "<br/>";
+//        echo date("Y-M", strtotime('+1 month', strtotime($dateMin)));
+        echo "<br/>";
+//
+        $plageMois = array();
+        $nbParPlage = array();
+        for ($i = 0; $i <= $nbMoisInterval; $i++) {
+            $result = Eleve::countPersonneIncritBetweenDate($dateMin, date("Y-M", strtotime('+1 month', strtotime($dateMin))));
+            if ($result->num_rows > 0) {
+                // output data of each row
+                while ($row = $result->fetch_assoc()) {
+                    $nbPersonneInscrit = $row['count(*)'];
+                    array_push($plageMois, $dateMin);
+                    array_push($nbParPlage, intval($nbPersonneInscrit));
+                }
+            }
+            $dateMin = date("Y-M", strtotime('+1 month', strtotime($dateMin)));
+        }
+        return $this->getBarChart("barChartElevesInscritsMois", $plageMois, $nbParPlage, "Nombre d\'élèves inscrits par mois", "vertical","Date","Nb Élèves");
+    }
+
+    private function getBarChartEnseignantParMois()
+    {
+        $dateMin = Enseignant::getMinDate();
+        $dateMax = Enseignant::getMaxDate();
+        echo $dateMin;
+        echo "<br/>";
+        echo $dateMax;
+        echo "<br/>";
+        $nbMoisInterval = intval(intval(strtotime($dateMax) - strtotime($dateMin)) / (60 * 60 * 24 * 30.4375));
+        echo $nbMoisInterval;
+        echo "<br/>";
+//        echo date("Y-M", strtotime('+1 month', strtotime($dateMin)));
+        echo "<br/>";
+//
+        $plageMois = array();
+        $nbParPlage = array();
+        for ($i = 0; $i <= $nbMoisInterval; $i++) {
+            $result = Enseignant::countPersonneIncritBetweenDate($dateMin, date("Y-M", strtotime('+1 month', strtotime($dateMin))));
+            if ($result->num_rows > 0) {
+                // output data of each row
+                while ($row = $result->fetch_assoc()) {
+                    $nbPersonneInscrit = $row['count(*)'];
+                    array_push($plageMois, $dateMin);
+                    array_push($nbParPlage, intval($nbPersonneInscrit));
+                }
+            }
+            $dateMin = date("Y-M", strtotime('+1 month', strtotime($dateMin)));
+        }
+        return $this->getBarChart("barChartEnseignantsInscritsMois", $plageMois, $nbParPlage, "Nombre d\'enseignants inscrits par mois", "vertical","Date","Nb Enseignants");
+    }
+
+    private function getBarChart($idBarChart, $listeLabels, $listeValeurs, $titre, $typeBarChart,$libelleX,$libelleY)
     {
         $widget = '
 <div class="my-container" style="width: 100%; height: 100%;">
@@ -405,7 +469,7 @@ var options = {
         $widget = $widget . '
 function drawBarChart() {
         var data = google.visualization.arrayToDataTable([
-        [\'Matiere\', \'Nombre de cours\'],';
+        [\''.$libelleX.'\', \''.$libelleY.'\'],';
         for ($i = 0; $i < count($listeLabels); $i++) {
             $widget = $widget . '
               [\'' . $listeLabels[$i] . '\', ' . $listeValeurs[$i] . ']';
