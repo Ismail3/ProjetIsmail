@@ -183,6 +183,29 @@ class Enseignant extends Personne
         return $result;
     }
 
+    public static function recherche($valeurRecherchee)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne, telephone, adresse, mot_de_passe, image
+                FROM Enseignant E, Personne P
+                WHERE E.id_personne = P.id
+                      and (
+                      P.nom like '%$valeurRecherchee%'
+                      or
+                      P.prenom like '%$valeurRecherchee%' 
+                      )
+                ;";
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
+    }
+
     /**
      * @return int
      */

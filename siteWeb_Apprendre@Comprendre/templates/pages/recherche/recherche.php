@@ -22,6 +22,14 @@ $ctrl->checkUserSession();
     <link rel="stylesheet" href="../../../ressources/styles/apprendre@comprendre.css">
     <link rel="stylesheet" href="../../../ressources/styles/template.css">
     <link rel="stylesheet" href="../../../ressources/styles/template-recherche.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/common.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/map.js"></script>

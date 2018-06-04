@@ -209,6 +209,34 @@ class Eleve extends Personne
     }
 
     /**
+     * @param $valeurRecherchee
+     * @return bool|mysqli_result
+     */
+    public static function recherche($valeurRecherchee)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,date_inscription,type_personne,NE.nom as niveau_etude, telephone, adresse, image
+                FROM Eleve E, NiveauEtude NE, Personne P
+                WHERE E.id_personne = P.id
+                      and E.niveau_etude = NE.id
+                      and (
+                      P.nom like '%$valeurRecherchee%'
+                      or
+                      P.prenom like '%$valeurRecherchee%' 
+                      )
+                ;";
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
+    }
+
+    /**
      * @return int
      */
     public function getId()

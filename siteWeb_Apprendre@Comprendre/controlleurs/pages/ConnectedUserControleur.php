@@ -182,6 +182,39 @@ class Connectedusercontroleur extends AbstractControleur
         }
     }
 
+    function afficherEleve($id, $nom, $prenom, $email, $date_naissance, $niveau_etude, $image)
+    {
+        $eleve = '<div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-card">
+                <img src="../../../ressources/images/' . $image . '" alt="' . $nom . ' ' . $prenom . '" style="width:100%">
+                <div class="w3-container">
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                                <h3>' . $nom . ' ' . $prenom . '</h3>
+                            </td>
+                            <td style="text-align: right">
+                                ' . $id . ' 
+                                                    <p class="w3-opacity">' . $niveau_etude . ' </p>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p style="text-align: center">' . $date_naissance . '</p>
+                    <p>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> ' . $email . ' </button>
+                    </p>
+                    <p>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-book"></i> Cours</button>
+                    </p>
+                </div>
+            </div>
+        </div>';
+
+        return $eleve;
+    }
+
     public function displayHeader()
     {
         if ($this->isUserConnected()) {

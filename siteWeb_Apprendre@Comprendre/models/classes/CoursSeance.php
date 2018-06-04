@@ -121,6 +121,33 @@ class CoursSeance extends AbstractModel
         return $result;
     }
 
+    public static function recherche($valeurRecherchee)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur,
+                M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom,
+                S.date_inscription, S.date_realisation, S.participant, S.duree, S.etat,
+                P.nom as nom_participant,P.prenom as prenom_participant,P.email as email_participant,P.date_naissance as date_naissance_participant, P.type_personne as type_personne_participant
+                FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax, SeanceCours S, Personne P
+                WHERE M.id = C.matiere
+                and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max
+                and S.proposition_cours = C.id and P.id = S.participant and C.nom like '%$valeurRecherchee%'
+                ORDER BY date_realisation DESC";
+
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+        return $result;
+    }
+
     /*
      * Getter & Setter
      */
@@ -256,6 +283,8 @@ class CoursSeance extends AbstractModel
                 LIMIT 5;";
         $result = $bdd->query($sql);
         $bdd->close();
+
+        return $result;
     }
 
     public static function getListeDesSeancesCoursDemande()
@@ -283,5 +312,8 @@ class CoursSeance extends AbstractModel
         $result = $bdd->query($sql);
 
         $bdd->close();
+
+        return $result;
+
     }
 }

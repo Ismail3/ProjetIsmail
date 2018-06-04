@@ -299,7 +299,7 @@ var options = {
             }
         }
 
-        return $this->getBarChart("barChartCoursMatiere", $listeMatieres, $listeNbCours, "Nombre de cours par matière","horizontal","Matières","Nb Cours");
+        return $this->getBarChart("barChartCoursMatiere", $listeMatieres, $listeNbCours, "Nombre de cours par matière", "horizontal", "Matières", "Nb Cours");
 
 
         return $widget;
@@ -321,7 +321,7 @@ var options = {
             }
         }
 
-        return $this->getBarChart("barChartCoursNiveauEtude", $listeNiveauEtude, $listeNbCours, "Nombre de cours par niveau etude min","horizontal","Niveaux d\'études","Nb Cours");
+        return $this->getBarChart("barChartCoursNiveauEtude", $listeNiveauEtude, $listeNbCours, "Nombre de cours par niveau etude min", "horizontal", "Niveaux d\'études", "Nb Cours");
     }
 
     private function getBarChartCoursParMois()
@@ -344,7 +344,7 @@ var options = {
             }
             $dateMin = date("Y-M", strtotime('+1 month', strtotime($dateMin)));
         }
-        return $this->getBarChart("barChartCoursMois", $plageMois, $nbParPlage, "Nombre de cours par mois", "vertical","Date","Nb Cours");
+        return $this->getBarChart("barChartCoursMois", $plageMois, $nbParPlage, "Nombre de cours par mois", "vertical", "Date", "Nb Cours");
     }
 
 
@@ -369,7 +369,7 @@ var options = {
             }
             $dateMin = date("Y-M", strtotime('+1 month', strtotime($dateMin)));
         }
-        return $this->getBarChart("barChartPersonnesInscritesMois", $plageMois, $nbParPlage, "Nombre de personnes inscrites par mois", "vertical","Date","Nb Personnes");
+        return $this->getBarChart("barChartPersonnesInscritesMois", $plageMois, $nbParPlage, "Nombre de personnes inscrites par mois", "vertical", "Date", "Nb Personnes");
     }
 
     private function getBarChartEleveParMois()
@@ -392,7 +392,7 @@ var options = {
             }
             $dateMin = date("Y-M", strtotime('+1 month', strtotime($dateMin)));
         }
-        return $this->getBarChart("barChartElevesInscritsMois", $plageMois, $nbParPlage, "Nombre d\'élèves inscrits par mois", "vertical","Date","Nb Élèves");
+        return $this->getBarChart("barChartElevesInscritsMois", $plageMois, $nbParPlage, "Nombre d\'élèves inscrits par mois", "vertical", "Date", "Nb Élèves");
     }
 
     private function getBarChartEnseignantParMois()
@@ -416,10 +416,10 @@ var options = {
             }
             $dateMin = date("Y-M", strtotime('+1 month', strtotime($dateMin)));
         }
-        return $this->getBarChart("barChartEnseignantsInscritsMois", $plageMois, $nbParPlage, "Nombre d\'enseignants inscrits par mois", "vertical","Date","Nb Enseignants");
+        return $this->getBarChart("barChartEnseignantsInscritsMois", $plageMois, $nbParPlage, "Nombre d\'enseignants inscrits par mois", "vertical", "Date", "Nb Enseignants");
     }
 
-    private function getBarChart($idBarChart, $listeLabels, $listeValeurs, $titre, $typeBarChart,$libelleX,$libelleY)
+    private function getBarChart($idBarChart, $listeLabels, $listeValeurs, $titre, $typeBarChart, $libelleX, $libelleY)
     {
         $widget = '
 <div class="my-container" style="width: 100%; height: 100%;">
@@ -438,10 +438,10 @@ var options = {
         $widget = $widget . '
 function drawBarChart() {
         var data = google.visualization.arrayToDataTable([
-        [\''.$libelleX.'\', \''.$libelleY.'\'],';
+        [\'' . $libelleX . '\', \'' . $libelleY . '\'],';
         for ($i = 0; $i < count($listeLabels); $i++) {
             $widget = $widget . '
-              [\'' . $listeLabels[$i] . '\', ' . $listeValeurs[$i] . ']';
+              [\'' . strval($listeLabels[$i]) . '\', ' . $listeValeurs[$i] . ']';
             if ($i < count($listeLabels) - 1) {
                 $widget = $widget . ',';
             }
@@ -451,16 +451,6 @@ function drawBarChart() {
         function drawBarChart() {
         var data = google.visualization.arrayToDataTable([
         [\'Matiere\', \'Nombre de cours\'],';
-        for ($i = 0; $i < count($listeLabels); $i++) {
-//            echo "listeMatieres[$i] : " . $listeLabels[$i] . "<br>";
-            $widget2 = $widget2 . '
-              [\'' . ($listeLabels[$i]) . '\', ' . $listeValeurs[$i] . ']';
-            if ($i < count($listeLabels) - 1) {
-                $widget2 = $widget2 . ',';
-            }
-        }
-        $widget2 = $widget2 . ']);';
-//        echo $widget2 . "<br/>";
         $widget = $widget . '
             var options = {
           chart: {
@@ -476,7 +466,7 @@ function drawBarChart() {
     }';
         $widget = $widget . '     
     </script>
-    </div>';
+    </div></div>';
         return $widget;
     }
 }

@@ -81,7 +81,7 @@ class TableauDeBordControleur extends ConnectedUserControleur
         return $widgets;
     }
 
-    function displayEleve($id, $nom, $prenom, $email, $date_naissance, $niveau_etude, $image)
+    function afficherEleve($id, $nom, $prenom, $email, $date_naissance, $niveau_etude, $image)
     {
         $eleve = '<div class="w3-col l3 m6 w3-margin-bottom">
             <div class="w3-card">
@@ -127,7 +127,7 @@ class TableauDeBordControleur extends ConnectedUserControleur
         if ($listeEleves->num_rows > 0) {
             // output data of each row
             while ($row = $listeEleves->fetch_assoc()) {
-                $this->displayEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"], $row["image"]);
+                $this->afficherEleve($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"], $row["image"]);
             }
         } else {
             echo "displayEleves : 0 results";
