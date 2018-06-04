@@ -250,7 +250,7 @@ class Personne extends AbstractModel
 
     /*
      * Getters & Setters
-     */
+
 
     /**
      * @return int

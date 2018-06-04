@@ -291,23 +291,21 @@ class CoursControleur extends ConnectedUserControleur
 
         $widget = '
     <div class="w3-container" style="padding:128px 16px">
-    <h3 class="w3-center">Nouveau cours</h3>
-    <p class="w3-left w3-large">Veuillez renseigner ci-dessous l\'ensemble des informations nécessaires à la création d\'un nouveau cours : </p>
+    <h2 class="w3-center w3-text-grey w3-padding-16"><i
+                                    class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Mise à jours cours </h2>
+    <p class="w3-left w3-large">Veuillez renseigner ci-dessous l\'ensemble des informations nécessaires à la mise à jours d\'un cours : </p>
     <div class="" style="margin-top:16px">';
 
         //Liste des cours crées
         $widget = $widget . '
-                    <div class="w3-container w3-card w3-white w3-margin-bottom">
-                        <h2 class="w3-text-grey w3-padding-16"><i
-                                    class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Cours </h2>';
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">';
         $widget = $widget . '
         <!-- Promo Section - "We know design" -->
         <div id="creationCours" class="w3-container ">
             <div class="w3-row-padding">
-                    <form action="" method="post">
+                    <form action="" method="post"
                         <fieldset>';
         $widget = $widget . '
-                            <legend>Nouveau cours</legend>
                             <div class="form-group">
                                 <label for="inputNomCours">Nom</label>
                                 <input type="text" class="form-control" 
@@ -360,7 +358,9 @@ class CoursControleur extends ConnectedUserControleur
                             </div>';
         $widget = $widget . '        
                             </fieldset>
-                                <button name="btnMajCours" id="btnMajCours" value="btnMajCours" type="submit" class="btn btn-primary" value = "Envoyer">Submit</button>
+                                <button name="btnMajCours" id="btnMajCours" value="btnMajCours" type="submit" class="btn btn-primary" value = "Envoyer">Enregistrer</button>
+                                <button name="btnSupprCours" id="btnSupprCours" value="btnSupprCours" type="submit" class="btn btn-danger" value = "Supprimer">Supprimer</button>
+
                         </fieldset>
                     </form>
             </div>
@@ -390,14 +390,26 @@ class CoursControleur extends ConnectedUserControleur
                 $niveauEtudeMaxCours = $_POST["inputNiveauEtudeMaxCours"];
                 $enligne = 0;
 
-                $id_cours = Cours::majCours($idCours, $enseignant, $nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours, $enligne);
+                $supprCours = Cours::majCours($idCours, $enseignant, $nomCours, $descriptionCours, $tarifCours, $matiereCours, $niveauEtudeMinCours, $niveauEtudeMaxCours, $enligne);
 
-                if ($id_cours != -1) {
+                if ($supprCours != -1) {
                     header('Location: ' . $this->url . 'templates/pages/tableauDeBord/tableauDeBordCours.php');
                     exit();
                 } else {
                     echo "Erreur à la mise à jour du cours";
                 }
+            }
+        } else if (isset($_POST['btnSupprCours'])) {
+
+            $idCours = $_GET["id"];
+
+            $supprCours = Cours::supprCours($idCours);
+
+            if ($supprCours === TRUE) {
+                header('Location: ' . $this->url . 'templates/pages/tableauDeBord/tableauDeBordCours.php');
+                exit();
+            } else {
+                echo "Erreur à la suppresion du cours";
             }
         }
     }

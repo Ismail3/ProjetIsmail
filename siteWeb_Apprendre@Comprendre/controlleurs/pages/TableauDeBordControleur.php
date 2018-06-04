@@ -770,7 +770,7 @@ class TableauDeBordControleur extends ConnectedUserControleur
         if ($gestion == 1) {
             if ($en_ligne == 0) {
                 $widget = $widget . '                            <form action="tableauDeBordCours.php" method="post">
-                            <button value="btnEnLigneCours' . $id . ' id="btnEnLigneCours' . $id . ' name="btnEnLigneCours' . $id . '" type="submit" class="btn">HorsLigne</button>
+                            <button value="btnEnLigneCours' . $id . ' id="btnEnLigneCours' . $id . ' name="btnEnLigneCours' . $id . '" type="submit" class="btn btn-warning">HorsLigne</button>
                             </form>';
             } else {
                 $widget = $widget . '

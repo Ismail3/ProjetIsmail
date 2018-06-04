@@ -148,6 +148,27 @@ class Cours extends AbstractModel
         return intval($nbCours);
     }
 
+    public static function supprCours($idCours)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "Delete from Cours
+                WHERE id=$idCours
+                ;";
+
+        echo $sql;
+
+
+        $mysqli_result = $bdd->query($sql);
+        $bdd->close();
+
+        echo $mysqli_result;
+        return $mysqli_result;
+    }
+
     /*
      * Getter & Setter
      */
@@ -480,7 +501,7 @@ class Cours extends AbstractModel
             die("Connection failed: " . $bdd->connect_error);
         }
 
-        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom
+        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom, en_ligne
                 FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
                 WHERE M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max and C.id_auteur = " . $idpersonne . "
                 ORDER BY date_creation DESC";
