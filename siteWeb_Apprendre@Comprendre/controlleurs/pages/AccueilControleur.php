@@ -1,10 +1,12 @@
 <?php
+
 require_once(dirname(__FILE__) . '/../AbstractControleur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Personne.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Eleve.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Cours.php');
 require_once(dirname(__FILE__) . '/../../models/classes/CoursSeance.php');
+require_once(dirname(__FILE__) . '/../../models/classes/Matiere.php');
 
 
 class AccueilControleur extends AbstractControleur
@@ -111,6 +113,8 @@ class AccueilControleur extends AbstractControleur
     private function getInfosSiteWeb()
     {
         $widget = $this->getInfosApropos();
+        $widget = $widget . $this->getInfosMatieres();
+        $widget = $widget . $this->getInfosEnseignants();
         $widget = $widget . $this->getStatistiques();
 
         return $widget;
@@ -123,90 +127,7 @@ class AccueilControleur extends AbstractControleur
 <div class="w3-container" style="padding:128px 16px" id="about">
     <h3 class="w3-center">À propos de <strong> Aprendre@Comprendre</strong></h3>';
         $widget = $widget . $this->displayQuelquesCaracteristiques();
-        $widget = $widget . '
 
-<!-- Promo Section - "We know design" -->
-<div class="w3-container w3-light-grey" style="padding:128px 16px">
-    <div class="w3-row-padding">
-        <div class="w3-col m6">
-            <h3>Des cours particuliers designer pour vous.</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod<br>tempor incididunt ut labore et
-                dolore.</p>
-            <p><a href="#work" class="w3-button w3-black"><i
-                    class="fa fa-th">&nbsp;</i> Qulesques matières</a></p>
-        </div>
-        <div class="w3-col m6">
-            <img class="w3-image w3-round-large" src="ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
-                 width="700" height="394">
-        </div>
-    </div>
-</div>';
-        $widget = $widget . '
-
-<!-- Team Section -->
-<div class="w3-container" style="padding:128px 16px" id="team">
-    <h3 class="w3-center">Quelques enseignants</h3>
-    <p class="w3-center w3-large">Unie par la volonté de transmettre la connaissance</p>
-    <div class="w3-row-padding w3-grayscale" style="margin-top:64px">
-        <div class="w3-col l3 m6 w3-margin-bottom">
-            <div class="w3-card">
-                <img src="ressources/images/team2.jpg" alt="John" style="width:100%">
-                <div class="w3-container">
-                    <h3>John Doe</h3>
-                    <p class="w3-opacity">CEO &amp; Founder</p>
-                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
-                        elementum.</p>
-                    <p>
-                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col l3 m6 w3-margin-bottom">
-            <div class="w3-card">
-                <img src="ressources/images/team1.jpg" alt="Jane" style="width:100%">
-                <div class="w3-container">
-                    <h3>Anja Doe</h3>
-                    <p class="w3-opacity">Art Director</p>
-                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
-                        elementum.</p>
-                    <p>
-                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col l3 m6 w3-margin-bottom">
-            <div class="w3-card">
-                <img src="ressources/images/team3.jpg" alt="Mike" style="width:100%">
-                <div class="w3-container">
-                    <h3>Mike Ross</h3>
-                    <p class="w3-opacity">Web Designer</p>
-                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
-                        elementum.</p>
-                    <p>
-                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col l3 m6 w3-margin-bottom">
-            <div class="w3-card">
-                <img src="ressources/images/team4.jpg" alt="Dan" style="width:100%">
-                <div class="w3-container">
-                    <h3>Dan Star</h3>
-                    <p class="w3-opacity">Designer</p>
-                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
-                        elementum.</p>
-                    <p>
-                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-';
         return $widget;
     }
 
@@ -527,6 +448,140 @@ var options = {
     ';
         $widget = $widget . '     
     </script>';
+        return $widget;
+    }
+
+    /**
+     * @return string
+     */
+    private function getInfosMatieres()
+    {
+        $widget = "";
+        $widget = $widget . '
+
+<!-- Promo Section - "We know design" -->
+<div class="w3-container w3-light-grey" style="padding:128px 16px">
+    <div class="w3-row-padding">
+        <div class="w3-col m6">
+            <h3>Qulesques matières</h3>';
+        $listeMatiere = Matiere::getListeMatiere();
+
+        $widget = $widget . $this->displayMatieres($listeMatiere);
+
+
+        $widget = $widget . '
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod<br>tempor incididunt ut labore et
+                dolore.</p>
+            <p><a href="#work" class="w3-button w3-black"><i
+                    class="fa fa-th">&nbsp;</i> Qulesques matières</a></p>
+        </div>
+        <div class="w3-col m6">
+            <img class="w3-image w3-round-large" src="ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
+                 width="700" height="394">
+        </div>
+    </div>
+</div>';
+        return $widget;
+    }
+
+    private function getInfosEnseignants()
+    {
+        $widget = "";
+
+        $widget = $widget . '
+
+<!-- Team Section -->
+<div class="w3-container" style="padding:128px 16px" id="team">
+    <h3 class="w3-center">Quelques enseignants</h3>
+    <p class="w3-center w3-large">Unie par la volonté de transmettre la connaissance</p>
+    <div class="w3-row-padding w3-grayscale" style="margin-top:64px">
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-card">
+                <img src="ressources/images/team2.jpg" alt="John" style="width:100%">
+                <div class="w3-container">
+                    <h3>John Doe</h3>
+                    <p class="w3-opacity">CEO &amp; Founder</p>
+                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
+                        elementum.</p>
+                    <p>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-card">
+                <img src="ressources/images/team1.jpg" alt="Jane" style="width:100%">
+                <div class="w3-container">
+                    <h3>Anja Doe</h3>
+                    <p class="w3-opacity">Art Director</p>
+                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
+                        elementum.</p>
+                    <p>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-card">
+                <img src="ressources/images/team3.jpg" alt="Mike" style="width:100%">
+                <div class="w3-container">
+                    <h3>Mike Ross</h3>
+                    <p class="w3-opacity">Web Designer</p>
+                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
+                        elementum.</p>
+                    <p>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-card">
+                <img src="ressources/images/team4.jpg" alt="Dan" style="width:100%">
+                <div class="w3-container">
+                    <h3>Dan Star</h3>
+                    <p class="w3-opacity">Designer</p>
+                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
+                        elementum.</p>
+                    <p>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+';
+        return $widget;
+    }
+
+    private function displayMatiere($nom)
+    {
+        $widget = "<li>";
+
+        $widget = $widget . $nom;
+
+        $widget = $widget . "</li>";
+
+        return $widget;
+    }
+
+    private function displayMatieres($listeMatiere)
+    {
+        $widget = "<ul>";
+
+        if ($listeMatiere->num_rows > 0) {
+            // output data of each row
+            while ($row = $listeMatiere->fetch_assoc()) {
+                $widget = $widget . $this->displayMatiere($row['nom']);
+
+            }
+        }
+
+        $widget = $widget . "</ul>";
+
         return $widget;
     }
 }
