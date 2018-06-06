@@ -439,12 +439,12 @@ var options = {
 function drawBarChart() {
         var data = google.visualization.arrayToDataTable([
         [\'' . $libelleX . '\', \'' . $libelleY . '\'],';
-        var_dump($listeLabels);
+//        var_dump($listeLabels);
         for ($i = 0; $i < count($listeLabels); $i++) {
             $label = $listeLabels[$i];
             $label_enconding = $this->convert_to($listeLabels[$i], "UTF-8");
-            echo "<br/> label : " . $label . " : " . strlen($label);
-            echo "<br/> label : " . $label_enconding . " : " . strlen($label_enconding);
+//            echo "<br/> label : " . $label . " : " . strlen($label);
+//            echo "<br/> label : " . $label_enconding . " : " . strlen($label_enconding);
             $widget = $widget . '
               [\'' . strval($label_enconding) . '\', ' . $listeValeurs[$i] . ']';
             if ($i < count($listeLabels) - 1) {

@@ -1,13 +1,25 @@
 <?php
 require_once(dirname(__FILE__) . '/Personne.php');
 
+/**
+ * Class Enseignant
+ */
 class Enseignant extends Personne
 {
     /*
      * Attributs
      */
+    /**
+     * @var
+     */
     private $id;
+    /**
+     * @var
+     */
     private $typeEnseignant;
+    /**
+     * @var string
+     */
     public static $TABLE_NAME = "Enseignant";
 
 
@@ -18,6 +30,10 @@ class Enseignant extends Personne
     {
     }
 
+    /**
+     * @param $id
+     * @return bool|mysqli_result
+     */
     public static function getUtilisateur($id)
     {
         $bd = new BdConnexion();
@@ -34,7 +50,14 @@ class Enseignant extends Personne
 
         $bdd->close();
 
-        return $result;
+        if ($result->num_rows > 0) {
+
+            while ($row = $result->fetch_assoc()) {
+                return Enseignant::initEnseignant($row);
+            }
+        } else {
+            return 0;
+        }
     }
 
     /**
@@ -68,13 +91,16 @@ class Enseignant extends Personne
         return $nbEnseignant;
     }
 
+    /**
+     * @return int
+     */
     public static function getMinAge()
     {
         $bd = new BdConnexion();
 
         // Create connection
         $bdd = $bd->openConn();
-        $sql = "select max(date_naissance) as ageMin from Personne where type_personne='".Enseignant::$TABLE_NAME."';";
+        $sql = "select max(date_naissance) as ageMin from Personne where type_personne='" . Enseignant::$TABLE_NAME . "';";
         $result = $bdd->query($sql);
         $bdd->close();
 
@@ -96,7 +122,7 @@ class Enseignant extends Personne
         // Create connection
         $bdd = $bd->openConn();
 
-        $sql = "select min(date_naissance) as ageMax from Personne where type_personne='".Enseignant::$TABLE_NAME."';";
+        $sql = "select min(date_naissance) as ageMax from Personne where type_personne='" . Enseignant::$TABLE_NAME . "';";
         $result = $bdd->query($sql);
         $bdd->close();
 
@@ -110,6 +136,9 @@ class Enseignant extends Personne
         return 0;
     }
 
+    /**
+     * @return false|string
+     */
     public static function getMinDate()
     {
         $minDate = "2013-12";
@@ -123,7 +152,7 @@ class Enseignant extends Personne
             die("Connection failed: " . $bdd->connect_error);
         }
 
-        $sql = "select min(date_inscription) as minDate from ".Personne::$TABLE_NAME." where type_personne='".Enseignant::$TABLE_NAME."' ;";
+        $sql = "select min(date_inscription) as minDate from " . Personne::$TABLE_NAME . " where type_personne='" . Enseignant::$TABLE_NAME . "' ;";
         $result = $bdd->query($sql);
 
         if ($result->num_rows > 0) {
@@ -138,6 +167,9 @@ class Enseignant extends Personne
         return date('Y-M', strtotime($minDate));
     }
 
+    /**
+     * @return false|string
+     */
     public static function getMaxDate()
     {
         $minDate = "2013-12";
@@ -151,7 +183,7 @@ class Enseignant extends Personne
             die("Connection failed: " . $bdd->connect_error);
         }
 
-        $sql = "select max(date_inscription) as maxDate from ".Personne::$TABLE_NAME." where type_personne='".Enseignant::$TABLE_NAME."' ;";
+        $sql = "select max(date_inscription) as maxDate from " . Personne::$TABLE_NAME . " where type_personne='" . Enseignant::$TABLE_NAME . "' ;";
         $result = $bdd->query($sql);
 
         if ($result->num_rows > 0) {
@@ -166,16 +198,21 @@ class Enseignant extends Personne
         return date('Y-M', strtotime($minDate));
     }
 
+    /**
+     * @param $dateMin
+     * @param $dateMax
+     * @return bool|mysqli_result
+     */
     public static function countPersonneIncritBetweenDate($dateMin, $dateMax)
     {
-        $dateTimeMin =  date('Y-m-d H:i:s', strtotime($dateMin));
-        $dateTimeMax =  date('Y-m-d H:i:s', strtotime($dateMax));
+        $dateTimeMin = date('Y-m-d H:i:s', strtotime($dateMin));
+        $dateTimeMax = date('Y-m-d H:i:s', strtotime($dateMax));
         $bd = new BdConnexion();
 
         // Create connection
         $bdd = $bd->openConn();
 
-        $sql = "select count(*) from ".Personne::$TABLE_NAME." where date_inscription < '$dateTimeMax' and date_inscription >='$dateTimeMin' and type_personne='".Enseignant::$TABLE_NAME."'";
+        $sql = "select count(*) from " . Personne::$TABLE_NAME . " where date_inscription < '$dateTimeMax' and date_inscription >='$dateTimeMin' and type_personne='" . Enseignant::$TABLE_NAME . "'";
 //        echo $sql;
         $result = $bdd->query($sql);
         $bdd->close();
@@ -183,6 +220,10 @@ class Enseignant extends Personne
         return $result;
     }
 
+    /**
+     * @param $valeurRecherchee
+     * @return bool|mysqli_result
+     */
     public static function recherche($valeurRecherchee)
     {
         $bd = new BdConnexion();
@@ -204,6 +245,67 @@ class Enseignant extends Personne
         $bdd->close();
 
         return $result;
+    }
+
+    /**
+     * @return bool|mysqli_result
+     */
+    public static function getEnseignantPopulaire()
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,P.date_inscription,type_personne, telephone, adresse, mot_de_passe, image, count(SC.date_realisation) as nbCours, E.description as description
+                FROM Enseignant E, Personne P, Cours C, SeanceCours SC
+                WHERE E.id_personne = P.id and C.id_auteur = P.id and C.id= SC.proposition_cours
+                GROUP BY E.id
+                ORDER BY nbCours DESC
+                LIMIT 8
+                ;";
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
+    }
+
+    public static function getListeMatiereEnseigner($id)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT distinct(M.nom)
+                FROM Enseignant E, Personne P, Cours C, Matiere M
+                WHERE E.id_personne = P.id and C.id_auteur = P.id
+                and P.id = $id and M.id = C.matiere
+                ;";
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
+    }
+
+    private static function initEnseignant($row)
+    {
+        $enseignant = new Enseignant();
+        $enseignant->setIdPersonne($row["id"]);
+        $enseignant->setNom($row["nom"]);
+        $enseignant->setPrenom($row["prenom"]);
+        $enseignant->setEmail($row["email"]);
+        $enseignant->setTelephone($row["telephone"]);
+        $enseignant->setDateNaissance($row["date_naissance"]);
+        $enseignant->setDateInscription($row["date_inscription"]);
+        $enseignant->setTypePersonne($row["type_personne"]);
+        $enseignant->setAdresse($row["adresse"]);
+        $enseignant->setMotDePasse($row["mot_de_passe"]);
+        $enseignant->setImage($row["image"]);
+
+        return $enseignant;
     }
 
     /**
@@ -238,6 +340,9 @@ class Enseignant extends Personne
         $this->typeEnseignant = $typeEnseignant;
     }
 
+    /**
+     * @return bool|mysqli_result
+     */
     public function getListeDesCours()
     {
         $idEnseignant = $this->getIdPersonne();
@@ -245,6 +350,9 @@ class Enseignant extends Personne
         return Cours::getListeDesCoursEnseignant($idEnseignant);
     }
 
+    /**
+     * @return bool|mysqli_result
+     */
     public function getListeMatièresEnseigner()
     {
         $idEnseignant = $this->getIdPersonne();
@@ -269,7 +377,11 @@ class Enseignant extends Personne
         return $result;
     }
 
-    public function getListeSeanceCoursDemande(){
+    /**
+     * @return bool|mysqli_result
+     */
+    public function getListeSeanceCoursDemande()
+    {
         $idEnseignant = $this->getIdPersonne();
         $bd = new BdConnexion();
 
@@ -297,6 +409,10 @@ class Enseignant extends Personne
 
         return $result;
     }
+
+    /**
+     * @return bool|mysqli_result
+     */
     public function getListeSeanceCoursProposition()
     {
         $bd = new BdConnexion();

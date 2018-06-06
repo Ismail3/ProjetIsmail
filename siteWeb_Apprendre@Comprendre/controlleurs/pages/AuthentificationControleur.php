@@ -605,95 +605,27 @@ class AuthentificationControleur extends AbstractControleur
         $id = $row["id"];
         $typePersonne = $row["type_personne"];
 
+        $result = null;
         //Recherche des informations de l'utilisateur
         if (strcmp($typePersonne, Eleve::$TABLE_NAME) == 0) {
             //Connexion d'un élève
             $result = Eleve::getUtilisateur($id);
-            if ($result->num_rows > 0) {
-//                session_start();
-                // output data of each row
-                while ($row = $result->fetch_assoc()) {
-                    $this->initUserConnected(Eleve::$TABLE_NAME, $row);
-                }
-            }
         } else if (strcmp($typePersonne, Enseignant::$TABLE_NAME) == 0) {
             //Connexion d'un enseignant
             $result = Enseignant::getUtilisateur($id);
-
-            if ($result->num_rows > 0) {
-//                session_start();
-                // output data of each row
-                while ($row = $result->fetch_assoc()) {
-                    $this->initUserConnected(Enseignant::$TABLE_NAME, $row);
-                }
-            }
         } else if (strcmp($typePersonne, Administrateur::$TABLE_NAME) == 0) {
             //Connexion d'un administrateur
             $result = Administrateur::getUtilisateur($id);
-
-            if ($result->num_rows > 0) {
-//                session_start();
-                // output data of each row
-                while ($row = $result->fetch_assoc()) {
-                    $this->initUserConnected(Administrateur::$TABLE_NAME, $row);
-                }
-            }
         }
+        $this->initUserConnected($result);
+
 
 
     }
 
-    private function initUserConnected($type_personne, $row)
+    private function initUserConnected($personne)
     {
-        if (strcmp($type_personne, Eleve::$TABLE_NAME) === 0) {
-            $personne = new Eleve();
-            $personne->setIdPersonne($row["id"]);
-            $personne->setNom($row["nom"]);
-            $personne->setPrenom($row["prenom"]);
-            $personne->setEmail($row["email"]);
-            $personne->setTelephone($row["telephone"]);
-            $personne->setAdresse($row["adresse"]);
-            $personne->setDateNaissance($row["date_naissance"]);
-            $personne->setTypePersonne($row["type_personne"]);
-            $personne->setDateInscription($row["date_inscription"]);
-            $personne->setMotDePasse($row["mot_de_passe"]);
-            $personne->setNiveauEtude($row["niveau_etude"]);
-            $personne->setImage($row["image"]);
-            $_SESSION["utilisateur"] = $personne;
-
-            return $personne;
-        } else if (strcmp($type_personne, Enseignant::$TABLE_NAME) === 0) {
-            $personne = new Enseignant();
-            $personne->setIdPersonne($row["id"]);
-            $personne->setNom($row["nom"]);
-            $personne->setPrenom($row["prenom"]);
-            $personne->setEmail($row["email"]);
-            $personne->setTelephone($row["telephone"]);
-            $personne->setDateNaissance($row["date_naissance"]);
-            $personne->setDateInscription($row["date_inscription"]);
-            $personne->setTypePersonne($row["type_personne"]);
-            $personne->setAdresse($row["adresse"]);
-            $personne->setMotDePasse($row["mot_de_passe"]);
-            $personne->setImage($row["image"]);
-            $_SESSION["utilisateur"] = $personne;
-
-            return $personne;
-        } else if (strcmp($type_personne, Administrateur::$TABLE_NAME) === 0) {
-            $personne = new Administrateur();
-            $personne->setIdPersonne($row["id"]);
-            $personne->setNom($row["nom"]);
-            $personne->setPrenom($row["prenom"]);
-            $personne->setEmail($row["email"]);
-            $personne->setTelephone($row["telephone"]);
-            $personne->setDateNaissance($row["date_naissance"]);
-            $personne->setDateInscription($row["date_inscription"]);
-            $personne->setTypePersonne($row["type_personne"]);
-            $personne->setAdresse($row["adresse"]);
-            $personne->setMotDePasse($row["mot_de_passe"]);
-            $personne->setImage($row["image"]);
-            $_SESSION["utilisateur"] = $personne;
-
-            return $personne;
-        }
+        $_SESSION["utilisateur"] = $personne;
+        return $_SESSION["utilisateur"];
     }
 }

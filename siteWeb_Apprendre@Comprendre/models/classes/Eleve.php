@@ -9,7 +9,7 @@ class Eleve extends Personne
     private $id;
     private $niveauEtude;
     private $filiaire;
-    public static $TABLE_NAME="Eleve";
+    public static $TABLE_NAME = "Eleve";
 
     /**
      * Eleve constructor.
@@ -42,6 +42,10 @@ class Eleve extends Personne
         return $result;
     }
 
+    /**
+     * @param $id
+     * @return bool|Eleve|mysqli_result
+     */
     public static function getUtilisateur($id)
     {
         $bd = new BdConnexion();
@@ -59,7 +63,15 @@ class Eleve extends Personne
 
         $bdd->close();
 
-        return $result;
+        if ($result->num_rows > 0) {
+
+            while ($row = $result->fetch_assoc()) {
+                return Eleve::initEleve($row);
+            }
+        }
+        else {
+            return 0;
+        }
     }
 
     /**
@@ -99,7 +111,7 @@ class Eleve extends Personne
 
         // Create connection
         $bdd = $bd->openConn();
-        $sql = "select max(date_naissance) as ageMin from Personne where type_personne='".Eleve::$TABLE_NAME."';";
+        $sql = "select max(date_naissance) as ageMin from Personne where type_personne='" . Eleve::$TABLE_NAME . "';";
         $result = $bdd->query($sql);
         $bdd->close();
 
@@ -121,7 +133,7 @@ class Eleve extends Personne
         // Create connection
         $bdd = $bd->openConn();
 
-        $sql = "select min(date_naissance) as ageMax from Personne where type_personne='".Eleve::$TABLE_NAME."';";
+        $sql = "select min(date_naissance) as ageMax from Personne where type_personne='" . Eleve::$TABLE_NAME . "';";
         $result = $bdd->query($sql);
         $bdd->close();
 
@@ -148,7 +160,7 @@ class Eleve extends Personne
             die("Connection failed: " . $bdd->connect_error);
         }
 
-        $sql = "select min(date_inscription) as minDate from ".Personne::$TABLE_NAME." where type_personne='".Eleve::$TABLE_NAME."' ;";
+        $sql = "select min(date_inscription) as minDate from " . Personne::$TABLE_NAME . " where type_personne='" . Eleve::$TABLE_NAME . "' ;";
         $result = $bdd->query($sql);
 
         if ($result->num_rows > 0) {
@@ -176,7 +188,7 @@ class Eleve extends Personne
             die("Connection failed: " . $bdd->connect_error);
         }
 
-        $sql = "select max(date_inscription) as maxDate from ".Personne::$TABLE_NAME." where type_personne='".Eleve::$TABLE_NAME."' ;";
+        $sql = "select max(date_inscription) as maxDate from " . Personne::$TABLE_NAME . " where type_personne='" . Eleve::$TABLE_NAME . "' ;";
         $result = $bdd->query($sql);
 
         if ($result->num_rows > 0) {
@@ -193,14 +205,14 @@ class Eleve extends Personne
 
     public static function countPersonneIncritBetweenDate($dateMin, $dateMax)
     {
-        $dateTimeMin =  date('Y-m-d H:i:s', strtotime($dateMin));
-        $dateTimeMax =  date('Y-m-d H:i:s', strtotime($dateMax));
+        $dateTimeMin = date('Y-m-d H:i:s', strtotime($dateMin));
+        $dateTimeMax = date('Y-m-d H:i:s', strtotime($dateMax));
         $bd = new BdConnexion();
 
         // Create connection
         $bdd = $bd->openConn();
 
-        $sql = "select count(*) from ".Personne::$TABLE_NAME." where date_inscription < '$dateTimeMax' and date_inscription >='$dateTimeMin' and type_personne='".Eleve::$TABLE_NAME."'";
+        $sql = "select count(*) from " . Personne::$TABLE_NAME . " where date_inscription < '$dateTimeMax' and date_inscription >='$dateTimeMin' and type_personne='" . Eleve::$TABLE_NAME . "'";
 //        echo $sql;
         $result = $bdd->query($sql);
         $bdd->close();
@@ -234,6 +246,48 @@ class Eleve extends Personne
         $bdd->close();
 
         return $result;
+    }
+
+    public static function getElevePopulaire()
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT P.id as id,P.nom as nom,prenom,email,date_naissance,P.date_inscription,type_personne,NE.nom as niveau_etude, telephone, adresse, mot_de_passe, image, count(SC.date_realisation) as nbCours
+                FROM Eleve E, NiveauEtude NE, Personne P, Cours C, SeanceCours SC
+                WHERE E.id_personne = P.id
+                      and E.niveau_etude = NE.id
+                      and C.id_auteur = P.id and C.id= SC.proposition_cours
+                GROUP BY E.id
+                ORDER BY nbCours DESC
+                LIMIT 8
+                ;";
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
+    }
+
+    private static function initEleve($row)
+    {
+        $eleve = new Eleve();
+        $eleve->setIdPersonne($row["id"]);
+        $eleve->setNom($row["nom"]);
+        $eleve->setPrenom($row["prenom"]);
+        $eleve->setEmail($row["email"]);
+        $eleve->setTelephone($row["telephone"]);
+        $eleve->setAdresse($row["adresse"]);
+        $eleve->setDateNaissance($row["date_naissance"]);
+        $eleve->setTypePersonne($row["type_personne"]);
+        $eleve->setDateInscription($row["date_inscription"]);
+        $eleve->setMotDePasse($row["mot_de_passe"]);
+        $eleve->setNiveauEtude($row["niveau_etude"]);
+        $eleve->setImage($row["image"]);
+
+        return $eleve;
     }
 
     /**

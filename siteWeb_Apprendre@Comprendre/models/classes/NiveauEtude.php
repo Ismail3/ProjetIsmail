@@ -33,7 +33,7 @@ class NiveauEtude extends AbstractModel
             die("Connection failed: " . $bdd->connect_error);
         }
 
-        $sql = "select * from " . NiveauEtude::$TABLE_NAME . ";";
+        $sql = "select * from " . NiveauEtude::$TABLE_NAME ;//. " where id!=11;";
         $result = $bdd->query($sql);
         $bdd->close();
 

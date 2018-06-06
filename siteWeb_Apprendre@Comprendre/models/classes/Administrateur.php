@@ -17,6 +17,24 @@ class Administrateur extends Personne
     {
     }
 
+    private static function initAdministrateur($row)
+    {
+        $administrateur = new Administrateur();
+        $administrateur->setIdPersonne($row["id"]);
+        $administrateur->setNom($row["nom"]);
+        $administrateur->setPrenom($row["prenom"]);
+        $administrateur->setEmail($row["email"]);
+        $administrateur->setTelephone($row["telephone"]);
+        $administrateur->setDateNaissance($row["date_naissance"]);
+        $administrateur->setDateInscription($row["date_inscription"]);
+        $administrateur->setTypePersonne($row["type_personne"]);
+        $administrateur->setAdresse($row["adresse"]);
+        $administrateur->setMotDePasse($row["mot_de_passe"]);
+        $administrateur->setImage($row["image"]);
+
+        return $administrateur;
+    }
+
     /*
      * Getter & Setter
      */
@@ -61,6 +79,13 @@ class Administrateur extends Personne
 
         $bdd->close();
 
-        return $result;
-    }
+        if ($result->num_rows > 0) {
+
+            while ($row = $result->fetch_assoc()) {
+                return Administrateur::initAdministrateur($row);
+            }
+        }
+        else {
+            return 0;
+        }    }
 }

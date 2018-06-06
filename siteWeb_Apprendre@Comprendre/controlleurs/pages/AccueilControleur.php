@@ -7,6 +7,7 @@ require_once(dirname(__FILE__) . '/../../models/classes/Enseignant.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Cours.php');
 require_once(dirname(__FILE__) . '/../../models/classes/CoursSeance.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Matiere.php');
+require_once(dirname(__FILE__) . '/../../models/classes/NiveauEtude.php');
 
 
 class AccueilControleur extends AbstractControleur
@@ -115,6 +116,8 @@ class AccueilControleur extends AbstractControleur
         $widget = $this->getInfosApropos();
         $widget = $widget . $this->getInfosMatieres();
         $widget = $widget . $this->getInfosEnseignants();
+        $widget = $widget . $this->getInfosNiveauxEtudes();
+        $widget = $widget . $this->getInfosEleves();
         $widget = $widget . $this->getStatistiques();
 
         return $widget;
@@ -461,17 +464,16 @@ var options = {
 
 <!-- Promo Section - "We know design" -->
 <div class="w3-container w3-light-grey" style="padding:128px 16px">
+    <h3 class="w3-center">Quelques matières</h3>
+
     <div class="w3-row-padding">
-        <div class="w3-col m6">
-            <h3>Qulesques matières</h3>';
+        <div class="w3-col m6">';
         $listeMatiere = Matiere::getListeMatiere();
 
-        $widget = $widget . $this->displayMatieres($listeMatiere);
+        $widget = $widget . $this->displayListe($listeMatiere);
 
 
         $widget = $widget . '
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod<br>tempor incididunt ut labore et
-                dolore.</p>
         </div>
         <div class="w3-col m6">
             <img class="w3-image w3-round-large" src="ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
@@ -486,76 +488,22 @@ var options = {
     {
         $widget = "";
 
+        $listeEnseignants = Enseignant::getEnseignantPopulaire();
         $widget = $widget . '
 
 <!-- Team Section -->
-<div class="w3-container" style="padding:128px 16px" id="team">
+<div class="w3-container" style="padding:128px 16px" id="accueilEnseignants">
     <h3 class="w3-center">Quelques enseignants</h3>
-    <p class="w3-center w3-large">Unie par la volonté de transmettre la connaissance</p>
-    <div class="w3-row-padding w3-grayscale" style="margin-top:64px">
-        <div class="w3-col l3 m6 w3-margin-bottom">
-            <div class="w3-card">
-                <img src="ressources/images/team2.jpg" alt="John" style="width:100%">
-                <div class="w3-container">
-                    <h3>John Doe</h3>
-                    <p class="w3-opacity">CEO &amp; Founder</p>
-                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
-                        elementum.</p>
-                    <p>
-                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col l3 m6 w3-margin-bottom">
-            <div class="w3-card">
-                <img src="ressources/images/team1.jpg" alt="Jane" style="width:100%">
-                <div class="w3-container">
-                    <h3>Anja Doe</h3>
-                    <p class="w3-opacity">Art Director</p>
-                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
-                        elementum.</p>
-                    <p>
-                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col l3 m6 w3-margin-bottom">
-            <div class="w3-card">
-                <img src="ressources/images/team3.jpg" alt="Mike" style="width:100%">
-                <div class="w3-container">
-                    <h3>Mike Ross</h3>
-                    <p class="w3-opacity">Web Designer</p>
-                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
-                        elementum.</p>
-                    <p>
-                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col l3 m6 w3-margin-bottom">
-            <div class="w3-card">
-                <img src="ressources/images/team4.jpg" alt="Dan" style="width:100%">
-                <div class="w3-container">
-                    <h3>Dan Star</h3>
-                    <p class="w3-opacity">Designer</p>
-                    <p>Phasellus edisplay enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque
-                        elementum.</p>
-                    <p>
-                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button>
-                    </p>
-                </div>
-            </div>
-        </div>
+    <p class="w3-center w3-large">Unie par la volonté de transmettre la connaissance</p>';
+        $widget = $widget . $this->displayListePersonne($listeEnseignants, Enseignant::$TABLE_NAME);
+        $widget = $widget . '
     </div>
 </div>
 ';
         return $widget;
     }
 
-    private function displayMatiere($nom)
+    private function displayListeItem($nom)
     {
         $widget = "<li>";
 
@@ -566,14 +514,14 @@ var options = {
         return $widget;
     }
 
-    private function displayMatieres($listeMatiere)
+    private function displayListe($listeMatiere)
     {
         $widget = "<ul>";
 
         if ($listeMatiere->num_rows > 0) {
             // output data of each row
             while ($row = $listeMatiere->fetch_assoc()) {
-                $widget = $widget . $this->displayMatiere($row['nom']);
+                $widget = $widget . $this->displayListeItem($row['nom']);
 
             }
         }
@@ -581,5 +529,130 @@ var options = {
         $widget = $widget . "</ul>";
 
         return $widget;
+    }
+
+    private function getInfosNiveauxEtudes()
+    {
+        $widget = "";
+        $widget = $widget . '
+
+<!-- Promo Section - "We know design" -->
+<div class="w3-container w3-light-grey" style="padding:128px 16px">
+    <h3 class="w3-center">Quelques niveaux d\'études</h3>
+
+    <div class="w3-row-padding">
+        <div class="w3-col m6">';
+        $listeMatiere = NiveauEtude::getListeNiveauEtude();
+
+        $widget = $widget . $this->displayListe($listeMatiere);
+
+
+        $widget = $widget . '
+        </div>
+        <div class="w3-col m6">
+            <img class="w3-image w3-round-large" src="ressources/images/laptop-2567809_1920.jpg" alt="Buildings"
+                 width="700" height="394">
+        </div>
+    </div>
+</div>';
+        return $widget;
+    }
+
+    private function getInfosEleves()
+    {
+        $widget = "";
+
+        $widget = $widget . '
+
+<!-- Team Section -->
+<div class="w3-container" style="padding:128px 16px" id="accueilElèves">
+    <h3 class="w3-center">Quelques élèves</h3>
+    <p class="w3-center w3-large">Unie par la volonté de recevoir la connaissance</p>
+    ';
+        $listeEleves = Eleve::getElevePopulaire();
+        $widget = $widget . $this->displayListePersonne($listeEleves, Eleve::$TABLE_NAME);
+        $widget = $widget . '
+</div>
+';
+        return $widget;
+    }
+
+    private function displayListePersonne($listePersonne, $typePersonne)
+    {
+        $widget = "";
+
+        if ($listePersonne->num_rows > 0) {
+            $numLigne = 0;
+            // output data of each row
+            while ($row = $listePersonne->fetch_assoc()) {
+                if ($numLigne++ == 0) {
+                    $widget = $widget . "<div class=\"w3-row-padding w3-grayscale\" style=\"margin-top:64px\">";
+                }
+                $widget = $widget . $this->displayListePersonneItem($row, $typePersonne);
+                if ($numLigne == 4) {
+                    $numLigne = 0;
+                    $widget = $widget . "</div>";
+                }
+            }
+            if ($numLigne > 0) {
+                $widget = $widget . "</div>";
+            }
+        }
+
+        return $widget;
+    }
+
+    private function displayListePersonneItem($row, $typePersonne)
+    {
+
+
+        $widget = "";
+
+        $widget = $widget . "        
+        <div class=\"w3-col l3 m6 w3-margin-bottom\">
+            <div class=\"w3-card\">
+                <img src=\"ressources/images/" . $row["image"] . "\" alt=\"" . $row["nom"] . "_" . $row["prenom"] . "\" style=\"width:100%\">
+                <div class=\"w3-container\">
+                <a href=\"./templates/pages/profil/profil.php?idPersonne=" . $row["id"] . "&typePersonne=" . $typePersonne . "\">
+                    <h4>" . $row["prenom"] . " " . $row["nom"] . "</h4>                
+                </a>";
+        if (strcmp($typePersonne, Eleve::$TABLE_NAME) == 0) {
+            $widget = $widget . "             <p class=\"w3-opacity\"> Élève " . $row["niveau_etude"] . "</p>";
+        } else {
+            $widget = $widget . "            <p class=\"w3-opacity\"><b>" . Enseignant::$TABLE_NAME . " de : </b>";
+            $widget = $widget . $this->displayListeMatiereEnseigner($row["id"]);
+            $widget = $widget . "            </p> <b> Description : </b>
+                    <p>" . substr($row["description"], 0, 25) . " ...</p>";
+        }
+        $widget = $widget . "
+                    <p><kbd>Inscript depuis " . $this->calculerTempsInscription($row["date_inscription"]) . "</kbd></p>
+                </div>
+            </div>
+        </div>";
+
+        return $widget;
+    }
+
+    private function displayListeMatiereEnseigner($id)
+    {
+        $widget = "";
+        $listeMatiereEnseigner = Enseignant::getListeMatiereEnseigner($id);
+        $widget = $widget . $this->displayListe($listeMatiereEnseigner);
+        return $widget;
+    }
+
+    private function calculerTempsInscription($date_inscription)
+    {
+        $datetime1 = new DateTime(date('Y-m-d', strtotime($date_inscription)));
+        $datetime2 = new DateTime(date('Y-m-d'));
+        $interval = $datetime1->diff($datetime2);
+        $tempsInscription = intval($interval->format('%R%a jours'));
+        if ($tempsInscription < 30) {
+            return $tempsInscription . " jours";
+        } elseif ($tempsInscription < 365.25) {
+            return intval($tempsInscription / 30.43) . " mois";
+        } else {
+            return intval($tempsInscription / 365.25) . " ans";
+        }
     }
 }
