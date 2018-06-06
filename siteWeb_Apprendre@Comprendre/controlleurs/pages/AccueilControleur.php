@@ -472,8 +472,6 @@ var options = {
         $widget = $widget . '
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod<br>tempor incididunt ut labore et
                 dolore.</p>
-            <p><a href="#work" class="w3-button w3-black"><i
-                    class="fa fa-th">&nbsp;</i> Qulesques matières</a></p>
         </div>
         <div class="w3-col m6">
             <img class="w3-image w3-round-large" src="ressources/images/laptop-2567809_1920.jpg" alt="Buildings"

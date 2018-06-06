@@ -439,9 +439,14 @@ var options = {
 function drawBarChart() {
         var data = google.visualization.arrayToDataTable([
         [\'' . $libelleX . '\', \'' . $libelleY . '\'],';
+        var_dump($listeLabels);
         for ($i = 0; $i < count($listeLabels); $i++) {
+            $label = $listeLabels[$i];
+            $label_enconding = $this->convert_to($listeLabels[$i], "UTF-8");
+            echo "<br/> label : " . $label . " : " . strlen($label);
+            echo "<br/> label : " . $label_enconding . " : " . strlen($label_enconding);
             $widget = $widget . '
-              [\'' . strval($listeLabels[$i]) . '\', ' . $listeValeurs[$i] . ']';
+              [\'' . strval($label_enconding) . '\', ' . $listeValeurs[$i] . ']';
             if ($i < count($listeLabels) - 1) {
                 $widget = $widget . ',';
             }
@@ -468,5 +473,26 @@ function drawBarChart() {
     </script>
     </div></div>';
         return $widget;
+    }
+
+    public function convert_to($source, $target_encoding)
+    {
+        // detect the character encoding of the incoming file
+        $encoding = mb_detect_encoding($source, "auto");
+
+        // escape all of the question marks so we can remove artifacts from
+        // the unicode conversion process
+        $target = str_replace("?", "[question_mark]", $source);
+
+        // convert the string to the target encoding
+        $target = mb_convert_encoding($target, $target_encoding, $encoding);
+
+        // remove any question marks that have been introduced because of illegal characters
+        $target = str_replace("?", "", $target);
+
+        // replace the token string "[question_mark]" with the symbol "?"
+        $target = str_replace("[question_mark]", "?", $target);
+
+        return $target;
     }
 }
