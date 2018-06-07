@@ -180,7 +180,7 @@ class Cours extends AbstractModel
             die("Connection failed: " . $bdd->connect_error);
         }
 
-        $sql = "SELECT C.id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom
+        $sql = "SELECT C.id as id, C.nom, C.description, C.tarif, C.date_creation, C.id_auteur, C.matiere, C.niveau_etude_min, C.niveau_etude_max, M.nom as matiere_nom,Nmin.nom as niveau_min_nom,Nmax.nom as niveau_max_nom
                 FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
                 WHERE M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max and C.nom like '%" . $valeurRecherchee . "%' and en_ligne=1
                 ORDER BY date_creation DESC";

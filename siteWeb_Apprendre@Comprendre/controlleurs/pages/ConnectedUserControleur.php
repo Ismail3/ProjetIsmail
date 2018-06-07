@@ -23,40 +23,44 @@ class Connectedusercontroleur extends AbstractControleur
     public function displayNavBar()
     {
         $this->rechercheByEnseignant();
+        $widget = "";
         if ($this->isUserConnected()) {
 
+            $widget = $widget . '<div class="w3-top">
+    <div class="w3-bar w3-white w3-card" id="myNavbar">
+        <a onclick="openNav()"
+           class="w3-bar-item w3-button w3-wide">
+            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
+        </a>
+        <!-- Right-sided navbar links -->
+        <div class="w3-right w3-hide-small">
+            <form class="form-inline my-2 my-lg-0" method="post">
+                <input type="text" class="form-control"
+                       name="inputRecherche"
+                       id="inputRecherche"
+                       type="text"
+                       aria-describedby="inputRechercheHelp" placeholder="Recherche">
+                <button name="btnRecherche" id="btnRecherche" value="btnRecherche" type="submit" class="btn btn-primary" value = "Envoyer">Recherche</button>
+                <a onclick="openNav2()" href="#" class="w3-bar-item w3-button"><i
+                        class="fa fa-home"></i> Menu' . $this->getUserConnected()->getTypePersonne() . '</a>
+            </form>
+        </div>
+        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
+           onclick="w3_open()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+</div>';
             if ($this->isEleve()) {
-                echo '<!-- Navbar (sit on top) -->
-                <div class="w3-top">
-                    <div class="w3-bar w3-white w3-card" id="myNavbar">
-                        <a onclick="openNav()"
-                           class="w3-bar-item w3-button w3-wide">
-                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre Light_Alpha.png" alt="LOGOA@C"/>
-                        </a>
-                        <!-- Right-sided navbar links -->
-                        <div class="w3-right w3-hide-small">
-                            <form class="form-inline my-2 my-lg-0" method="post">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                                <a onclick="openNav2()" href="#" class="w3-bar-item w3-button"><i
-                                        class="fa fa-home"></i> Menu' . $this->getUserConnected()->getTypePersonne() . '</a>
-                            </form>
-                        </div>
-                        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
-                
-                        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
-                           onclick="w3_open()">
-                            <i class="fa fa-bars"></i>
-                        </a>
-                    </div>
-                </div>
-                
+                $widget = $widget . '
                 <div id="sideNavLeft" class="sidenav-left">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()">&times;</a>
                     <a href="../tableauDeBord/tableauDeBord.php"><img class="profil-picture" src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '"></a>
                     <a href="../tableauDeBord/tableauDeBordProfil.php">Profil</a>
                     <a href="../tableauDeBord/tableauDeBordMessagerie.php">Messagerie</a>
-                    <a href="../tableauDeBord/tableauDeBordEleves.php">Élèves</a>
+                    <a href="../tableauDeBord/tableauDeBordEnseignants.php">Enseignants</a>
                     <a href="../tableauDeBord/tableauDeBordRessources.php">Ressources</a>
                 </div>
                 
@@ -74,35 +78,7 @@ class Connectedusercontroleur extends AbstractControleur
                 </nav>
                 ';
             } else if ($this->isEnseignant()) {
-                echo '<!-- Navbar (sit on top) -->
-                <div class="w3-top">
-                    <div class="w3-bar w3-white w3-card" id="myNavbar">
-                        <a onclick="openNav()"
-                           class="w3-bar-item w3-button w3-wide">
-                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
-                        </a>
-                        <!-- Right-sided navbar links -->
-                        <div class="w3-right w3-hide-small">
-                            <form class="form-inline my-2 my-lg-0" method="post">
-                                <input type="text" class="form-control" 
-                                name="inputRecherche"
-                                id="inputRecherche" 
-                                type="text" 
-                                aria-describedby="inputRechercheHelp" placeholder="Recherche">
-                                <button name="btnRechercheByEnseignant" id="btnRechercheByEnseignant" value="btnRechercheByEnseignant" type="submit" class="btn btn-primary" value = "Envoyer">Recherche</button>
-                                 <a onclick="openNav2()" href="#" class="w3-bar-item w3-button"><i
-                                        class="fa fa-home"></i> Menu' . $this->getUserConnected()->getTypePersonne() . '</a>
-                            </form>
-                        </div>
-                        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
-                
-                        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
-                           onclick="w3_open()">
-                            <i class="fa fa-bars"></i>
-                        </a>
-                    </div>
-                </div>
-                
+                $widget = $widget . '
                 <div id="sideNavLeft" class="sidenav-left">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()">&times;</a>
                     <a href="../tableauDeBord/tableauDeBord.php"><img class="profil-picture" src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '"></a>
@@ -127,31 +103,7 @@ class Connectedusercontroleur extends AbstractControleur
                 </nav>
                 ';
             } else if ($this->isAdministrateur()) {
-                echo '<!-- Navbar (sit on top) -->
-                <div class="w3-top">
-                    <div class="w3-bar w3-white w3-card" id="myNavbar">
-                        <a onclick="openNav()"
-                           class="w3-bar-item w3-button w3-wide">
-                            <img id="logo_header" src="' . $this->getImagePath() . 'Logo_Apprendre@Comprendre%20Light_Alpha.png" alt="LOGOA@C"/>
-                        </a>
-                        <!-- Right-sided navbar links -->
-                        <div class="w3-right w3-hide-small">
-                            <form class="form-inline my-2 my-lg-0" method="post">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                                <a onclick="openNav2()" href="#home" class="w3-bar-item w3-button"><i
-                                        class="fa fa-home"></i> Menu' . $this->getUserConnected()->getTypePersonne() . '</a>
-                            </form>
-                        </div>
-                        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
-                
-                        <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
-                           onclick="w3_open()">
-                            <i class="fa fa-bars"></i>
-                        </a>
-                    </div>
-                </div>
-                
+                $widget = $widget . '
                 <div id="sideNavLeft" class="sidenav-left">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNavLeft()">&times;</a>
                     <a href="tableauDeBord.php"><img class="profil-picture" src="' . $this->getImagePath() . $this->getUserConnected()->getImage() . '"></a>
@@ -177,8 +129,9 @@ class Connectedusercontroleur extends AbstractControleur
                 </nav>
                 ';
             }
+            echo $widget;
         } else {
-            //Rediriger vers la page d'accueil
+            header('Location: ' . $this->url . "templates/pages/erreur/utilisateurNonConnecte.php");
         }
     }
 
@@ -310,8 +263,8 @@ class Connectedusercontroleur extends AbstractControleur
 
     protected function rechercheByEnseignant()
     {
-        if (isset($_POST['btnRechercheByEnseignant'])) {
-            echo "btnRechercheByEnseignant";
+        if (isset($_POST['btnRecherche'])) {
+            echo "btnRecherche";
 
             if ($this->barreDeRechecheVide()) {
 

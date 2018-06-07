@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/ConnectedUserControleur.php');
+require_once(dirname(__FILE__) . '/ProfilControleur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/NiveauEtude.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Cours.php');
 
@@ -497,6 +498,35 @@ class CoursControleur extends ConnectedUserControleur
         }
 
         return $formulaire_vide;
+    }
+
+    public function displayInscriptionCours()
+    {
+        $widget = "<br/><br/><br/><br/><br/><br/><h2 >Inscription Cours</h2><br/>";
+        $idCours = $_GET["id"];
+        $result = Cours::getCours($idCours);
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $profilCtrl = new ProfilControleur();
+                $widget = $widget . $profilCtrl->displayCours($row, 3);
+            }
+        }
+        $widget = $widget . $this->requiredDataInscriptionCours();
+        echo $widget;
+    }
+
+    public function inscriptionCours()
+    {
+    }
+
+    private function requiredDataInscriptionCours()
+    {
+        $widget="";
+
+        $widget = $widget . "date_realisation && duree";
+
+        return $widget;
     }
 
 

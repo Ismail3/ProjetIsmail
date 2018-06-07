@@ -20,12 +20,7 @@ $ctrl->checkUserSession();
     <link rel="stylesheet" href="../../../ressources/styles/font-awesome.min.css">
     <link rel="stylesheet" href="../../../ressources/styles/bootstrap.min.css">
     <link rel="stylesheet" href="../../../ressources/styles/apprendre@comprendre.css">
-    <link rel="stylesheet" href="../../../ressources/styles/template.css">
     <link rel="stylesheet" href="../../../ressources/styles/template-tableau-de-bord.css">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/common.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/map.js"></script>
@@ -34,7 +29,6 @@ $ctrl->checkUserSession();
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/onion.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/controls.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../../../ressources/javascript/stats.js"></script>
-
     <script src="../../../ressources/javascript/js"></script>
     <script src="../../../ressources/javascript/apprendre@comprendre.js"></script>
 </head>
@@ -46,8 +40,7 @@ $ctrl = new TableauDeBordControleur();
 $ctrl->displayNavBar();
 $ctrl->displayHeader();
 $ctrl->displayTopButton();
-$ctrl->editProfilSave();
-$ctrl->displayUilisateurProfilEdit();
+$ctrl->displayEnseignants();
 $ctrl->displayFooter();
 
 ?>

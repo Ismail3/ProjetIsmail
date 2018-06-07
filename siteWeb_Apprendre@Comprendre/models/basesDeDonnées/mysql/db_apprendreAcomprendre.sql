@@ -28,7 +28,7 @@ CREATE TABLE `Administrateur` (
   PRIMARY KEY (`id`),
   KEY `FK_Administrateur_Personne` (`id_personne`),
   CONSTRAINT `FK_Administrateur_Personne` FOREIGN KEY (`id_personne`) REFERENCES `Personne` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `Cours` (
   CONSTRAINT `FK_Cours_Matiere` FOREIGN KEY (`matiere`) REFERENCES `Matiere` (`id`),
   CONSTRAINT `FK_Cours_NiveauEtudeMax` FOREIGN KEY (`niveau_etude_max`) REFERENCES `NiveauEtude` (`id`),
   CONSTRAINT `FK_Cours_NiveauEtudeMin` FOREIGN KEY (`niveau_etude_min`) REFERENCES `NiveauEtude` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2998 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2998 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,7 @@ CREATE TABLE `Eleve` (
   KEY `FK_Eleve_NiveauEtude` (`niveau_etude`),
   CONSTRAINT `FK_Eleve_NiveauEtude` FOREIGN KEY (`niveau_etude`) REFERENCES `NiveauEtude` (`id`),
   CONSTRAINT `FK_Eleve_Personne` FOREIGN KEY (`id_personne`) REFERENCES `Personne` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1024 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1024 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +125,7 @@ CREATE TABLE `Enseignant` (
   PRIMARY KEY (`id`),
   KEY `FK_Enseignant_Personne` (`id_personne`),
   CONSTRAINT `FK_Enseignant_Personne` FOREIGN KEY (`id_personne`) REFERENCES `Personne` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +155,7 @@ CREATE TABLE `Enseigner` (
   CONSTRAINT `FK_Enseigner_Engseignant` FOREIGN KEY (`enseignant`) REFERENCES `Personne` (`id`),
   CONSTRAINT `FK_Enseigner_Matiere` FOREIGN KEY (`matiere`) REFERENCES `Matiere` (`id`),
   CONSTRAINT `FK_Enseigner_Niveau` FOREIGN KEY (`niveau_etude`) REFERENCES `NiveauEtude` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +179,7 @@ CREATE TABLE `Matiere` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +188,7 @@ CREATE TABLE `Matiere` (
 
 LOCK TABLES `Matiere` WRITE;
 /*!40000 ALTER TABLE `Matiere` DISABLE KEYS */;
-INSERT INTO `Matiere` VALUES (1,'\0m\0a\0t\0h\0'),(2,'\0f\0r\0a\0n\0ç\0a\0i\0s\0'),(3,'\0s\0p\0o\0r\0t\0'),(4,'\0t\0e\0c\0h\0n\0o\0l\0o\0g\0i\0e\0'),(5,'\0h\0i\0s\0t\0o\0i\0r\0e\0'),(6,'\0a\0n\0g\0l\0a\0i\0s\0'),(7,'\0a\0r\0t\0 \0p\0l\0a\0s\0t\0i\0q\0u\0e\0'),(8,'\0p\0h\0y\0s\0i\0q\0u\0e\0'),(9,'\0s\0c\0i\0e\0n\0c\0e\0'),(10,'\0m\0u\0s\0i\0q\0u\0e\0'),(11,'\0g\0é\0o\0g\0r\0a\0p\0h\0i\0e\0'),(12,'\0c\0h\0i\0m\0i\0e\0'),(13,'\0i\0n\0f\0o\0r\0m\0a\0t\0i\0q\0u\0e\0'),(14,'\0é\0c\0o\0n\0o\0m\0i\0e\0'),(15,'\0f\0i\0n\0a\0n\0c\0e\0'),(16,NULL);
+INSERT INTO `Matiere` VALUES (1,'math'),(2,'français'),(3,'sport'),(4,'technologie'),(5,'histoire'),(6,'anglais'),(7,'art plastique'),(8,'physique'),(9,'science'),(10,'musique'),(11,'géographie'),(12,'chimie'),(13,'informatique'),(14,'économie'),(15,'finance'),(16,NULL);
 /*!40000 ALTER TABLE `Matiere` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -210,7 +210,7 @@ CREATE TABLE `Message` (
   KEY `FK_Message_Receveur` (`receveur`),
   CONSTRAINT `FK_Message_Expediteur` FOREIGN KEY (`expediteur`) REFERENCES `Personne` (`id`),
   CONSTRAINT `FK_Message_Receveur` FOREIGN KEY (`receveur`) REFERENCES `Personne` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,7 +233,7 @@ CREATE TABLE `NiveauEtude` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +242,7 @@ CREATE TABLE `NiveauEtude` (
 
 LOCK TABLES `NiveauEtude` WRITE;
 /*!40000 ALTER TABLE `NiveauEtude` DISABLE KEYS */;
-INSERT INTO `NiveauEtude` VALUES (1,'\0C\0P\0'),(2,'\0C\0E\01\0'),(3,'\0C\0E\02\0'),(4,'\0C\0M\01\0'),(5,'\0C\0M\02\0'),(6,'\06\0e\0'),(7,'\05\0e\0'),(8,'\04\0e\0'),(9,'\03\0e\0'),(10,'\02\0n\0d\0'),(11,'\01\0è\0r\0e\0'),(12,'\0T\0e\0r\0m\0i\0n\0a\0l\0'),(13,'\0L\01\0'),(14,'\0L\02\0'),(15,'\0L\03\0'),(16,'\0M\01\0'),(17,'\0M\02\0'),(18,'\0D\0');
+INSERT INTO `NiveauEtude` VALUES (1,'CP'),(2,'CE1'),(3,'CE2'),(4,'CM1'),(5,'CM2'),(6,'6e'),(7,'5e'),(8,'4e'),(9,'3e'),(10,'2nd'),(11,'1ère'),(12,'Terminal'),(13,'L1'),(14,'L2'),(15,'L3'),(16,'M1'),(17,'M2'),(18,'D');
 /*!40000 ALTER TABLE `NiveauEtude` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -268,7 +268,7 @@ CREATE TABLE `Personne` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UC_Personne_Mail` (`email`),
   UNIQUE KEY `UC_Personne_Telephone` (`telephone`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -297,7 +297,7 @@ CREATE TABLE `Ressource` (
   PRIMARY KEY (`id`),
   KEY `FK_Ressource_TypeRessource` (`type_ressource`),
   CONSTRAINT `FK_Ressource_TypeRessource` FOREIGN KEY (`type_ressource`) REFERENCES `TypeRessource` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -327,7 +327,7 @@ CREATE TABLE `SeanceCours` (
   KEY `FK_SeanceCours_Personne` (`participant`),
   CONSTRAINT `FK_SeanceCours_Cours` FOREIGN KEY (`proposition_cours`) REFERENCES `Cours` (`id`),
   CONSTRAINT `FK_SeanceCours_Personne` FOREIGN KEY (`participant`) REFERENCES `Personne` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -351,7 +351,7 @@ CREATE TABLE `TypeRessource` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/ConnectedUserControleur.php');
+require_once(dirname(__FILE__) . '/ProfilControleur.php');
 require_once(dirname(__FILE__) . '/../../models/classes/NiveauEtude.php');
 require_once(dirname(__FILE__) . '/../../models/classes/Ressource.php');
 require_once(dirname(__FILE__) . '/../../models/classes/AbstractModel.php');
@@ -61,10 +62,10 @@ class RechercheControleur extends ConnectedUserControleur
     {
         $result = Eleve::recherche($valeurRecherchee);
 
-        return $this->afficherEleves($result);
+        return $this->afficherEleves($result,$valeurRecherchee);
     }
 
-    private function afficherEleves($result)
+    private function afficherEleves($result,$valeurRecherchee)
     {
         $widget = "<h2 id=\"idRechercheEleves\">Élèves</h2>";
         $nLumigne = 0;
@@ -92,6 +93,9 @@ class RechercheControleur extends ConnectedUserControleur
                 $widget = $widget . "</div>";
             }
         }
+        else {
+            $widget = $widget . "Aucun élève ne correspond à la recherche \"".$valeurRecherchee."\"";
+        }
         return $widget;
 
     }
@@ -100,10 +104,10 @@ class RechercheControleur extends ConnectedUserControleur
     {
         $result = Enseignant::recherche($valeurRecherchee);
 
-        return $this->afficherEnseignants($result);
+        return $this->afficherEnseignants($result,$valeurRecherchee);
     }
 
-    private function afficherEnseignants($result)
+    private function afficherEnseignants($result,$valeurRecherchee)
     {
         $widget = "<h2 id=\"idRechercheEnseignants\">Enseignants</h2>";
         $numLigne = 0;
@@ -131,6 +135,9 @@ class RechercheControleur extends ConnectedUserControleur
                 $widget = $widget . "</div>";
             }
         }
+        else {
+            $widget = $widget . "Aucun enseignant ne correspond à la recherche \"".$valeurRecherchee."\"";
+        }
         return $widget;
 
     }
@@ -139,10 +146,10 @@ class RechercheControleur extends ConnectedUserControleur
     {
         $result = Cours::recherche($valeurRecherchee);
 
-        return $this->afficherListeCours($result);
+        return $this->afficherListeCours($result,$valeurRecherchee);
     }
 
-    private function afficherListeCours($result)
+    private function afficherListeCours($result,$valeurRecherchee)
     {
         $widget = "<h2 id=\"idRechercheCours\">Cours</h2>";
         $numLigne = 0;
@@ -152,15 +159,8 @@ class RechercheControleur extends ConnectedUserControleur
                 if ($numLigne == 0) {
                     $widget = $widget . "<div class=\"row\">";
                 }
-                $widget = $widget . $this->afficheCours($row["id"],
-                        $row["nom"],
-                        $row["description"],
-                        $row["tarif"],
-                        $row["date_creation"],
-                        $row["id_auteur"],
-                        $row["matiere_nom"],
-                        $row["niveau_etude_min_nom"],
-                        $row["niveau_etude_max_nom"]);
+                $profilCtrl = new ProfilControleur();
+                $widget = $widget . $profilCtrl->displayCours($row,2);
                 $numLigne++;
                 if ($numLigne == 4) {
                     $numLigne = 0;
@@ -170,6 +170,9 @@ class RechercheControleur extends ConnectedUserControleur
             if ($numLigne > 0) {
                 $widget = $widget . "</div>";
             }
+        }
+        else {
+            $widget = $widget . "Aucun cours ne correspond à la recherche \"".$valeurRecherchee."\"";
         }
         return $widget;
     }
@@ -220,10 +223,10 @@ class RechercheControleur extends ConnectedUserControleur
     {
         $result = CoursSeance::recherche($valeurRecherchee);
 
-        return $this->afficherListeCoursSeance($result);
+        return $this->afficherListeCoursSeance($result,$valeurRecherchee);
     }
 
-    private function afficherListeCoursSeance($result)
+    private function afficherListeCoursSeance($result,$valeurRecherchee)
     {
         $widget = "<h2 id=\"idRechercheCoursSeance\">CoursSeance</h2>";
         $numLigne = 0;
@@ -251,6 +254,9 @@ class RechercheControleur extends ConnectedUserControleur
             if ($numLigne > 0) {
                 $widget = $widget . "</div>";
             }
+        }
+        else {
+            $widget = $widget . "Aucune séance de cours ne correspond à la recherche \"".$valeurRecherchee."\"";
         }
         return $widget;
     }

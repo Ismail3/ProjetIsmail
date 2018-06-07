@@ -1,7 +1,9 @@
 <?php
 require_once(dirname(__FILE__) . '/../../../controlleurs/pages/TableauDeBordControleur.php');
 session_start();
-?>
+ob_start();
+$ctrl = new TableauDeBordControleur();
+$ctrl->checkUserSession();?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,8 +33,6 @@ session_start();
 </head>
 <body cz-shortcut-listen="true">
 <?php
-ob_start();
-
 $ctrl = new TableauDeBordControleur();
 
 $ctrl->displayNavBar();

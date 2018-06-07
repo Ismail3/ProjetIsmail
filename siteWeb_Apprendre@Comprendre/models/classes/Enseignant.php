@@ -32,7 +32,7 @@ class Enseignant extends Personne
 
     /**
      * @param $id
-     * @return bool|mysqli_result
+     * @return Enseignant|int
      */
     public static function getUtilisateur($id)
     {

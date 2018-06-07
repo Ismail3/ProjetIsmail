@@ -15,13 +15,13 @@ CREATE TABLE Matiere (
   id  INT NOT NULL AUTO_INCREMENT,
   nom VARCHAR(255),
   CONSTRAINT PK_Matiere PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE NiveauEtude (
   id  INT NOT NULL AUTO_INCREMENT,
   nom VARCHAR(255),
   CONSTRAINT PK_NiveauEtude PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE Personne (
   id               INT NOT NULL AUTO_INCREMENT,
@@ -38,7 +38,7 @@ CREATE TABLE Personne (
   CONSTRAINT PK_Personne PRIMARY KEY (id),
   CONSTRAINT UC_Personne_Mail UNIQUE (email),
   CONSTRAINT UC_Personne_Telephone UNIQUE (telephone)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 
 CREATE TABLE Enseignant (
@@ -48,7 +48,7 @@ CREATE TABLE Enseignant (
   CONSTRAINT PK_Enseignant PRIMARY KEY (id),
   CONSTRAINT FK_Enseignant_Personne FOREIGN KEY (id_personne)
   REFERENCES Personne (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 
 CREATE TABLE Enseigner (
@@ -62,7 +62,7 @@ CREATE TABLE Enseigner (
   REFERENCES NiveauEtude (id),
   CONSTRAINT FK_Enseigner_Engseignant FOREIGN KEY (enseignant)
   REFERENCES Personne (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 
 CREATE TABLE Eleve (
@@ -74,7 +74,7 @@ CREATE TABLE Eleve (
   REFERENCES Personne (id),
   CONSTRAINT FK_Eleve_NiveauEtude FOREIGN KEY (niveau_etude)
   REFERENCES NiveauEtude (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE Administrateur (
   id           INT NOT NULL AUTO_INCREMENT,
@@ -82,7 +82,7 @@ CREATE TABLE Administrateur (
   CONSTRAINT PK_Administrateur PRIMARY KEY (id),
   CONSTRAINT FK_Administrateur_Personne FOREIGN KEY (id_personne)
   REFERENCES Personne (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE Cours (
   id               INT NOT NULL AUTO_INCREMENT,
@@ -104,7 +104,7 @@ CREATE TABLE Cours (
   REFERENCES NiveauEtude (id),
   CONSTRAINT FK_Cours_NiveauEtudeMax FOREIGN KEY (niveau_etude_max)
   REFERENCES NiveauEtude (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE SeanceCours (
   date_inscription  DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -118,13 +118,13 @@ CREATE TABLE SeanceCours (
   REFERENCES Cours (id),
   CONSTRAINT FK_SeanceCours_Personne FOREIGN KEY (participant)
   REFERENCES Personne (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE TypeRessource (
   id  INT NOT NULL AUTO_INCREMENT,
   nom VARCHAR(255),
   CONSTRAINT PK_TypeRessource PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE Ressource (
   id             INT NOT NULL AUTO_INCREMENT,
@@ -135,7 +135,7 @@ CREATE TABLE Ressource (
   CONSTRAINT PK_Ressource PRIMARY KEY (id),
   CONSTRAINT FK_Ressource_TypeRessource FOREIGN KEY (type_ressource)
   REFERENCES TypeRessource (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 
 CREATE TABLE Message (
@@ -149,7 +149,7 @@ CREATE TABLE Message (
   REFERENCES Personne (id),
   CONSTRAINT FK_Message_Receveur FOREIGN KEY (receveur)
   REFERENCES Personne (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 SHOW TABLES;
 

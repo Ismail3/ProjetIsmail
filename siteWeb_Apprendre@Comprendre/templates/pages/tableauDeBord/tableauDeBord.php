@@ -36,8 +36,6 @@ $ctrl->checkUserSession();
 
 <body cz-shortcut-listen="true">
 <?php
-ob_start();
-
 $ctrl = new TableauDeBordControleur();
 
 $ctrl->displayNavBar();

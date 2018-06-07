@@ -664,7 +664,7 @@ class ProfilControleur extends AbstractControleur
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $widget = $widget . $this->displayCours($row);
+                $widget = $widget . $this->displayCours($row, 2);
             }
         } else {
             echo "getListeDesCoursAdmin : 0 results";
@@ -711,9 +711,10 @@ class ProfilControleur extends AbstractControleur
      * @param $row
      * @return string
      */
-    private function displayCours($row, $gestion)
+    public function displayCours($row, $gestion)
     {
-        $id = $row['id'];
+        $id = intval($row['id']);
+        echo "id : " . $id;
         $nom = $row['nom'];
         $description = $row['description'];
         $tarif = $row['tarif'];
@@ -723,7 +724,8 @@ class ProfilControleur extends AbstractControleur
         $niveau_min_nom = $row['niveau_min_nom'];
         $niveau_max_nom = $row['niveau_max_nom'];
         $en_ligne = $row['en_ligne'];
-        $widget = '<div class="w3-container">
+
+        $widget = '<div class="w3-container" style="width: 100%">
                     <table style="width: 100%">
                         <tr>
                             <td style="text-align: left">
@@ -733,7 +735,16 @@ class ProfilControleur extends AbstractControleur
         } else {
             $widget = $widget . $nom;
         }
-        $widget = $widget . '</b></h4>                            </td>
+        $widget = $widget . '</b></h4>                            </td>';
+        if ($gestion == 2) {
+            $enseignant = Enseignant::getUtilisateur($id_auteur);
+            $widget = $widget . '
+                            <td style="text-align: center"> Ajouté par <a href="../profil/profil.php?idPersonne=' . intval($enseignant->getIdPersonne()) . '&typePersonne=' . Enseignant::$TABLE_NAME . '">'
+                . $enseignant->getPrenom() . " " . $enseignant->getNom()
+                . '</a></td>
+';
+        }
+        $widget = $widget . '
                             <td style="text-align: right">
 <span
                                         class="w3-tag w3-teal w3-round">' . $matiere_nom . '</span>';
@@ -775,7 +786,7 @@ class ProfilControleur extends AbstractControleur
                             ';
         if ($gestion == 2) {
             $widget = $widget . '
-            <a href="../cours/inscription.php?id="'.$id.'>
+            <a href="../cours/inscription.php?id=' . $id . '">
                             <button value="btnInscriptionCours' . $id . ' id="btnInscriptionCours' . $id . ' name="btnInscriptionCours' . $id . '" type="submit" class="btn btn-primary">Inscription</button>
              </a>
                             ';
@@ -785,8 +796,12 @@ class ProfilControleur extends AbstractControleur
                             ' . date('Y-m-d', strtotime($date_creation)) . '                            
                             </td>
                         </tr>
-                        </table>                            
-                        <hr>
+                        </table>';
+        if ($gestion != 3) {
+            $widget = $widget . '
+                        <hr>';
+        }
+        $widget = $widget . '
                         </div>';
 
         return $widget;

@@ -114,6 +114,35 @@ class TableauDeBordControleur extends ConnectedUserControleur
         echo $eleve;
     }
 
+    private function afficherEnseignant($id, $nom, $prenom, $email, $date_naissance, $niveau_etude, $image)
+    {
+        echo "";
+    }
+
+    function displayEnseignants()
+    {
+        echo '<div class="w3-container" style="padding:128px 16px" id="team">
+    <h3 class="w3-center">Vos enseignants</h3>
+    <p class="w3-center w3-large">Dans ces rubriques vous pouvez contacter vos enseignants ou visualer les cours ques vous
+        avez ou devez réaliser avec eux</p>
+    <div class="w3-row-padding w3-grayscale" style="margin-top:64px">';
+
+        $idEleve = $this->getUserConnected()->getIdPersonne();
+        $listeEnseignants = Eleve::getListeEnseignant($idEleve);
+
+        if ($listeEnseignants->num_rows > 0) {
+            // output data of each row
+            while ($row = $listeEnseignants->fetch_assoc()) {
+                $this->afficherEnseignant($row["id"], $row["nom"], $row["prenom"], $row["email"], $row["date_naissance"], $row["niveau_etude"], $row["image"]);
+            }
+        } else {
+            echo "Vous n'avez actuellement aucun enseignant";
+        }
+        echo "</div>";
+        echo "</div>";
+
+    }
+
     function displayEleves()
     {
         echo '<div class="w3-container" style="padding:128px 16px" id="team">
@@ -1672,8 +1701,6 @@ class TableauDeBordControleur extends ConnectedUserControleur
         $this->displayListeSeanceCoursEnseignant();
         echo '</div>';
     }
-
-
 }
 
 ?>

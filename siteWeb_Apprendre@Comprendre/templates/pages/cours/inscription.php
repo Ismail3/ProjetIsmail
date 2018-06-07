@@ -40,6 +40,8 @@ $ctrl = new CoursControleur();
 $ctrl->displayNavBar();
 $ctrl->displayHeader();
 $ctrl->displayTopButton();
+$ctrl->displayInscriptionCours();
+$ctrl->inscriptionCours();
 $ctrl->displayFooter();
 ?>
 </body>

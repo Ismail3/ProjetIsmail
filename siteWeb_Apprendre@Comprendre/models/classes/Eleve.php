@@ -290,6 +290,35 @@ class Eleve extends Personne
         return $eleve;
     }
 
+    public static function getListeEnseignant($idEleve)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+        // Check connection
+        if ($bdd->connect_error) {
+            die("Connection failed: " . $bdd->connect_error);
+        }
+
+        $sql = "SELECT distinct(PEN.id) as id,PEN.nom as nom,PEN.prenom,PEN.email,PEN.date_naissance,PEN.date_inscription,PEN.type_personne, PEN.telephone, PEN.adresse, PEN.image, EN.description as description
+                FROM Eleve E, NiveauEtude NE, Personne P, SeanceCours SC , Cours C, Personne PEN, Enseignant EN
+                WHERE E.id_personne = P.id 
+                and E.niveau_etude = NE.id 
+                and SC.participant = $idEleve
+                and C.id = SC.proposition_cours
+                and C.id_auteur = PEN.id
+                and C.id_auteur = EN.id_personne
+                LIMIT 8
+                ;";
+//        echo $sql;
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
+    }
+
     /**
      * @return int
      */
