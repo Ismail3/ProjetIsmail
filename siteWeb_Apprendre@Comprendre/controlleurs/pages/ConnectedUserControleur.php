@@ -16,7 +16,7 @@ class Connectedusercontroleur extends AbstractControleur
     public function checkUserSession()
     {
         if (!$this->isUserConnected()) {
-            header('Location: ' . $this->url);
+            header('Location: ' . $this->url . "templates/pages/erreur/utilisateurNonConnecte.php");
         }
     }
 
@@ -320,7 +320,7 @@ class Connectedusercontroleur extends AbstractControleur
                 echo $recherche;
 
                 if ($recherche) {
-                    header('Location: ' . $this->url . 'templates/pages/recherche/recherche.php?recherche='.$recherche);
+                    header('Location: ' . $this->url . 'templates/pages/recherche/recherche.php?recherche=' . $recherche);
                     exit();
                 }
             }

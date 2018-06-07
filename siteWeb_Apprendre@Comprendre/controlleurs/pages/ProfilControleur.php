@@ -27,7 +27,7 @@ class ProfilControleur extends AbstractControleur
         <!-- Right-sided navbar links -->
         <div class="w3-right w3-hide-small">
 
-            <a href="templates/pages/authentification/authentification.php" class="w3-bar-item w3-button"><i
+            <a href="../authentification/authentification.php" class="w3-bar-item w3-button"><i
                         class="fa fa-user"></i> Authentification</a>
         </div>
         <!-- Hide right-floated links on small screens and replace them with a menu icon -->
@@ -409,26 +409,6 @@ class ProfilControleur extends AbstractControleur
         $widgets = $widgets . '
                     </div>';
 
-        //Liste des séance de cours inscrit
-        $widgets = $widgets . '
-                    <div class="w3-container w3-card w3-white w3-margin-bottom">
-                        <h2 class="w3-text-grey w3-padding-16"><i
-                                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i> Séances programmés (Demande)</h2>';
-        $widgets = $widgets . $this->getListeDesSeancesCoursDemande($enseignant);
-        $widgets = $widgets . '
-                    </div>';
-
-        //Liste des séance de cours crées
-        $widgets = $widgets . '
-                    <div class="w3-container w3-card w3-white w3-margin-bottom">
-                        <h2 class="w3-text-grey w3-padding-16"><i
-                                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Séances programmés (Proposition)</h2>';
-        $widgets = $widgets . $this->getListeDesSeancesCoursProposition($enseignant);
-        $widgets = $widgets . '
-                    </div>
-        
-                    <!-- End Right Column -->
-                </div>';
         $widgets = $widgets . '
         
                 <!-- End Grid -->
@@ -648,7 +628,7 @@ class ProfilControleur extends AbstractControleur
         if ($listeCoursEnseignants->num_rows > 0) {
             // output data of each row
             while ($row = $listeCoursEnseignants->fetch_assoc()) {
-                $widget = $widget . $this->displayCoursProfil($row);
+                $widget = $widget . $this->displayCoursIncription($row);
             }
         } else {
             echo "<br> getListeDesCours : 0 results";
@@ -789,8 +769,24 @@ class ProfilControleur extends AbstractControleur
                         </tr>
                     </table>
                             <p>' . substr($description, 0, 196) . ' ...</p>
-                            <p style="text-align: right">' . $date_creation . '</p>
-                            <hr>
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                            ';
+        if ($gestion == 2) {
+            $widget = $widget . '
+            <a href="../cours/inscription.php?id="'.$id.'>
+                            <button value="btnInscriptionCours' . $id . ' id="btnInscriptionCours' . $id . ' name="btnInscriptionCours' . $id . '" type="submit" class="btn btn-primary">Inscription</button>
+             </a>
+                            ';
+        }
+        $widget = $widget . '</td>
+                            <td style="text-align: right">
+                            ' . date('Y-m-d', strtotime($date_creation)) . '                            
+                            </td>
+                        </tr>
+                        </table>                            
+                        <hr>
                         </div>';
 
         return $widget;
@@ -1661,6 +1657,11 @@ class ProfilControleur extends AbstractControleur
         echo '<br/>';
         $this->displayListeSeanceCoursEnseignant();
         echo '</div>';
+    }
+
+    private function displayCoursIncription($row)
+    {
+        return $this->displayCours($row, 2);
     }
 
 
