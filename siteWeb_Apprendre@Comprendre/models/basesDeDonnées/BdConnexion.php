@@ -93,6 +93,12 @@ class BdConnexion
     public function openConn()
     {
         $this->conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        if (!$this->conn->set_charset("utf8")) {
+            printf("Erreur lors du chargement du jeu de caractères utf8 : %s\n", $this->conn->error);
+            exit();
+        } else {
+            printf("Jeu de caractères courant : %s\n", $this->conn->character_set_name());
+        }
         if (isset($this->conn)) {
             return $this->conn;
         }
