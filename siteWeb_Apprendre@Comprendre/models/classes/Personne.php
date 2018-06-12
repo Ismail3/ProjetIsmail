@@ -514,7 +514,7 @@ class Personne extends AbstractModel
      * @param $image
      * @return bool|mysqli_result
      */
-    public function updxate($nom, $prenom, $adresse, $email, $tel, $mot_de_passe, $image)
+    public function update($nom, $prenom, $adresse, $email, $tel, $mot_de_passe, $image)
     {
         $bd = new BdConnexion();
 

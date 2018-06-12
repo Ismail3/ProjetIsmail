@@ -509,7 +509,7 @@ class CoursControleur extends ConnectedUserControleur
             // output data of each row
             while ($row = $result->fetch_assoc()) {
                 $profilCtrl = new ProfilControleur();
-                $widget = $widget . $profilCtrl->displayCours($row, 3);
+                $widget = $widget . $this->displayFormulaireInscriptionCours($row);
             }
         }
         $widget = $widget . $this->requiredDataInscriptionCours();
@@ -525,6 +525,81 @@ class CoursControleur extends ConnectedUserControleur
         $widget="";
 
         $widget = $widget . "date_realisation && duree";
+
+        return $widget;
+    }
+
+    private function displayFormulaireInscriptionCours($row)
+    {
+        $id = intval($row['id']);
+        echo "id : " . $id;
+        $nom = $row['nom'];
+        $description = $row['description'];
+        $tarif = $row['tarif'];
+        $date_creation = $row['date_creation'];
+        $id_auteur = $row['id_auteur'];
+        $matiere_nom = $row['matiere_nom'];
+        $niveau_min_nom = $row['niveau_min_nom'];
+        $niveau_max_nom = $row['niveau_max_nom'];
+        $en_ligne = $row['en_ligne'];
+
+        $widget = '<div class="w3-container" style="width: 100%">
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                            <h4 class="w3-opacity"><b>';
+            $widget = $widget . $nom;
+        $widget = $widget . '</b></h4>                            </td>';
+
+        $widget = $widget . '
+                            <td style="text-align: right">
+<span
+                                        class="w3-tag w3-teal w3-round">' . $matiere_nom . '</span>';
+        $widget = $widget . '
+
+
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                                                        <h6 class="w3-text-teal"><i class="fa fa-asterisk fa-fw w3-margin-right"></i>
+                            ' . $niveau_min_nom . ' - <span
+                                        class="w3-tag w3-teal w3-round">' . $niveau_max_nom . '</span></h6>                           </td>
+                            <td style="text-align: right">
+<h1
+                                        class="w3-tag w3-blue-grey w3-round">' . $tarif . '€</h1>
+
+                            </td>
+                        </tr>
+                    </table>
+                            <p>' . substr($description, 0, 196) . ' ...</p>
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left">
+                            ';
+        $widget = $widget . '</td>
+                            <td style="text-align: right">
+                            ' . date('Y-m-d', strtotime($date_creation)) . '                            
+                            </td>
+                        </tr>
+                        </table>';
+        $widget = $widget . '<form action="">
+                                    <div class="form-group">
+
+                              Date réalisation : <input class="form-control" type="date" name="dateRealisationSeanceCours">
+                              Durée (en heure) : <input class="form-control" type="number" name="dureeSeanceCours">
+                              <label for="inputEmailConnexion">Email address</label>
+                                        <input name="inputEmailConnexion" type="email" class="form-control" id="inputEmailConnexion" aria-describedby="emailHelp" placeholder="Enter email">
+                                        <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre email avec quelqu\'un d\'autre.</small>
+        
+                              <input type="submit">
+                              </div>
+                            </form>';
+
+        $widget = $widget . '
+                        </div>';
 
         return $widget;
     }

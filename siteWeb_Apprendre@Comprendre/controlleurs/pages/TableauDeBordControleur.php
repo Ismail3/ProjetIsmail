@@ -33,11 +33,11 @@ class TableauDeBordControleur extends ConnectedUserControleur
             $mot_de_passe = $_POST['inputEditProfiPassword'];
             $mot_de_passe_confirm = $_POST['inputEditProfilPasswordConfirm'];
             if (strcmp($mot_de_passe, "") === 0 || strcmp($mot_de_passe_confirm, "") === 0) {
-                echo "not updatePassWord";
+//                echo "not updatePassWord";
                 $this->updateProfil("");
             } else {
                 if ($this->validerMotDePasse($mot_de_passe, $mot_de_passe_confirm)) {
-                    echo "updatePassWord";
+//                    echo "updatePassWord";
                     $this->updateProfil($mot_de_passe);
                 }
             }
@@ -1171,7 +1171,7 @@ class TableauDeBordControleur extends ConnectedUserControleur
             $mot_de_passe = $personne->getMotDePasse();
         }
 
-        echo "mot_de_passe" . $mot_de_passe;
+//        echo "mot_de_passe" . $mot_de_passe;
 
         $date_naissance = $personne->getDateNaissance();;
 
@@ -1244,24 +1244,27 @@ class TableauDeBordControleur extends ConnectedUserControleur
         $newFileName = "fileUpload";
         // Check if image file is a actual image or fake image
         if (isset($_POST["btnSaveEditProfil"])) {
-            $check = getimagesize($_FILES["inputImgProfil"]["tmp_name"]);
-            if ($check !== false) {
-                echo "File is an image - " . basename($_FILES["inputImgProfil"]["name"]) . " " . $check["mime"] . ".  <br>";
-                $uploadOk = 1;
-            } else {
-                echo "File is not an image.";
-                $uploadOk = 0;
+            if (!isset($_FILES["inputImgProfil"]["tmp_name"])) {
+//                echo $_FILES["inputImgProfil"]["tmp_name"];
+                $check = getimagesize($_FILES["inputImgProfil"]["tmp_name"]);
+                if ($check !== false) {
+//                    echo "File is an image - " . basename($_FILES["inputImgProfil"]["name"]) . " " . $check["mime"] . ".  <br>";
+                    $uploadOk = 1;
+                } else {
+//                    echo "File is not an image.";
+                    $uploadOk = 0;
+                }
             }
         }
         // Check if file already exists
         if (file_exists($target_file)) {
-            echo "Sorry, file already exists.";
+//            echo "Sorry, file already exists.";
             $uploadOk = 0;
             return basename($_FILES["inputImgProfil"]["name"]);
         }
         // Check file size
         if ($_FILES["inputImgProfil"]["size"] > 500000) {
-            echo "Sorry, your file is too large.";
+//            echo "Sorry, your file is too large.";
             $uploadOk = 0;
         }
         // Allow certain file formats

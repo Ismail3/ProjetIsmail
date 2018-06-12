@@ -188,7 +188,7 @@ CREATE TABLE `Matiere` (
 
 LOCK TABLES `Matiere` WRITE;
 /*!40000 ALTER TABLE `Matiere` DISABLE KEYS */;
-INSERT INTO `Matiere` VALUES (1,'math'),(2,'français'),(3,'sport'),(4,'technologie'),(5,'histoire'),(6,'anglais'),(7,'art plastique'),(8,'physique'),(9,'science'),(10,'musique'),(11,'géographie'),(12,'chimie'),(13,'informatique'),(14,'économie'),(15,'finance'),(16,NULL);
+INSERT INTO `Matiere` VALUES (1,'math'),(2,'français'),(3,'sport'),(4,'technologie'),(5,'histoire'),(6,'anglais'),(7,'art plastique'),(8,'physique'),(9,'science'),(10,'musique'),(11,'géographie'),(12,'chimie'),(13,'informatique'),(14,'économie'),(15,'finance');
 /*!40000 ALTER TABLE `Matiere` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -211,7 +211,7 @@ CREATE TABLE `Message` (
   CONSTRAINT `FK_Message_Expediteur` FOREIGN KEY (`expediteur`) REFERENCES `Personne` (`id`),
   CONSTRAINT `FK_Message_Receveur` FOREIGN KEY (`receveur`) REFERENCES `Personne` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET character_set_client = f@saved_cs_client */;
 
 --
 -- Dumping data for table `Message`

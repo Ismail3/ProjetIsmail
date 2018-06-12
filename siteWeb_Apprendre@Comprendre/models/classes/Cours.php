@@ -528,6 +528,8 @@ class Cours extends AbstractModel
                 FROM Cours C, Matiere M, NiveauEtude Nmin , NiveauEtude Nmax
                 WHERE M.id = C.matiere and Nmin.id = C.niveau_etude_min and Nmax.id = C.niveau_etude_max and C.id_auteur = " . $idpersonne . "
                 ORDER BY date_creation DESC";
+//        echo $sql;
+
         $result = $bdd->query($sql);
 
         $bdd->close();
