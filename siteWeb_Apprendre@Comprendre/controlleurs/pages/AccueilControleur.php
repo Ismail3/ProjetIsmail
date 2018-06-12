@@ -469,8 +469,9 @@ var options = {
     <div class="w3-row-padding">
         <div class="w3-col m6">';
         $listeMatiere = Matiere::getListeMatiere();
+        $listeNbCoursMatiere = Matiere::getListeNbCoursMatiere();
 
-        $widget = $widget . $this->displayListe($listeMatiere);
+        $widget = $widget . $this->displayListe($listeNbCoursMatiere);
 
 
         $widget = $widget . '
@@ -503,11 +504,18 @@ var options = {
         return $widget;
     }
 
-    private function displayListeItem($nom)
+    private function displayListeItem($nom, $nb)
     {
         $widget = "<li>";
 
         $widget = $widget . $nom;
+        if(isset($nb)){
+            $widget = $widget . '    ';
+            $widget = $widget . '<kbd>';
+            $widget = $widget . $nb;
+            $widget = $widget . ' heures de cours';
+            $widget = $widget . '</kbd>';
+        }
 
         $widget = $widget . "</li>";
 
@@ -521,7 +529,7 @@ var options = {
         if ($listeMatiere->num_rows > 0) {
             // output data of each row
             while ($row = $listeMatiere->fetch_assoc()) {
-                $widget = $widget . $this->displayListeItem($row['nom']);
+                $widget = $widget . $this->displayListeItem($row['nom'],$row['nb']);
 
             }
         }
@@ -542,9 +550,10 @@ var options = {
 
     <div class="w3-row-padding">
         <div class="w3-col m6">';
-        $listeMatiere = NiveauEtude::getListeNiveauEtude();
+        $listeNiveauEtude = NiveauEtude::getListeNiveauEtude();
+        $listeNbCoursNiveauEtude = NiveauEtude::getListeNbCoursNiveauEtude();
 
-        $widget = $widget . $this->displayListe($listeMatiere);
+        $widget = $widget . $this->displayListe($listeNbCoursNiveauEtude);
 
 
         $widget = $widget . '
@@ -637,7 +646,8 @@ var options = {
     {
         $widget = "";
         $listeMatiereEnseigner = Enseignant::getListeMatiereEnseigner($id);
-        $widget = $widget . $this->displayListe($listeMatiereEnseigner);
+        $listeNbCoursMatiereEnseigner = Enseignant::getListeNbCoursMatiereEnseigner($id);
+        $widget = $widget . $this->displayListe($listeNbCoursMatiereEnseigner);
         return $widget;
     }
 

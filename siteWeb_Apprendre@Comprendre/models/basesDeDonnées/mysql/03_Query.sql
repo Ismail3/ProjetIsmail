@@ -183,4 +183,14 @@ LIMIT 10
 ;
 
 
+/*
+  Matiere
+ */
 
+SELECT count(*), M.nom
+FROM Matiere M, Cours C, SeanceCours SC
+WHERE M.nom like '%'
+and C.matiere = M.id
+and C.id = SC.proposition_cours
+group by M.nom
+;

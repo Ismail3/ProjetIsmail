@@ -308,6 +308,27 @@ class Enseignant extends Personne
         return $enseignant;
     }
 
+    public static function getListeNbCoursMatiereEnseigner($id)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT M.nom, count(*) as nb
+                FROM Enseignant E, Personne P, Cours C, Matiere M, SeanceCours SC
+                WHERE E.id_personne = P.id and C.id_auteur = P.id
+                and P.id = $id and M.id = C.matiere                
+                and C.id = SC.proposition_cours
+                group by M.nom
+                ;";
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
+    }
+
     /**
      * @return int
      */

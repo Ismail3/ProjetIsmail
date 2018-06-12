@@ -6,7 +6,7 @@ class Matiere extends AbstractModel
     /*
      * Attributs
      */
-    public static $TABLE_NAME="Matiere";
+    public static $TABLE_NAME = "Matiere";
     private $id;
     private $nom;
 
@@ -15,6 +15,29 @@ class Matiere extends AbstractModel
      */
     public function __construct()
     {
+    }
+
+
+    public static function getListeNbCoursMatiere()
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT M.nom, count(*) as nb
+                FROM Matiere M, Cours C, SeanceCours SC
+                WHERE M.nom like '%'
+                and C.matiere = M.id
+                and C.id = SC.proposition_cours
+                group by M.nom
+                ;
+";
+//        echo $sql;
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+        return $result;
     }
 
     /*

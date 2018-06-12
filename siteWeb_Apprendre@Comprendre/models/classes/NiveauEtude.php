@@ -40,6 +40,30 @@ class NiveauEtude extends AbstractModel
         return $result;
     }
 
+    public static function getListeNbCoursNiveauEtude()
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT NE.nom, count(*) as nb
+                FROM NiveauEtude NE, Cours C, SeanceCours SC
+                WHERE NE.nom like '%'
+                and C.niveau_etude_min <= NE.id
+                and C.niveau_etude_max >= NE.id
+                and C.id = SC.proposition_cours
+                group by NE.id
+                order by NE.id
+                ;
+";
+//        echo $sql;
+        $result = $bdd->query($sql);
+        $bdd->close();
+
+        return $result;
+    }
+
     /*
      * Getters and Setters
      */
