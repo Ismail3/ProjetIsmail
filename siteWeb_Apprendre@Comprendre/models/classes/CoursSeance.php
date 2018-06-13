@@ -50,7 +50,7 @@ class CoursSeance extends AbstractModel
 
     public static function getMinDate()
     {
-        $minDate = "2013-12";
+        $minDate = "2014-12";
 
         $bd = new BdConnexion();
 
@@ -78,7 +78,7 @@ class CoursSeance extends AbstractModel
 
     public static function getMaxDate()
     {
-        $maxDate = "2017-03";
+        $maxDate = "2018-03";
 
         $bd = new BdConnexion();
 

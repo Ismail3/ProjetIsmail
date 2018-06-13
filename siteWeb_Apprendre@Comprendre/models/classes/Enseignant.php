@@ -141,7 +141,7 @@ class Enseignant extends Personne
      */
     public static function getMinDate()
     {
-        $minDate = "2013-12";
+        $minDate = "2014-12";
 
         $bd = new BdConnexion();
 
@@ -172,7 +172,7 @@ class Enseignant extends Personne
      */
     public static function getMaxDate()
     {
-        $minDate = "2013-12";
+        $minDate = "2014-12";
 
         $bd = new BdConnexion();
 
