@@ -203,6 +203,26 @@ class Eleve extends Personne
         return date('Y-M', strtotime($minDate));
     }
 
+    public static function getListeNbCoursMatiereSuivie($id)
+    {
+        $bd = new BdConnexion();
+
+        // Create connection
+        $bdd = $bd->openConn();
+
+        $sql = "SELECT M.nom, count(*) as nb
+                FROM Cours C, Matiere M, SeanceCours SC
+                WHERE SC.participant = $id and M.id = C.matiere                
+                and C.id = SC.proposition_cours
+                group by M.nom
+                ;";
+        $result = $bdd->query($sql);
+
+        $bdd->close();
+
+        return $result;
+    }
+
     public static function countPersonneIncritBetweenDate($dateMin, $dateMax)
     {
         $dateTimeMin = date('Y-m-d H:i:s', strtotime($dateMin));

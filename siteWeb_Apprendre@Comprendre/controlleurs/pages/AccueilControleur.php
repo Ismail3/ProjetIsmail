@@ -627,6 +627,10 @@ var options = {
                 </a>";
         if (strcmp($typePersonne, Eleve::$TABLE_NAME) == 0) {
             $widget = $widget . "             <p class=\"w3-opacity\"> Élève " . $row["niveau_etude"] . "</p>";
+            $widget = $widget . "            <p class=\"w3-opacity\"><b>" . Eleve::$TABLE_NAME . " de : </b>";
+            $widget = $widget . $this->displayListeMatiereSuivie($row["id"]);
+            $widget = $widget . "            </p> <b> Description : </b>
+                    <p>" . substr($row["description"], 0, 25) . " ...</p>";
         } else {
             $widget = $widget . "            <p class=\"w3-opacity\"><b>" . Enseignant::$TABLE_NAME . " de : </b>";
             $widget = $widget . $this->displayListeMatiereEnseigner($row["id"]);
@@ -648,6 +652,14 @@ var options = {
         $listeMatiereEnseigner = Enseignant::getListeMatiereEnseigner($id);
         $listeNbCoursMatiereEnseigner = Enseignant::getListeNbCoursMatiereEnseigner($id);
         $widget = $widget . $this->displayListe($listeNbCoursMatiereEnseigner);
+        return $widget;
+    }
+
+    private function displayListeMatiereSuivie($id)
+    {
+        $widget = "";
+        $listeNbCoursMatiereSuivie = Eleve::getListeNbCoursMatiereSuivie($id);
+        $widget = $widget . $this->displayListe($listeNbCoursMatiereSuivie);
         return $widget;
     }
 
