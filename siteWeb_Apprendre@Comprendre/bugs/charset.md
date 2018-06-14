@@ -14,8 +14,7 @@
 * �conomie
 * finance
 
-http://php.net/manual/fr/function.mysql-set-charset.php
-
+https://www.w3schools.com/php/func_mysqli_set_charset.asp
 * math
 * français
 * sport

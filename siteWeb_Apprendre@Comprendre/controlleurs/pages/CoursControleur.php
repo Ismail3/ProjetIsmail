@@ -532,7 +532,7 @@ class CoursControleur extends ConnectedUserControleur
     private function displayFormulaireInscriptionCours($row)
     {
         $id = intval($row['id']);
-        echo "id : " . $id;
+//        echo "id : " . $id;
         $nom = $row['nom'];
         $description = $row['description'];
         $tarif = $row['tarif'];

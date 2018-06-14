@@ -1,8 +1,8 @@
 <?php
 require_once(dirname(__FILE__) . '/../../../controlleurs/pages/RechercheControleur.php');
+$ctrl = new RechercheControleur();
 session_start();
 ob_start();
-$ctrl = new RechercheControleur();
 $ctrl->checkUserSession();
 ?>
 <!DOCTYPE html>

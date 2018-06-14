@@ -714,7 +714,7 @@ class ProfilControleur extends AbstractControleur
     public function displayCours($row, $gestion)
     {
         $id = intval($row['id']);
-        echo "id : " . $id;
+//        echo "id : " . $id;
         $nom = $row['nom'];
         $description = $row['description'];
         $tarif = $row['tarif'];
@@ -738,6 +738,9 @@ class ProfilControleur extends AbstractControleur
         $widget = $widget . '</b></h4>                            </td>';
         if ($gestion == 2) {
             $enseignant = Enseignant::getUtilisateur($id_auteur);
+            echo $enseignant->getIdPersonne();
+            echo $enseignant->getPrenom();
+            echo $enseignant->getNom();
             $widget = $widget . '
                             <td style="text-align: center"> Ajouté par <a href="../profil/profil.php?idPersonne=' . intval($enseignant->getIdPersonne()) . '&typePersonne=' . Enseignant::$TABLE_NAME . '">'
                 . $enseignant->getPrenom() . " " . $enseignant->getNom()
